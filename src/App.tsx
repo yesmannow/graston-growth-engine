@@ -15,6 +15,7 @@ import { supabase } from "./lib/supabaseClient";
 import { useEffect, useState } from "react";
 import AnalyticsTracker from "./components/AnalyticsTracker";
 import MarketingToolkitPage from "./pages/MarketingToolkit";
+import Directory from "./pages/Directory";
 
 const queryClient = new QueryClient();
 
@@ -61,6 +62,7 @@ const App = () => (
         <AnalyticsTracker />
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/directory" element={<Directory />} />
           <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/provider/:id" element={<ProviderPage />} />
