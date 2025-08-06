@@ -17,6 +17,11 @@ export interface FAQ {
   answer: string;
 }
 
+export interface Coordinates {
+  lat: number;
+  lng: number;
+}
+
 export interface FullProviderProfile {
   id: string;
   name: string;
@@ -26,10 +31,7 @@ export interface FullProviderProfile {
   profileImage: string;
   tier: Tier;
   trainingLevel?: TrainingLevel;
-  coordinates?: {
-    lat: number;
-    lng: number;
-  };
+  coordinates?: Coordinates;
   contactInfo?: ContactInfo;
   servicesOffered?: string[];
   galleryImages?: string[];
