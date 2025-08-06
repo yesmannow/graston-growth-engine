@@ -88,7 +88,9 @@ export function DataTable<TData, TValue>({
           <Label htmlFor="tier-filter">Tier:</Label>
           <Select
             value={(table.getColumn("tier")?.getFilterValue() as string) ?? ""}
-            onValueChange={(value) => table.getColumn("tier")?.setFilterValue(value)}
+            onValueChange={(value) =>
+              table.getColumn("tier")?.setFilterValue(value === "" ? undefined : value)
+            }
           >
             <SelectTrigger id="tier-filter" className="w-[180px]">
               <SelectValue placeholder="Select Tier" />
@@ -106,7 +108,9 @@ export function DataTable<TData, TValue>({
           <Label htmlFor="trial-status-filter">Trial Status:</Label>
           <Select
             value={(table.getColumn("trialStatus")?.getFilterValue() as string) ?? ""}
-            onValueChange={(value) => table.getColumn("trialStatus")?.setFilterValue(value)}
+            onValueChange={(value) =>
+              table.getColumn("trialStatus")?.setFilterValue(value === "" ? undefined : value)
+            }
           >
             <SelectTrigger id="trial-status-filter" className="w-[180px]">
               <SelectValue placeholder="Select Status" />
