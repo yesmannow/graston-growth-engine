@@ -1,36 +1,129 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { mockProviders } from "@/lib/mockData";
 import ProviderCard from "@/components/directory/ProviderCard";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { FullProviderProfile, Tier, TrainingLevel } from "@/types";
-import { Search } from "lucide-react";
+import { DirectoryFilters, FullProviderProfile, SortOption } from "@/types";
+import { Search, Filter, X } from "lucide-react";
 import DirectoryMap from "@/components/directory/DirectoryMap";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import FilterPanel from "@/components/directory/FilterPanel";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useMediaQuery } from "@/hooks/use-mobile";
 
 const Directory = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedTier, setSelectedTier] = useState<Tier | "All">("All");
-  const [selectedSpecialty, setSelectedSpecialty] = useState<string | "All">("All");
-  const [selectedTrainingLevel, setSelectedTrainingLevel] = useState<TrainingLevel | "All">("All");
   const [hoveredProviderId, setHoveredProviderId] = useState<string | null>(null);
-
-  // Ensure specialties are always strings
-  const specialties = [...new Set(mockProviders.map(p => p.specialty).filter((s): s is string => typeof s === 'string'))];
-
-  const filteredProviders = mockProviders.filter((provider: FullProviderProfile) => {
-    const lowerCaseSearch = searchTerm.toLowerCase();
-    const matchesSearch = 
-      provider.name.toLowerCase().includes(lowerCaseSearch) ||
-      provider.specialty?.toLowerCase().includes(lowerCaseSearch) ||
-      provider.location?.toLowerCase().includes(lowerCaseSearch);
-    
-    const matchesTier = selectedTier === "All" || provider.tier === selectedTier;
-    const matchesSpecialty = selectedSpecialty === "All" || provider.specialty === selectedSpecialty;
-    const matchesTrainingLevel = selectedTrainingLevel === "All" || provider.trainingLevel === selectedTrainingLevel;
-
-    return matchesSearch && matchesTier && matchesSpecialty && matchesTrainingLevel;
+  const [filters, setFilters] = useState<DirectoryFilters>({
+    sortBy: 'premier-first'
   });
+  const [filteredProviders, setFilteredProviders] = useState<FullProviderProfile[]>(mockProviders);
+  const isMobile = useMediaQuery("(max-width: 1024px)");
+
+  // Extract unique specialties for the filter dropdown
+  const specialties = [...new Set(mockProviders.map(p => p.specialty).filter(Boolean))];
+
+  // Apply filters and search whenever dependencies change
+  useEffect(() => {
+    const filtered = mockProviders.filter((provider: FullProviderProfile) => {
+      // Text search
+      const lowerCaseSearch = searchTerm.toLowerCase();
+      const matchesSearch = 
+        provider.name.toLowerCase().includes(lowerCaseSearch) ||
+        (provider.specialty?.toLowerCase().includes(lowerCaseSearch) || false) ||
+        (provider.location?.toLowerCase().includes(lowerCaseSearch) || false) ||
+        (provider.clinicianType?.toLowerCase().includes(lowerCaseSearch) || false);
+      
+      if (!matchesSearch) return false;
+      
+      // Location filters
+      if (filters.city && (!provider.city || !provider.city.toLowerCase().includes(filters.city.toLowerCase()))) {
+        return false;
+      }
+      
+      if (filters.state && (!provider.state || provider.state !== filters.state)) {
+        return false;
+      }
+      
+      if (filters.zipCode && (!provider.zipCode || !provider.zipCode.includes(filters.zipCode))) {
+        return false;
+      }
+      
+      // Provider type filters
+      if (filters.tier && filters.tier !== 'All' && provider.tier !== filters.tier) {
+        return false;
+      }
+      
+      if (filters.clinicianType && filters.clinicianType !== 'All' && 
+          provider.clinicianType !== filters.clinicianType) {
+        return false;
+      }
+      
+      if (filters.specialty && filters.specialty !== 'All' && 
+          provider.specialty !== filters.specialty) {
+        return false;
+      }
+      
+      if (filters.trainingLevel && filters.trainingLevel !== 'All' && 
+          provider.trainingLevel !== filters.trainingLevel) {
+        return false;
+      }
+      
+      // Languages filter
+      if (filters.languages && filters.languages.length > 0) {
+        if (!provider.languagesSpoken) return false;
+        
+        const hasMatchingLanguage = filters.languages.some(language => 
+          provider.languagesSpoken?.includes(language)
+        );
+        
+        if (!hasMatchingLanguage) return false;
+      }
+      
+      return true;
+    });
+
+    // Sort the filtered results
+    const sorted = sortProviders(filtered, filters.sortBy || 'premier-first');
+    setFilteredProviders(sorted);
+  }, [searchTerm, filters]);
+
+  // Sort providers based on selected sort option
+  const sortProviders = (providers: FullProviderProfile[], sortBy: SortOption): FullProviderProfile[] => {
+    const sortedProviders = [...providers];
+    
+    switch (sortBy) {
+      case 'premier-first':
+        return sortedProviders.sort((a, b) => {
+          const tierOrder = { Premier: 0, Preferred: 1, Free: 2 };
+          return tierOrder[a.tier] - tierOrder[b.tier];
+        });
+        
+      case 'closest':
+        // In a real app, this would use geolocation to sort by actual distance
+        // For now, we'll just return the original order
+        return sortedProviders;
+        
+      case 'top-rated':
+        return sortedProviders.sort((a, b) => 
+          (b.rating || 0) - (a.rating || 0)
+        );
+        
+      case 'most-active':
+        return sortedProviders.sort((a, b) => 
+          (b.activityScore || 0) - (a.activityScore || 0)
+        );
+        
+      case 'most-reviewed':
+        return sortedProviders.sort((a, b) => 
+          (b.reviewCount || 0) - (a.reviewCount || 0)
+        );
+        
+      default:
+        return sortedProviders;
+    }
+  };
 
   const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
@@ -55,48 +148,63 @@ const Directory = () => {
       <div className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-4 p-4 overflow-hidden">
         {/* Left Column: Filters & Results */}
         <div className="lg:col-span-1 flex flex-col gap-4 overflow-hidden">
-          {/* Filters */}
-          <div className="flex flex-col gap-4 p-4 bg-muted rounded-lg shrink-0">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search by name, location..."
-                className="pl-10"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+          {/* Search Bar */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search by name, specialty, location..."
+              className="pl-10 pr-10"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {searchTerm && (
+              <button 
+                className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
+                onClick={() => setSearchTerm('')}
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+          
+          {/* Mobile Filter Button */}
+          {isMobile && (
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" className="lg:hidden flex items-center">
+                  <Filter className="h-4 w-4 mr-2" />
+                  Filters
+                  {Object.keys(filters).length > 1 && (
+                    <Badge className="ml-2 h-5 w-5 p-0 flex items-center justify-center">
+                      {Object.keys(filters).length - 1}
+                    </Badge>
+                  )}
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-[300px] sm:w-[400px] overflow-y-auto">
+                <FilterPanel 
+                  filters={filters} 
+                  onFilterChange={setFilters} 
+                  specialties={specialties}
+                />
+              </SheetContent>
+            </Sheet>
+          )}
+          
+          {/* Desktop Filter Panel */}
+          {!isMobile && (
+            <div className="hidden lg:block">
+              <FilterPanel 
+                filters={filters} 
+                onFilterChange={setFilters} 
+                specialties={specialties}
               />
             </div>
-            <Select value={selectedSpecialty} onValueChange={(value) => setSelectedSpecialty(value as string | "All")}>
-              <SelectTrigger>
-                <SelectValue placeholder="Filter by specialty" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="All">All Specialties</SelectItem>
-                {specialties.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-              </SelectContent>
-            </Select>
-            <Select value={selectedTrainingLevel} onValueChange={(value) => setSelectedTrainingLevel(value as TrainingLevel | "All")}>
-              <SelectTrigger>
-                <SelectValue placeholder="Filter by training level" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="All">All Training Levels</SelectItem>
-                <SelectItem value="Essential">Essential</SelectItem>
-                <SelectItem value="Advanced">Advanced</SelectItem>
-                <SelectItem value="GTS">GTS</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={selectedTier} onValueChange={(value) => setSelectedTier(value as Tier | "All")}>
-              <SelectTrigger>
-                <SelectValue placeholder="Filter by tier" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="All">All Tiers</SelectItem>
-                <SelectItem value="Premier">Premier</SelectItem>
-                <SelectItem value="Preferred">Preferred</SelectItem>
-                <SelectItem value="Free">Free</SelectItem>
-              </SelectContent>
-            </Select>
+          )}
+
+          {/* Results Count */}
+          <div className="text-sm text-muted-foreground">
+            Found {filteredProviders.length} provider{filteredProviders.length !== 1 ? 's' : ''}
           </div>
 
           {/* Results List */}
@@ -116,6 +224,16 @@ const Directory = () => {
                 <div className="text-center py-16 px-4">
                   <h2 className="text-xl font-semibold">No Providers Found</h2>
                   <p className="text-muted-foreground mt-2">Try adjusting your search or filter criteria.</p>
+                  <Button 
+                    variant="outline" 
+                    className="mt-4"
+                    onClick={() => {
+                      setSearchTerm('');
+                      setFilters({ sortBy: 'premier-first' });
+                    }}
+                  >
+                    Clear All Filters
+                  </Button>
                 </div>
               )}
             </div>
@@ -124,7 +242,11 @@ const Directory = () => {
 
         {/* Right Column: Map */}
         <div className="lg:col-span-2 rounded-lg overflow-hidden h-full w-full">
-          <DirectoryMap providers={filteredProviders} apiKey={googleMapsApiKey} hoveredProviderId={hoveredProviderId} />
+          <DirectoryMap 
+            providers={filteredProviders} 
+            apiKey={googleMapsApiKey} 
+            hoveredProviderId={hoveredProviderId} 
+          />
         </div>
       </div>
     </div>

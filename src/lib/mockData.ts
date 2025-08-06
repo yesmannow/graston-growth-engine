@@ -1,10 +1,10 @@
-import { FullProviderProfile } from "@/types";
+import { FullProviderProfile, ClinicianType, Language } from "@/types";
 
 export const mockProviders: FullProviderProfile[] = [
   {
     id: "1",
     name: "Dr. Sarah Johnson",
-    email: "sarah.johnson@example.com", // Added email field
+    email: "sarah.johnson@example.com",
     specialty: "Orthopedic Surgery",
     location: "New York, NY",
     bio: "Dr. Johnson is a board-certified orthopedic surgeon specializing in sports medicine and joint replacement. With over 15 years of experience, she has helped countless athletes return to peak performance.",
@@ -12,6 +12,14 @@ export const mockProviders: FullProviderProfile[] = [
     tier: "Premier",
     trainingLevel: "GTS",
     coordinates: { lat: 40.7128, lng: -74.0060 },
+    city: "New York",
+    state: "NY",
+    zipCode: "10001",
+    clinicianType: "Medical Doctor" as ClinicianType,
+    languagesSpoken: ["English", "Spanish"] as Language[],
+    rating: 4.9,
+    reviewCount: 127,
+    activityScore: 98,
     contactInfo: {
       phone: "(212) 555-1234",
       email: "sarah.johnson@example.com",
@@ -40,7 +48,7 @@ export const mockProviders: FullProviderProfile[] = [
   {
     id: "2",
     name: "Dr. Michael Chen",
-    email: "michael.chen@example.com", // Added email field
+    email: "michael.chen@example.com",
     specialty: "Dermatology",
     location: "Los Angeles, CA",
     bio: "Dr. Chen is a dermatologist with expertise in cosmetic procedures, skin cancer treatment, and general dermatology. He is committed to helping patients achieve healthy, beautiful skin.",
@@ -48,6 +56,14 @@ export const mockProviders: FullProviderProfile[] = [
     tier: "Preferred",
     trainingLevel: "Advanced",
     coordinates: { lat: 34.0522, lng: -118.2437 },
+    city: "Los Angeles",
+    state: "CA",
+    zipCode: "90001",
+    clinicianType: "Medical Doctor" as ClinicianType,
+    languagesSpoken: ["English", "Mandarin"] as Language[],
+    rating: 4.7,
+    reviewCount: 89,
+    activityScore: 85,
     contactInfo: {
       phone: "(310) 555-6789",
       email: "michael.chen@example.com",
@@ -73,7 +89,7 @@ export const mockProviders: FullProviderProfile[] = [
   {
     id: "3",
     name: "Dr. Emily Rodriguez",
-    email: "emily.rodriguez@example.com", // Added email field
+    email: "emily.rodriguez@example.com",
     specialty: "Pediatrics",
     location: "Chicago, IL",
     bio: "Dr. Rodriguez is a compassionate pediatrician dedicated to providing comprehensive care for children from birth through adolescence. She believes in partnering with families to ensure optimal health outcomes.",
@@ -81,6 +97,14 @@ export const mockProviders: FullProviderProfile[] = [
     tier: "Free",
     trainingLevel: "Essential",
     coordinates: { lat: 41.8781, lng: -87.6298 },
+    city: "Chicago",
+    state: "IL",
+    zipCode: "60601",
+    clinicianType: "Medical Doctor" as ClinicianType,
+    languagesSpoken: ["English", "Spanish"] as Language[],
+    rating: 4.8,
+    reviewCount: 56,
+    activityScore: 72,
     contactInfo: {
       phone: "(773) 555-4321",
       email: "emily.rodriguez@example.com",
@@ -106,7 +130,7 @@ export const mockProviders: FullProviderProfile[] = [
   {
     id: "4",
     name: "Dr. James Wilson",
-    email: "james.wilson@example.com", // Added email field
+    email: "james.wilson@example.com",
     specialty: "Cardiology",
     location: "Houston, TX",
     bio: "Dr. Wilson is a cardiologist specializing in preventive cardiology and heart disease management. He uses the latest diagnostic tools and treatments to help patients maintain optimal heart health.",
@@ -114,6 +138,14 @@ export const mockProviders: FullProviderProfile[] = [
     tier: "Premier",
     trainingLevel: "GTS",
     coordinates: { lat: 29.7604, lng: -95.3698 },
+    city: "Houston",
+    state: "TX",
+    zipCode: "77001",
+    clinicianType: "Medical Doctor" as ClinicianType,
+    languagesSpoken: ["English"] as Language[],
+    rating: 4.9,
+    reviewCount: 112,
+    activityScore: 95,
     contactInfo: {
       phone: "(832) 555-7890",
       email: "james.wilson@example.com",
@@ -139,7 +171,7 @@ export const mockProviders: FullProviderProfile[] = [
   {
     id: "5",
     name: "Dr. Olivia Thompson",
-    email: "olivia.thompson@example.com", // Added email field
+    email: "olivia.thompson@example.com",
     specialty: "Psychiatry",
     location: "Miami, FL",
     bio: "Dr. Thompson is a psychiatrist who provides compassionate mental health care for adults dealing with depression, anxiety, and other psychiatric conditions. She believes in a holistic approach to treatment.",
@@ -147,6 +179,14 @@ export const mockProviders: FullProviderProfile[] = [
     tier: "Preferred",
     trainingLevel: "Advanced",
     coordinates: { lat: 25.7617, lng: -80.1918 },
+    city: "Miami",
+    state: "FL",
+    zipCode: "33101",
+    clinicianType: "Medical Doctor" as ClinicianType,
+    languagesSpoken: ["English", "Spanish"] as Language[],
+    rating: 4.6,
+    reviewCount: 78,
+    activityScore: 82,
     contactInfo: {
       phone: "(305) 555-2345",
       email: "olivia.thompson@example.com",
@@ -168,5 +208,136 @@ export const mockProviders: FullProviderProfile[] = [
     faqs: [
       { question: "Do you offer telehealth appointments?", answer: "Yes, we offer secure video appointments for both new and established patients." }
     ]
+  },
+  {
+    id: "6",
+    name: "Dr. Robert Taylor",
+    email: "robert.taylor@example.com",
+    specialty: "Physical Therapy",
+    location: "Denver, CO",
+    bio: "Dr. Taylor is a physical therapist with over 20 years of experience in sports rehabilitation and injury prevention. He specializes in helping athletes recover from injuries and improve performance.",
+    profileImage: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=300&h=300&fit=crop",
+    tier: "Premier",
+    trainingLevel: "GTS",
+    coordinates: { lat: 39.7392, lng: -104.9903 },
+    city: "Denver",
+    state: "CO",
+    zipCode: "80201",
+    clinicianType: "Physical Therapist" as ClinicianType,
+    languagesSpoken: ["English", "French"] as Language[],
+    rating: 4.9,
+    reviewCount: 143,
+    activityScore: 97,
+    contactInfo: {
+      phone: "(303) 555-8765",
+      email: "robert.taylor@example.com",
+      website: "www.taylorphysicaltherapy.com"
+    },
+    servicesOffered: [
+      "Sports Rehabilitation",
+      "Post-Surgical Rehabilitation",
+      "Manual Therapy",
+      "Injury Prevention"
+    ]
+  },
+  {
+    id: "7",
+    name: "Dr. Lisa Chang",
+    email: "lisa.chang@example.com",
+    specialty: "Chiropractic Care",
+    location: "Seattle, WA",
+    bio: "Dr. Chang is a chiropractor focused on holistic wellness and pain management through spinal adjustments and therapeutic exercises. She has helped hundreds of patients find relief from chronic pain.",
+    profileImage: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=300&h=300&fit=crop",
+    tier: "Preferred",
+    trainingLevel: "Advanced",
+    coordinates: { lat: 47.6062, lng: -122.3321 },
+    city: "Seattle",
+    state: "WA",
+    zipCode: "98101",
+    clinicianType: "Chiropractor" as ClinicianType,
+    languagesSpoken: ["English", "Mandarin"] as Language[],
+    rating: 4.7,
+    reviewCount: 92,
+    activityScore: 84,
+    contactInfo: {
+      phone: "(206) 555-3456",
+      email: "lisa.chang@example.com",
+      website: "www.changchiropractic.com"
+    },
+    servicesOffered: [
+      "Spinal Adjustments",
+      "Therapeutic Exercise",
+      "Posture Correction",
+      "Pain Management"
+    ]
+  },
+  {
+    id: "8",
+    name: "Mark Johnson",
+    email: "mark.johnson@example.com",
+    specialty: "Sports Massage",
+    location: "Portland, OR",
+    bio: "Mark is a certified massage therapist specializing in sports massage and myofascial release. He works with athletes of all levels to improve recovery and performance.",
+    profileImage: "https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=300&h=300&fit=crop",
+    tier: "Free",
+    trainingLevel: "Essential",
+    coordinates: { lat: 45.5051, lng: -122.6750 },
+    city: "Portland",
+    state: "OR",
+    zipCode: "97201",
+    clinicianType: "Massage Therapist" as ClinicianType,
+    languagesSpoken: ["English"] as Language[],
+    rating: 4.5,
+    reviewCount: 47,
+    activityScore: 65,
+    contactInfo: {
+      phone: "(503) 555-9876",
+      email: "mark.johnson@example.com",
+      website: "www.markjohnsonmassage.com"
+    },
+    servicesOffered: [
+      "Sports Massage",
+      "Deep Tissue Massage",
+      "Myofascial Release",
+      "Recovery Techniques"
+    ]
   }
+];
+
+export const states = [
+  "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
+  "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
+  "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
+  "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
+  "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"
+];
+
+export const clinicianTypes: ClinicianType[] = [
+  "Chiropractor",
+  "Physical Therapist",
+  "Occupational Therapist",
+  "Athletic Trainer",
+  "Massage Therapist",
+  "Medical Doctor",
+  "Other"
+];
+
+export const languages: Language[] = [
+  "English",
+  "Spanish",
+  "French",
+  "Mandarin",
+  "Arabic",
+  "Tagalog",
+  "Other"
+];
+
+export const radiusOptions: number[] = [5, 10, 25, 50, 100];
+
+export const sortOptions = [
+  { value: "closest", label: "Closest First" },
+  { value: "top-rated", label: "Top-Rated" },
+  { value: "most-active", label: "Most Active" },
+  { value: "premier-first", label: "Premier First" },
+  { value: "most-reviewed", label: "Most Reviewed" }
 ];

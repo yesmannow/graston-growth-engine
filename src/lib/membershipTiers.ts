@@ -8,7 +8,7 @@ const tierRequirements: Record<Tier, (keyof FullProviderProfile)[]> = {
 };
 
 // Labels for fields in the UI
-const fieldLabels: Record<keyof FullProviderProfile, string> = {
+const fieldLabels: Partial<Record<keyof FullProviderProfile, string>> = {
   id: 'ID',
   name: 'Full Name',
   tier: 'Tier',
@@ -33,7 +33,16 @@ const fieldLabels: Record<keyof FullProviderProfile, string> = {
   education: 'Education',
   churnRisk: 'Churn Risk',
   trialStatus: 'Trial Status',
-  certifications: 'Certifications'
+  certifications: 'Certifications',
+  // Add the missing properties
+  state: 'State',
+  city: 'City',
+  zipCode: 'Zip Code',
+  clinicianType: 'Clinician Type',
+  languagesSpoken: 'Languages Spoken',
+  rating: 'Rating',
+  reviewCount: 'Review Count',
+  activityScore: 'Activity Score'
 };
 
 // Calculate profile completion score based on tier requirements
@@ -63,7 +72,7 @@ export const calculateProfileScore = (user: FullProviderProfile) => {
   } else {
     const missingFields = requirements.filter((field: keyof FullProviderProfile) => !user[field]);
     if (missingFields.length > 0) {
-      const fieldName = fieldLabels[missingFields[0]];
+      const fieldName = fieldLabels[missingFields[0]] || missingFields[0];
       nextAction = `Add your ${fieldName} to improve your score.`;
     } else {
       nextAction = 'Start filling out your profile.';

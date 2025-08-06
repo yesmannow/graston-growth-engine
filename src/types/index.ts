@@ -1,6 +1,33 @@
 export type Tier = 'Free' | 'Preferred' | 'Premier';
 export type TrainingLevel = 'Essential' | 'Advanced' | 'GTS';
 
+export type ClinicianType = 
+  | 'Chiropractor'
+  | 'Physical Therapist'
+  | 'Occupational Therapist'
+  | 'Athletic Trainer'
+  | 'Massage Therapist'
+  | 'Medical Doctor'
+  | 'Other';
+
+export type Language = 
+  | 'English'
+  | 'Spanish'
+  | 'French'
+  | 'Mandarin'
+  | 'Arabic'
+  | 'Tagalog'
+  | 'Other';
+
+export type SortOption = 
+  | 'closest'
+  | 'top-rated'
+  | 'most-active'
+  | 'premier-first'
+  | 'most-reviewed';
+
+export type RadiusOption = 5 | 10 | 25 | 50 | 100;
+
 export interface Coordinates {
   lat: number;
   lng: number;
@@ -33,13 +60,20 @@ export interface MarketingResource {
   id: string;
   title: string;
   description: string;
-  image: string;         // Added this property
-  imageUrl?: string;     // Made optional since image is used instead
-  filePath: string;      // Added this property
-  fileUrl?: string;      // Made optional since filePath is used instead
+  image: string;
+  imageUrl?: string;
+  filePath: string;
+  fileUrl?: string;
   tier: Tier;
   category: string;
   tags: string[];
+}
+
+export interface LocationData {
+  city: string;
+  state: string;
+  zipCode: string;
+  coordinates: Coordinates;
 }
 
 export interface FullProviderProfile {
@@ -50,7 +84,7 @@ export interface FullProviderProfile {
   bio: string;
   profileImage: string;
   tier: Tier;
-  email: string;         // Required field
+  email: string;
   
   // Optional fields used throughout the app
   membershipTier?: Tier;
@@ -58,7 +92,7 @@ export interface FullProviderProfile {
   coordinates?: Coordinates;
   contactInfo?: ContactInfo;
   servicesOffered?: string[];
-  services?: string[]; // Alternative name used in some components
+  services?: string[];
   galleryImages?: string[];
   testimonials?: Testimonial[];
   faqs?: FAQ[];
@@ -72,4 +106,27 @@ export interface FullProviderProfile {
   churnRisk?: boolean;
   trialStatus?: 'Active' | 'Expired' | 'N/A';
   certifications?: string[];
+  
+  // New fields for enhanced filtering
+  clinicianType?: ClinicianType;
+  languagesSpoken?: Language[];
+  city?: string;
+  state?: string;
+  zipCode?: string;
+  rating?: number;
+  reviewCount?: number;
+  activityScore?: number;
+}
+
+export interface DirectoryFilters {
+  city?: string;
+  state?: string;
+  zipCode?: string;
+  radius?: RadiusOption;
+  tier?: Tier | 'All';
+  clinicianType?: ClinicianType | 'All';
+  specialty?: string | 'All';
+  trainingLevel?: TrainingLevel | 'All';
+  languages?: Language[];
+  sortBy?: SortOption;
 }
