@@ -38,15 +38,28 @@ const Index: React.FC = () => {
               <span className="text-muted-foreground">/directory</span>
             </li>
             <li>
-              <Link
-                to="/directory/provider/123"
-                className="underline hover:text-blue-600"
-              >
+              <Link to="/onboarding" className="underline hover:text-blue-600">
+                Onboarding Guide
+              </Link>{" "}
+              <span className="text-muted-foreground">/onboarding</span>
+            </li>
+            <li>
+              <Link to="/reports" className="underline hover:text-blue-600">
+                Analytics Reports
+              </Link>{" "}
+              <span className="text-muted-foreground">/reports</span>
+            </li>
+            <li>
+              <Link to="/support" className="underline hover:text-blue-600">
+                Support &amp; Ticketing
+              </Link>{" "}
+              <span className="text-muted-foreground">/support</span>
+            </li>
+            <li>
+              <Link to="/directory/provider/123" className="underline hover:text-blue-600">
                 Public Provider Profile
               </Link>{" "}
-              <span className="text-muted-foreground">
-                /directory/provider/:id
-              </span>
+              <span className="text-muted-foreground">/directory/provider/:id</span>
             </li>
             <li>
               <Link to="/login" className="underline hover:text-blue-600">
@@ -73,26 +86,16 @@ const Index: React.FC = () => {
               <span className="text-muted-foreground">/provider/:id</span>
             </li>
             <li>
-              <Link
-                to="/provider/123/update"
-                className="underline hover:text-blue-600"
-              >
+              <Link to="/provider/123/update" className="underline hover:text-blue-600">
                 Update Profile
               </Link>{" "}
-              <span className="text-muted-foreground">
-                /provider/:id/update
-              </span>
+              <span className="text-muted-foreground">/provider/:id/update</span>
             </li>
             <li>
-              <Link
-                to="/provider/123/toolkit"
-                className="underline hover:text-blue-600"
-              >
+              <Link to="/provider/123/toolkit" className="underline hover:text-blue-600">
                 Toolkit
               </Link>{" "}
-              <span className="text-muted-foreground">
-                /provider/:id/toolkit
-              </span>
+              <span className="text-muted-foreground">/provider/:id/toolkit</span>
             </li>
             <li>
               <Link to="/404" className="underline hover:text-blue-600">
