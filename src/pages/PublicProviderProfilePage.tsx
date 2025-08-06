@@ -79,7 +79,7 @@ const PublicProviderProfilePage = () => {
             <>
               <h2 className="text-2xl font-semibold mt-6 mb-3">Services Offered</h2>
               <div className="flex flex-wrap gap-2">
-                {provider.servicesOffered.map((service, index) => (
+                {provider.servicesOffered.map((service: string, index: number) => (
                   <Badge key={index} variant="secondary" className="px-3 py-1 text-sm">
                     {service}
                   </Badge>
@@ -93,7 +93,7 @@ const PublicProviderProfilePage = () => {
               <h2 className="text-2xl font-semibold mt-6 mb-3">Gallery</h2>
               <Carousel className="w-full max-w-xs mx-auto">
                 <CarouselContent>
-                  {provider.galleryImages.map((image, index) => (
+                  {provider.galleryImages.map((image: string, index: number) => (
                     <CarouselItem key={index}>
                       <div className="p-1">
                         <Card>
@@ -115,7 +115,7 @@ const PublicProviderProfilePage = () => {
             <>
               <h2 className="text-2xl font-semibold mt-6 mb-3">Testimonials</h2>
               <div className="grid gap-4">
-                {provider.testimonials.map((testimonial, index) => (
+                {provider.testimonials.map((testimonial: { quote: string; author: string }, index: number) => (
                   <Card key={index} className="p-4">
                     <p className="text-muted-foreground italic">"{testimonial.quote}"</p>
                     <p className="text-sm font-semibold mt-2">- {testimonial.author}</p>
@@ -129,7 +129,7 @@ const PublicProviderProfilePage = () => {
             <>
               <h2 className="text-2xl font-semibold mt-6 mb-3">FAQs</h2>
               <div className="grid gap-4">
-                {provider.faqs.map((faq, index) => (
+                {provider.faqs.map((faq: { question: string; answer: string }, index: number) => (
                   <Card key={index} className="p-4">
                     <CardTitle className="text-lg mb-2">{faq.question}</CardTitle>
                     <CardContent className="p-0 text-muted-foreground">{faq.answer}</CardContent>
