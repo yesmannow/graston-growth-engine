@@ -4,15 +4,17 @@ export const mockProviders: FullProviderProfile[] = [
   {
     id: "1",
     name: "Dr. Alice Smith",
-    specialty: "Pediatrician",
+    specialty: "Physical Therapist",
     location: "New York, NY",
-    bio: "Dr. Smith is a board-certified pediatrician with over 15 years of experience caring for children from infancy through adolescence. She is passionate about preventative care and building strong relationships with families.",
+    bio: "Dr. Smith is a board-certified physical therapist with over 15 years of experience caring for patients. She is passionate about preventative care and building strong relationships with families.",
     profileImage: "https://via.placeholder.com/150/FF5733/FFFFFF?text=AS",
     tier: "Premier",
+    trainingLevel: "GTS",
+    coordinates: { lat: 40.7128, lng: -74.0060 },
     contactInfo: {
       phone: "555-123-4567",
       email: "alice.smith@example.com",
-      website: "https://www.alicesmithpediatrics.com",
+      website: "https://www.alicesmithpt.com",
     },
     servicesOffered: ["Well-child visits", "Vaccinations", "Sick visits", "Developmental screenings"],
     galleryImages: [
@@ -31,15 +33,17 @@ export const mockProviders: FullProviderProfile[] = [
   {
     id: "2",
     name: "Dr. Bob Johnson",
-    specialty: "Dentist",
+    specialty: "Chiropractor",
     location: "Los Angeles, CA",
-    bio: "Dr. Johnson provides comprehensive dental care, from routine cleanings to cosmetic procedures. He is committed to making every patient's visit comfortable and stress-free.",
+    bio: "Dr. Johnson provides comprehensive chiropractic care, from routine adjustments to specialized treatments. He is committed to making every patient's visit comfortable and stress-free.",
     profileImage: "https://via.placeholder.com/150/3366FF/FFFFFF?text=BJ",
     tier: "Preferred",
+    trainingLevel: "Advanced",
+    coordinates: { lat: 34.0522, lng: -118.2437 },
     contactInfo: {
       phone: "555-987-6543",
       email: "bob.johnson@example.com",
-      website: "https://www.bobjohnsondental.com",
+      website: "https://www.bobjohnsonchiro.com",
     },
     servicesOffered: ["Cleanings", "Fillings", "Crowns", "Teeth whitening"],
     galleryImages: [
@@ -47,7 +51,7 @@ export const mockProviders: FullProviderProfile[] = [
       "https://via.placeholder.com/400/3366FF/FFFFFF?text=Office+2",
     ],
     testimonials: [
-      { quote: "Best dentist I've ever had!", author: "Patient C" },
+      { quote: "Best chiropractor I've ever had!", author: "Patient C" },
       { quote: "Painless and professional.", author: "Patient D" },
     ],
     faqs: [
@@ -58,15 +62,17 @@ export const mockProviders: FullProviderProfile[] = [
   {
     id: "3",
     name: "Dr. Carol White",
-    specialty: "Dermatologist",
+    specialty: "Sports Medicine Physician",
     location: "Chicago, IL",
-    bio: "Dr. White specializes in medical and cosmetic dermatology, helping patients achieve healthy, radiant skin. She offers personalized treatment plans for various skin conditions.",
+    bio: "Dr. White specializes in sports medicine, helping athletes and active individuals recover from injuries and optimize performance. She offers personalized treatment plans for various conditions.",
     profileImage: "https://via.placeholder.com/150/33FF57/FFFFFF?text=CW",
     tier: "Free",
+    trainingLevel: "Essential",
+    coordinates: { lat: 41.8781, lng: -87.6298 },
     contactInfo: {
       phone: "555-555-1212",
       email: "carol.white@example.com",
-      website: "https://www.carolwhitederm.com",
+      website: "https://www.carolwhitesportsmed.com",
     },
     servicesOffered: ["Acne treatment", "Skin cancer screenings", "Botox", "Fillers"],
     galleryImages: [
@@ -85,15 +91,17 @@ export const mockProviders: FullProviderProfile[] = [
   {
     id: "4",
     name: "Dr. David Green",
-    specialty: "Cardiologist",
+    specialty: "Physical Therapist",
     location: "Houston, TX",
-    bio: "Dr. Green is a leading cardiologist dedicated to providing exceptional heart care. He focuses on preventive strategies and advanced treatments for cardiovascular diseases.",
+    bio: "Dr. Green is a leading physical therapist dedicated to providing exceptional care. He focuses on preventive strategies and advanced treatments for musculoskeletal conditions.",
     profileImage: "https://via.placeholder.com/150/FF33CC/FFFFFF?text=DG",
     tier: "Premier",
+    trainingLevel: "GTS",
+    coordinates: { lat: 29.7604, lng: -95.3698 },
     contactInfo: {
       phone: "555-777-8888",
       email: "david.green@example.com",
-      website: "https://www.davidgreencardio.com",
+      website: "https://www.davidgreenpt.com",
     },
     servicesOffered: ["Cardiac evaluations", "Stress tests", "Echocardiograms", "Hypertension management"],
     galleryImages: [
@@ -112,15 +120,17 @@ export const mockProviders: FullProviderProfile[] = [
   {
     id: "5",
     name: "Dr. Emily Brown",
-    specialty: "Physical Therapist",
+    specialty: "Chiropractor",
     location: "Miami, FL",
-    bio: "Dr. Brown helps patients recover from injuries and improve mobility through personalized physical therapy programs. She emphasizes active recovery and patient education.",
+    bio: "Dr. Brown helps patients recover from injuries and improve mobility through personalized chiropractic programs. She emphasizes active recovery and patient education.",
     profileImage: "https://via.placeholder.com/150/33CCFF/FFFFFF?text=EB",
     tier: "Preferred",
+    trainingLevel: "Advanced",
+    coordinates: { lat: 25.7617, lng: -80.1918 },
     contactInfo: {
       phone: "555-222-3333",
       email: "emily.brown@example.com",
-      website: "https://www.emilybrownpt.com",
+      website: "https://www.emilybrownchiro.com",
     },
     servicesOffered: ["Rehabilitation", "Pain management", "Sports injury therapy", "Post-surgical recovery"],
     galleryImages: [
