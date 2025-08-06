@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { mockProviders } from "@/lib/mockData";
 import { marketingResources } from "@/data/marketingResources";
@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Star } from "lucide-react";
 import { MarketingResource } from "@/types";
+import { supabase } from "@/lib/supabaseClient";
+import ResourceCardSkeleton from "@/components/dashboards/provider/ResourceCardSkeleton";
 
 const categories = ['All', ...new Set(marketingResources.map((r: MarketingResource) => r.category))];
 
@@ -16,6 +18,44 @@ const MarketingToolkitPage = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [resourceStatuses, setResourceStatuses] = useState<Record<string, 'read' | 'downloaded'>>({});
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStatuses = async () => {
+      if (!provider) return;
+      setIsLoading(true);
+      const { data, error } = await supabase
+        .from('provider_resources')
+        .select('resource_id, status')
+        .eq('provider_id', provider.id);
+
+      if (error) {
+        console.error("Error fetching resource statuses", error);
+      } else {
+        const statuses = data.reduce((acc, record) => {
+          acc[record.resource_id] = record.status;
+          return acc;
+        }, {} as Record<string, 'read' | 'downloaded'>);
+        setResourceStatuses(statuses);
+      }
+      setIsLoading(false);
+    };
+
+    fetchStatuses();
+  }, [provider]);
+
+  const handleStatusChange = (resourceId: string, newStatus?: 'read' | 'downloaded') => {
+    setResourceStatuses(prev => {
+      const newState = { ...prev };
+      if (newStatus) {
+        newState[resourceId] = newStatus;
+      } else {
+        delete newState[resourceId]; // Remove the status if newStatus is undefined
+      }
+      return newState;
+    });
+  };
 
   if (!provider) {
     return (
@@ -51,7 +91,15 @@ const MarketingToolkitPage = () => {
           <h2 className="text-sm font-semibold uppercase text-primary mb-1 flex items-center gap-2"><Star className="h-4 w-4" /> Featured Resource</h2>
           <h3 className="text-2xl font-bold">{featuredResource.title}</h3>
           <p className="text-muted-foreground mt-2 mb-4">{featuredResource.description}</p>
-          <ResourceCard resource={featuredResource} userTier={provider.tier} />
+          {isLoading ? <ResourceCardSkeleton /> : (
+            <ResourceCard 
+              resource={featuredResource} 
+              userTier={provider.tier} 
+              providerId={provider.id}
+              status={resourceStatuses[featuredResource.id]}
+              onStatusChange={handleStatusChange}
+            />
+          )}
         </div>
       </div>
 
@@ -82,11 +130,22 @@ const MarketingToolkitPage = () => {
 
       {/* Resource Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {filteredResources.map((resource: MarketingResource) => (
-          <ResourceCard key={resource.id} resource={resource} userTier={provider.tier} />
-        ))}
+        {isLoading ? (
+            Array.from({ length: 6 }).map((_, index) => <ResourceCardSkeleton key={index} />)
+        ) : (
+            filteredResources.map((resource: MarketingResource) => (
+                <ResourceCard 
+                    key={resource.id} 
+                    resource={resource} 
+                    userTier={provider.tier} 
+                    providerId={provider.id}
+                    status={resourceStatuses[resource.id]}
+                    onStatusChange={handleStatusChange}
+                />
+            ))
+        )}
       </div>
-      {filteredResources.length === 0 && (
+      {!isLoading && filteredResources.length === 0 && (
         <div className="text-center col-span-full py-12">
             <p className="text-muted-foreground">No resources found matching your criteria.</p>
         </div>

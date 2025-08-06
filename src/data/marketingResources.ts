@@ -1,5 +1,8 @@
 import { MarketingResource } from "@/types";
 
+// IMPORTANT: Replace 'YOUR_PROJECT_REF' with your actual Supabase project reference.
+const supabaseStorageBaseUrl = 'https://YOUR_PROJECT_REF.supabase.co/storage/v1/object/public/resources';
+
 export const marketingResources: MarketingResource[] = [
   {
     id: 'res_001',
@@ -8,7 +11,7 @@ export const marketingResources: MarketingResource[] = [
     category: 'Social Media',
     image: '/images/resources/social-media.png',
     tier: 'Free',
-    filePath: '/resources/Social-Media-Strategy.pdf',
+    filePath: `${supabaseStorageBaseUrl}/Social-Media-Strategy.pdf`,
   },
   {
     id: 'res_002',
@@ -17,7 +20,7 @@ export const marketingResources: MarketingResource[] = [
     category: 'Paid Ads',
     image: '/images/resources/paid-ads.png',
     tier: 'Preferred',
-    filePath: '/resources/Paid-Advertising-Guide.pdf',
+    filePath: `${supabaseStorageBaseUrl}/Paid-Advertising-Guide.pdf`,
   },
   {
     id: 'res_003',
@@ -26,7 +29,7 @@ export const marketingResources: MarketingResource[] = [
     category: 'General',
     image: '/images/resources/market-understanding.png',
     tier: 'Free',
-    filePath: '/resources/Market-Understanding-Guide.pdf',
+    filePath: `${supabaseStorageBaseUrl}/Market-Understanding-Guide.pdf`,
   },
   {
     id: 'res_004',
@@ -35,7 +38,7 @@ export const marketingResources: MarketingResource[] = [
     category: 'SEO',
     image: '/images/resources/gmb.png',
     tier: 'Preferred',
-    filePath: '/resources/Google-My-Business-Optimization.pdf',
+    filePath: `${supabaseStorageBaseUrl}/Google-My-Business-Optimization.pdf`,
   },
   {
     id: 'res_005',
@@ -44,7 +47,7 @@ export const marketingResources: MarketingResource[] = [
     category: 'Email',
     image: '/images/resources/email-marketing.png',
     tier: 'Premier',
-    filePath: '/resources/Email-Marketing-Automation.pdf',
+    filePath: `${supabaseStorageBaseUrl}/Email-Marketing-Automation.pdf`,
   },
   {
     id: 'res_006',
@@ -53,6 +56,6 @@ export const marketingResources: MarketingResource[] = [
     category: 'In-Clinic',
     image: '/images/resources/in-clinic.png',
     tier: 'Free',
-    filePath: '/resources/In-Clinic-Marketing.pdf',
+    filePath: `${supabaseStorageBaseUrl}/In-Clinic-Marketing.pdf`,
   },
 ];
