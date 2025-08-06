@@ -1,18 +1,3 @@
-export interface ProviderProfile {
-  id: string;
-  name: string;
-  specialty: string;
-  location: string;
-  bio: string;
-  profileImage: string;
-  tier: 'Free' | 'Preferred' | 'Premier';
-  trainingLevel?: 'Essential' | 'Advanced' | 'GTS';
-  coordinates?: {
-    lat: number;
-    lng: number;
-  };
-}
-
 export type Tier = 'Free' | 'Preferred' | 'Premier';
 export type TrainingLevel = 'Essential' | 'Advanced' | 'GTS';
 
@@ -32,7 +17,19 @@ export interface FAQ {
   answer: string;
 }
 
-export interface FullProviderProfile extends ProviderProfile {
+export interface FullProviderProfile {
+  id: string;
+  name: string;
+  specialty: string;
+  location: string;
+  bio: string;
+  profileImage: string;
+  tier: Tier;
+  trainingLevel?: TrainingLevel;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
   contactInfo?: ContactInfo;
   servicesOffered?: string[];
   galleryImages?: string[];

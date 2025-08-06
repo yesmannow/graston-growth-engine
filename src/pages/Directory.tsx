@@ -14,7 +14,8 @@ const Directory = () => {
   const [selectedSpecialty, setSelectedSpecialty] = useState<string | "All">("All");
   const [selectedTrainingLevel, setSelectedTrainingLevel] = useState<TrainingLevel | "All">("All");
 
-  const specialties = [...new Set(mockProviders.map(p => p.specialty))];
+  // Ensure specialties are always strings
+  const specialties = [...new Set(mockProviders.map(p => p.specialty).filter((s): s is string => typeof s === 'string'))];
 
   const filteredProviders = mockProviders.filter((provider: FullProviderProfile) => {
     const lowerCaseSearch = searchTerm.toLowerCase();

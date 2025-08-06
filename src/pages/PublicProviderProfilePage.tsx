@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { MapPin, Phone, Mail, Globe, Star } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { FullProviderProfile, ContactInfo, Testimonial, FAQ } from "@/types"; // Import necessary types
+import { FullProviderProfile, ContactInfo, Testimonial, FAQ } from "@/types"; // All types now correctly imported
 
 const tierColors: { [key: string]: string } = {
   Premier: "bg-purple-600 hover:bg-purple-700 text-white",

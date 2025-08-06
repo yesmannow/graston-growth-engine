@@ -142,7 +142,7 @@ export const mockProviders: FullProviderProfile[] = [
       { quote: "Very supportive and effective therapy.", author: "Patient J" },
     ],
     faqs: [
-      { question: "Do I need a referral?", answer: "Some insurance plans require a referral; please check with your provider." },
+      { question: "Do you need a referral?", answer: "Some insurance plans require a referral; please check with your provider." },
       { question: "What should I wear to my appointment?", answer: "Comfortable clothing that allows for movement." },
     ],
   },
