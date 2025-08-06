@@ -6,12 +6,13 @@ import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Index from "./pages/Index";
 import AdminPage from "./pages/Admin";
 import ProviderPage from "./pages/Provider";
+import UpdateProfile from "./pages/UpdateProfile";
 import NotFound from "./pages/NotFound";
-import StaffDashboard from "./components/dashboards/StaffDashboard"; // Import StaffDashboard
-import ProviderDashboard from "./components/dashboards/ProviderDashboard"; // Import ProviderDashboard
-import Login from "./pages/Login"; // Import the new Login component
-import { supabase } from "./lib/supabaseClient"; // Import supabase client
-import { useEffect, useState } from "react"; // Import useState and useEffect
+import StaffDashboard from "./components/dashboards/StaffDashboard";
+import ProviderDashboard from "./components/dashboards/ProviderDashboard";
+import Login from "./pages/Login";
+import { supabase } from "./lib/supabaseClient";
+import { useEffect, useState } from "react";
 import AnalyticsTracker from "./components/AnalyticsTracker";
 import MarketingToolkitPage from "./pages/MarketingToolkit";
 
@@ -40,7 +41,7 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   }, []);
 
   if (loading) {
-    return <div>Loading authentication...</div>; // Or a spinner component
+    return <div>Loading authentication...</div>;
   }
 
   if (!session) {
@@ -63,6 +64,7 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/provider/:id" element={<ProviderPage />} />
+          <Route path="/provider/:id/update" element={<UpdateProfile />} />
           <Route path="/provider/:id/toolkit" element={<MarketingToolkitPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
