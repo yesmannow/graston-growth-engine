@@ -30,6 +30,14 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -66,7 +74,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 space-x-4">
         <Input
           placeholder="Filter by name..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -75,6 +83,43 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+
+        <div className="flex items-center space-x-2">
+          <Label htmlFor="tier-filter">Tier:</Label>
+          <Select
+            value={(table.getColumn("tier")?.getFilterValue() as string) ?? ""}
+            onValueChange={(value) => table.getColumn("tier")?.setFilterValue(value)}
+          >
+            <SelectTrigger id="tier-filter" className="w-[180px]">
+              <SelectValue placeholder="Select Tier" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">All</SelectItem>
+              <SelectItem value="Free">Free</SelectItem>
+              <SelectItem value="Preferred">Preferred</SelectItem>
+              <SelectItem value="Premier">Premier</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <Label htmlFor="trial-status-filter">Trial Status:</Label>
+          <Select
+            value={(table.getColumn("trialStatus")?.getFilterValue() as string) ?? ""}
+            onValueChange={(value) => table.getColumn("trialStatus")?.setFilterValue(value)}
+          >
+            <SelectTrigger id="trial-status-filter" className="w-[180px]">
+              <SelectValue placeholder="Select Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">All</SelectItem>
+              <SelectItem value="Active">Active</SelectItem>
+              <SelectItem value="Expired">Expired</SelectItem>
+              <SelectItem value="N/A">N/A</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
