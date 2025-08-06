@@ -10,6 +10,7 @@ import ProviderDashboard from "./components/dashboards/ProviderDashboard"; // Im
 import Login from "./pages/Login"; // Import the new Login component
 import { supabase } from "./lib/supabaseClient"; // Import supabase client
 import { useEffect, useState } from "react"; // Import useState and useEffect
+import AnalyticsTracker from "./components/AnalyticsTracker";
 
 const queryClient = new QueryClient();
 
@@ -53,6 +54,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <AnalyticsTracker />
         <Routes>
           <Route path="/login" element={<Login />} /> {/* Add login route */}
           <Route path="/" element={<Index />} />
