@@ -1,65 +1,75 @@
-export type Tier = "Free" | "Preferred" | "Premier";
+export type Tier = 'Free' | 'Preferred' | 'Premier';
+export type TrainingLevel = 'Essential' | 'Advanced' | 'GTS';
 
-export interface FullProviderProfile {
-  id: string;
-  name: string;
-  email: string;
+export interface Coordinates {
+  lat: number;
+  lng: number;
+}
+
+export interface ContactInfo {
   phone?: string;
-  specialty?: string;
-  location?: string;
-  bio?: string;
-  profileScore?: number;
-  membershipTier: Tier;
-  tier: Tier; // Legacy alias for membershipTier
-  joinDate?: string;
-  lastActive?: string;
-  verified?: boolean;
-  profileImage?: string;
+  email?: string;
   website?: string;
-  socialMedia?: {
-    linkedin?: string;
-    facebook?: string;
-    instagram?: string;
-    twitter?: string;
-  };
-  services?: string[];
-  certifications?: string[];
-  experience?: string;
-  education?: string;
-  // Additional properties for admin/staff views
-  trialStatus?: "Active" | "Expired" | "N/A";
-  activity?: number;
-  churnRisk?: boolean;
-  first_name?: string;
-  last_name?: string;
+}
+
+export interface SocialMedia {
+  linkedin?: string;
+  facebook?: string;
+  instagram?: string;
+  twitter?: string;
+}
+
+export interface Testimonial {
+  quote: string;
+  author: string;
+}
+
+export interface FAQ {
+  question: string;
+  answer: string;
 }
 
 export interface MarketingResource {
   id: string;
   title: string;
   description: string;
-  category: string;
+  image: string;         // Added this property
+  imageUrl?: string;     // Made optional since image is used instead
+  filePath: string;      // Added this property
+  fileUrl?: string;      // Made optional since filePath is used instead
   tier: Tier;
-  image: string;
-  filePath: string;
+  category: string;
+  tags: string[];
 }
 
-export interface Lead {
-  id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  created_at: string;
-}
-
-export interface AdminMetrics {
-  totalProviders: number;
-  activeProviders: number;
-  newThisMonth: number;
-  churnRisk: number;
-  tierCounts: {
-    premier: number;
-    preferred: number;
-    basic: number;
-  };
+export interface FullProviderProfile {
+  id: string;
+  name: string;
+  specialty: string;
+  location: string;
+  bio: string;
+  profileImage: string;
+  tier: Tier;
+  email: string;         // Required field
+  
+  // Optional fields used throughout the app
+  membershipTier?: Tier;
+  trainingLevel?: TrainingLevel;
+  coordinates?: Coordinates;
+  contactInfo?: ContactInfo;
+  servicesOffered?: string[];
+  services?: string[]; // Alternative name used in some components
+  galleryImages?: string[];
+  testimonials?: Testimonial[];
+  faqs?: FAQ[];
+  
+  // Additional fields referenced in components
+  website?: string;
+  socialMedia?: SocialMedia;
+  phone?: string;
+  experience?: string;
+  education?: string;
+  churnRisk?: boolean;
+  trialStatus?: 'Active' | 'Expired' | 'N/A';
+  certifications?: string[];
 }

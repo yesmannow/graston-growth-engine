@@ -1,62 +1,79 @@
 import { FullProviderProfile, Tier } from "@/types";
 
-// Updated to use correct property names from FullProviderProfile
+// Define which fields are required for each tier
 const tierRequirements: Record<Tier, (keyof FullProviderProfile)[]> = {
   Free: ['name', 'email', 'profileImage', 'bio'],
   Preferred: ['name', 'email', 'profileImage', 'bio', 'website'],
   Premier: ['name', 'email', 'profileImage', 'bio', 'website', 'socialMedia'],
 };
 
+// Labels for fields in the UI
 const fieldLabels: Record<keyof FullProviderProfile, string> = {
   id: 'ID',
   name: 'Full Name',
-  membershipTier: 'Membership Tier',
   tier: 'Tier',
-  email: 'Email',
-  phone: 'Phone',
+  membershipTier: 'Membership Tier',
   specialty: 'Specialty',
   location: 'Location',
   bio: 'Bio',
-  profileScore: 'Profile Score',
-  joinDate: 'Join Date',
-  lastActive: 'Last Active',
-  verified: 'Verified',
   profileImage: 'Profile Image',
+  email: 'Email',
   website: 'Website',
   socialMedia: 'Social Media',
+  trainingLevel: 'Training Level',
+  coordinates: 'Location Coordinates',
+  contactInfo: 'Contact Information',
+  servicesOffered: 'Services Offered',
   services: 'Services',
-  certifications: 'Certifications',
+  galleryImages: 'Gallery Images',
+  testimonials: 'Testimonials',
+  faqs: 'FAQs',
+  phone: 'Phone',
   experience: 'Experience',
   education: 'Education',
-  trialStatus: 'Trial Status',
-  activity: 'Activity',
   churnRisk: 'Churn Risk',
-  first_name: 'First Name',
-  last_name: 'Last Name',
+  trialStatus: 'Trial Status',
+  certifications: 'Certifications'
 };
 
+// Calculate profile completion score based on tier requirements
 export const calculateProfileScore = (user: FullProviderProfile) => {
   const requirements = tierRequirements[user.membershipTier || user.tier];
   let completedFields = 0;
 
-  requirements.forEach(field => {
+  requirements.forEach((field: keyof FullProviderProfile) => {
     if (user[field]) {
       completedFields++;
     }
   });
 
   const score = Math.round((completedFields / requirements.length) * 100);
-  
-  let nextAction = "Complete your profile to improve your score.";
+  let nextAction = '';
+  let status = '';
+
   if (score === 100) {
-    nextAction = "Your profile is complete!";
+    status = 'Complete';
+    nextAction = 'Your profile is complete!';
+  } else if (score >= 80) {
+    status = 'Almost Complete';
+    nextAction = 'Just a few more fields to complete your profile.';
+  } else if (score >= 50) {
+    status = 'In Progress';
+    nextAction = 'Keep going! Your profile is taking shape.';
   } else {
-    const missingFields = requirements.filter(field => !user[field]);
+    const missingFields = requirements.filter((field: keyof FullProviderProfile) => !user[field]);
     if (missingFields.length > 0) {
       const fieldName = fieldLabels[missingFields[0]];
       nextAction = `Add your ${fieldName} to improve your score.`;
+    } else {
+      nextAction = 'Start filling out your profile.';
     }
+    status = 'Just Started';
   }
 
-  return { score, nextAction };
+  return {
+    score,
+    status,
+    nextAction
+  };
 };
