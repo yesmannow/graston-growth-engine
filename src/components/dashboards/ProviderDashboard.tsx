@@ -1,11 +1,11 @@
-import ProfileScoreCard from "./provider/ProfileScoreCard.tsx";
-import MembershipTierCard from "./provider/MembershipTierCard.tsx";
-import PerformanceAnalyticsCard from "./provider/PerformanceAnalyticsCard.tsx";
-import AudienceOverviewCard from "./provider/AudienceOverviewCard.tsx";
-import LeadInboxCard from "./provider/LeadInboxCard.tsx";
-import RoiCalculatorCard from "./provider/RoiCalculatorCard.tsx";
-import UpgradeCtaCard from "./provider/UpgradeCtaCard.tsx";
-import ContentAssistantCard from "./provider/ContentAssistantCard.tsx";
+import ProfileScoreCard from "./provider/ProfileScoreCard";
+import MembershipTierCard from "./provider/MembershipTierCard";
+import PerformanceAnalyticsCard from "./provider/PerformanceAnalyticsCard";
+import AudienceOverviewCard from "./provider/AudienceOverviewCard";
+import LeadInboxCard from "./provider/LeadInboxCard";
+import RoiCalculatorCard from "./provider/RoiCalculatorCard";
+import UpgradeCtaCard from "./provider/UpgradeCtaCard";
+import ContentAssistantCard from "./provider/ContentAssistantCard";
 
 const ProviderDashboard = () => {
   return (
