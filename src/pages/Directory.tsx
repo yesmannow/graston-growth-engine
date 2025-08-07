@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { mockProviders } from "@/lib/mockData";
 import ProviderCard from "@/components/directory/ProviderCard";
 import { Input } from "@/components/ui/input";
 import { DirectoryFilters, FullProviderProfile, SortOption } from "@/types";
-import { Search, Filter, X } from "lucide-react";
+import { Search, Filter, X, RefreshCw } from "lucide-react";
 import DirectoryMap from "@/components/directory/DirectoryMap";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import FilterPanel from "@/components/directory/FilterPanel";
@@ -11,6 +11,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useMediaQuery } from "@/hooks/use-mobile";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { showSuccess } from "@/utils/toast";
 
 const Directory = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -18,8 +21,12 @@ const Directory = () => {
   const [filters, setFilters] = useState<DirectoryFilters>({
     sortBy: 'premier-first'
   });
-  const [filteredProviders, setFilteredProviders] = useState<FullProviderProfile[]>(mockProviders);
+  const [filteredProviders, setFilteredProviders] = useState<FullProviderProfile[]>([]);
   const [mapBounds, setMapBounds] = useState<google.maps.LatLngBounds | null>(null);
+  const [filterByMapArea, setFilterByMapArea] = useState(true);
+  const [mapKey, setMapKey] = useState(0);
+  const [listKey, setListKey] = useState(0);
+
   const isMobile = useMediaQuery("(max-width: 1024px)");
 
   // Extract unique specialties for the filter dropdown
@@ -91,12 +98,26 @@ const Directory = () => {
   }, [searchTerm, filters]);
 
   // Filter providers based on current map bounds if available
-  const visibleProviders = mapBounds ? 
+  const providersInBounds = mapBounds ? 
     filteredProviders.filter(provider => {
       if (!provider.coordinates) return false;
       const position = new google.maps.LatLng(provider.coordinates.lat, provider.coordinates.lng);
       return mapBounds.contains(position);
     }) : filteredProviders;
+
+  const providersToList = filterByMapArea ? providersInBounds : filteredProviders;
+
+  // Show toast when map-filtered list changes
+  useEffect(() => {
+    if (filterByMapArea && mapBounds) {
+      showSuccess(`Showing ${providersInBounds.length} providers in this map area.`);
+    }
+  }, [providersInBounds, filterByMapArea, mapBounds]);
+
+  // Reset scroll position of the list when its content changes
+  useEffect(() => {
+    setListKey(key => key + 1);
+  }, [providersToList]);
 
   // Sort providers based on selected sort option
   const sortProviders = (providers: FullProviderProfile[], sortBy: SortOption): FullProviderProfile[] => {
@@ -108,28 +129,21 @@ const Directory = () => {
           const tierOrder = { Premier: 0, Preferred: 1, Free: 2 };
           return tierOrder[a.tier] - tierOrder[b.tier];
         });
-        
-      case 'closest':
-        return sortedProviders;
-        
       case 'top-rated':
-        return sortedProviders.sort((a, b) => 
-          (b.rating || 0) - (a.rating || 0)
-        );
-        
-      case 'most-active':
-        return sortedProviders.sort((a, b) => 
-          (b.activityScore || 0) - (a.activityScore || 0)
-        );
-        
+        return sortedProviders.sort((a, b) => (b.rating || 0) - (a.rating || 0));
       case 'most-reviewed':
-        return sortedProviders.sort((a, b) => 
-          (b.reviewCount || 0) - (a.reviewCount || 0)
-        );
-        
+        return sortedProviders.sort((a, b) => (b.reviewCount || 0) - (a.reviewCount || 0));
       default:
         return sortedProviders;
     }
+  };
+
+  const handleReset = () => {
+    setSearchTerm('');
+    setFilters({ sortBy: 'premier-first' });
+    setMapBounds(null);
+    setMapKey(prevKey => prevKey + 1); // Remounts the map to reset its view
+    showSuccess("Filters and map view have been reset.");
   };
 
   const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
@@ -155,23 +169,39 @@ const Directory = () => {
       <div className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-4 p-4 overflow-hidden">
         {/* Left Column: Filters & Results */}
         <div className="lg:col-span-1 flex flex-col gap-4 overflow-hidden">
-          {/* Search Bar */}
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search by name, specialty, location..."
-              className="pl-10 pr-10"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            {searchTerm && (
-              <button 
-                className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
-                onClick={() => setSearchTerm('')}
-              >
-                <X className="h-4 w-4" />
-              </button>
-            )}
+          {/* Search & Controls */}
+          <div className="flex flex-col gap-3">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search by name, specialty, location..."
+                className="pl-10 pr-10"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              {searchTerm && (
+                <button 
+                  className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
+                  onClick={() => setSearchTerm('')}
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center space-x-2">
+                <Switch
+                  id="filter-by-map"
+                  checked={filterByMapArea}
+                  onCheckedChange={setFilterByMapArea}
+                />
+                <Label htmlFor="filter-by-map" className="text-sm">Filter by map area</Label>
+              </div>
+              <Button variant="ghost" size="sm" onClick={handleReset} className="text-xs">
+                <RefreshCw className="h-3 w-3 mr-1" />
+                Reset All
+              </Button>
+            </div>
           </div>
           
           {/* Mobile Filter Button */}
@@ -210,15 +240,15 @@ const Directory = () => {
           )}
 
           {/* Results Count */}
-          <div className="text-sm text-muted-foreground">
-            Total providers: {filteredProviders.length}. {mapBounds && `Showing ${visibleProviders.length} within current map view.`}
+          <div className="text-sm text-muted-foreground shrink-0">
+            Showing {providersToList.length} of {filteredProviders.length} matching providers.
           </div>
 
           {/* Results List */}
-          <ScrollArea className="flex-grow border rounded-lg">
+          <ScrollArea key={listKey} className="flex-grow border rounded-lg">
             <div className="p-2 space-y-2">
-              {visibleProviders.length > 0 ? (
-                visibleProviders.map((provider) => (
+              {providersToList.length > 0 ? (
+                providersToList.map((provider) => (
                   <div
                     key={provider.id}
                     onMouseEnter={() => setHoveredProviderId(provider.id)}
@@ -230,14 +260,11 @@ const Directory = () => {
               ) : (
                 <div className="text-center py-16 px-4">
                   <h2 className="text-xl font-semibold">No Providers Found</h2>
-                  <p className="text-muted-foreground mt-2">Try adjusting your search or filter criteria.</p>
+                  <p className="text-muted-foreground mt-2">Try adjusting your search or filter criteria, or move the map to a new area.</p>
                   <Button 
                     variant="outline" 
                     className="mt-4"
-                    onClick={() => {
-                      setSearchTerm('');
-                      setFilters({ sortBy: 'premier-first' });
-                    }}
+                    onClick={handleReset}
                   >
                     Clear All Filters
                   </Button>
@@ -250,6 +277,7 @@ const Directory = () => {
         {/* Right Column: Map */}
         <div className="lg:col-span-2 rounded-lg overflow-hidden h-full w-full">
           <DirectoryMap 
+            key={mapKey}
             providers={filteredProviders} 
             apiKey={googleMapsApiKey} 
             hoveredProviderId={hoveredProviderId}
