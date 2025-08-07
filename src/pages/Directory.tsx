@@ -12,6 +12,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useFilterStore } from "@/hooks/useFilterStore";
 import { motion, AnimatePresence } from "framer-motion";
+import { createClient } from "@/integrations/supabase/client"; // Import Supabase client
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "";
 
@@ -19,6 +20,7 @@ const Directory: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useMediaQuery("(max-width: 1023px)");
+  const supabase = createClient(); // Initialize Supabase client
 
   // Global filter state from Zustand
   const { searchTerm, clinicianType, condition, language, tiers, setSearchTerm, setClinicianType, setCondition, setLanguage, setTiers } = useFilterStore();
@@ -33,6 +35,11 @@ const Directory: React.FC = () => {
   const [mapZoom, setMapZoom] = useState(4);
   const [mapBounds, setMapBounds] = useState<google.maps.LatLngBounds | null>(null);
   const debouncedBounds = useDebounce(mapBounds, 500);
+  const debouncedSearchTerm = useDebounce(searchTerm, 500); // Debounce search term
+  const debouncedClinicianType = useDebounce(clinicianType, 500);
+  const debouncedCondition = useDebounce(condition, 500);
+  const debouncedLanguage = useDebounce(language, 500);
+  const debouncedTiers = useDebounce(tiers, 500);
 
   // Refs for scrolling to provider cards
   const providerCardRefs = useRef<Map<string, HTMLDivElement | null>>(new Map());
@@ -73,31 +80,59 @@ const Directory: React.FC = () => {
   }, [searchTerm, clinicianType, condition, language, tiers, mapCenter, mapZoom, mapBounds, navigate]);
 
 
-  // Simulate fetching data based on filters and map bounds
+  // Fetch data from Supabase based on filters and map bounds
   useEffect(() => {
-    setIsLoading(true);
-    // In a real app, this would be a useQuery call with dependencies on `debouncedBounds` and `filters`
-    const filteredProviders = mockProviders.filter(p => {
-      const inBounds = debouncedBounds 
-        ? p.coordinates && debouncedBounds.contains(new google.maps.LatLng(p.coordinates.lat, p.coordinates.lng))
-        : true;
-      
-      const tierMatch = tiers.includes(p.tier);
-      const typeMatch = !clinicianType || p.clinicianType === clinicianType;
-      const conditionMatch = !condition || p.conditions_treated?.includes(condition);
-      const languageMatch = !language || p.languages_spoken?.includes(language);
-      const searchMatch = searchTerm === '' || 
-        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (p.specialty || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (p.clinicAddress || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (p.location || '').toLowerCase().includes(searchTerm.toLowerCase());
+    const fetchProviders = async () => {
+      setIsLoading(true);
+      let query = supabase.from('profiles').select('*');
 
-      return inBounds && tierMatch && typeMatch && conditionMatch && languageMatch && searchMatch;
-    });
+      // Apply text search filter
+      if (debouncedSearchTerm) {
+        query = query.or(`name.ilike.%${debouncedSearchTerm}%,specialty.ilike.%${debouncedSearchTerm}%,clinic_address.ilike.%${debouncedSearchTerm}%,location.ilike.%${debouncedSearchTerm}%`);
+      }
 
-    setProviders(filteredProviders);
-    setTimeout(() => setIsLoading(false), 500); // Simulate network delay
-  }, [debouncedBounds, searchTerm, clinicianType, condition, language, tiers]);
+      // Apply clinician type filter
+      if (debouncedClinicianType) {
+        query = query.eq('clinician_type', debouncedClinicianType);
+      }
+
+      // Apply condition filter
+      if (debouncedCondition) {
+        query = query.contains('conditions_treated', [debouncedCondition]);
+      }
+
+      // Apply language filter
+      if (debouncedLanguage) {
+        query = query.contains('languages_spoken', [debouncedLanguage]);
+      }
+
+      // Apply tier filter
+      if (debouncedTiers && debouncedTiers.length > 0 && debouncedTiers.length < 3) {
+        query = query.in('tier', debouncedTiers);
+      }
+
+      // Apply map bounds filter (requires coordinates to be stored as JSONB or separate lat/lng columns)
+      // For simplicity, this example assumes coordinates are available and filters them client-side
+      // A more robust solution would involve PostGIS or a custom Supabase function for geo-spatial queries.
+      const { data, error } = await query;
+
+      if (error) {
+        console.error("Error fetching providers:", error);
+        setProviders([]);
+      } else {
+        // Client-side filtering for map bounds as Supabase doesn't have native geospatial queries on JSONB
+        const filteredByBounds = data.filter(p => {
+          return debouncedBounds 
+            ? p.coordinates && debouncedBounds.contains(new google.maps.LatLng(p.coordinates.lat, p.coordinates.lng))
+            : true;
+        });
+        setProviders(filteredByBounds as FullProviderProfile[]);
+      }
+      setIsLoading(false);
+    };
+
+    fetchProviders();
+  }, [debouncedBounds, debouncedSearchTerm, debouncedClinicianType, debouncedCondition, debouncedLanguage, debouncedTiers, supabase]);
 
   const handleMapCameraChanged = useCallback((ev: any) => {
     const newBounds = ev.map.getBounds();
