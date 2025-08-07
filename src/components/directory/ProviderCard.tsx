@@ -1,20 +1,23 @@
 import { FullProviderProfile } from "@/types";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MapPin, Star, Phone, Globe, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 interface ProviderCardProps {
   provider: FullProviderProfile;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
   onToggleFavorite: (providerId: string) => void;
+  onToggleCompare: (providerId: string) => void;
+  isComparing: boolean;
 }
 
-const ProviderCard = ({ provider, onMouseEnter, onMouseLeave, onToggleFavorite }: ProviderCardProps) => {
+const ProviderCard = ({ provider, onMouseEnter, onMouseLeave, onToggleFavorite, onToggleCompare, isComparing }: ProviderCardProps) => {
   const navigate = useNavigate();
-
 
   const handleClick = () => {
     navigate(`/directory/provider/${provider.id}`);
@@ -58,14 +61,20 @@ const ProviderCard = ({ provider, onMouseEnter, onMouseLeave, onToggleFavorite }
           <Button variant="ghost" size="sm" onClick={e => e.stopPropagation()}><Phone className="h-5 w-5 mr-1"/>Call</Button>
           <Button variant="ghost" size="sm" asChild><a href={provider.website} target="_blank" rel="noopener"><Globe className="h-5 w-5 mr-1"/>Website</a></Button>
           <Button variant="ghost" size="sm" onClick={e => { e.stopPropagation(); onToggleFavorite(provider.id); }}><Heart className={`h-5 w-5 ${provider.isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400'}`}/></Button>
+          {provider.can_compare && (
+            <div className="flex items-center space-x-2" onClick={e => e.stopPropagation()}>
+              <Checkbox id={`compare-${provider.id}`} checked={isComparing} onCheckedChange={() => onToggleCompare(provider.id)} />
+              <Label htmlFor={`compare-${provider.id}`} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer">Compare</Label>
+            </div>
+          )}
         </div>
       </div>
     );
   }
   if (provider.tier === 'Preferred') {
     return (
-      <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={handleClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-        <CardContent className="p-4 flex items-center gap-3">
+      <Card className="hover:shadow-lg transition-shadow cursor-pointer flex flex-col" onClick={handleClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+        <CardContent className="p-4 flex items-center gap-3 flex-grow">
           <Avatar className="h-12 w-12"><AvatarImage src={provider.profileImage} alt={provider.name}/><AvatarFallback>{provider.name.split(' ').map(n=>n[0]).join('')}</AvatarFallback></Avatar>
           <div className="flex-1">
             <h3 className="font-semibold truncate">{provider.name}</h3>
@@ -76,6 +85,14 @@ const ProviderCard = ({ provider, onMouseEnter, onMouseLeave, onToggleFavorite }
             </div>
           </div>
         </CardContent>
+        {provider.can_compare && (
+          <CardFooter className="p-4 border-t" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center space-x-2">
+              <Checkbox id={`compare-${provider.id}`} checked={isComparing} onCheckedChange={() => onToggleCompare(provider.id)} />
+              <Label htmlFor={`compare-${provider.id}`} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer">Compare</Label>
+            </div>
+          </CardFooter>
+        )}
       </Card>
     );
   }

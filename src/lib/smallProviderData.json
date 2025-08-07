@@ -71,5 +71,642 @@
     "accreditations": [
       "BCTMB"
     ]
+  },
+  {
+    "provider_name": "Amber Lee",
+    "clinic_name": "King-Thomas",
+    "city": "East William",
+    "state": "MA",
+    "phone": "444-403-8444x881",
+    "email": "jessica23@mullins.com",
+    "website": "http://www.aguirre.com/",
+    "specialties": [
+      "Shoulder Injuries",
+      "Knee Rehab",
+      "Back Pain"
+    ],
+    "languages_spoken": [
+      "Spanish"
+    ],
+    "clinician_type": "Massage Therapist",
+    "provider_tier": "Premier",
+    "latitude": 27.901356,
+    "longitude": -69.366237,
+    "accreditations": []
+  },
+  {
+    "provider_name": "Christopher Merritt",
+    "clinic_name": "Padilla, Williams and Nelson",
+    "city": "North Lauraburgh",
+    "state": "WY",
+    "phone": "452-212-7825x84119",
+    "email": "iwright@yahoo.com",
+    "website": "http://schneider.com/",
+    "specialties": [
+      "Neck Pain",
+      "Knee Rehab"
+    ],
+    "languages_spoken": [
+      "English",
+      "Hindi"
+    ],
+    "clinician_type": "Chiropractor",
+    "provider_tier": "Premier",
+    "latitude": 31.133402,
+    "longitude": -116.389307,
+    "accreditations": [
+      "FSBPT",
+      "ACA",
+      "PACE"
+    ]
+  },
+  {
+    "provider_name": "Beth Walsh",
+    "clinic_name": "Park-Davis",
+    "city": "East Danielle",
+    "state": "AK",
+    "phone": "(844)605-2538",
+    "email": "mobrien@ponce-medina.com",
+    "website": "https://green.org/",
+    "specialties": [
+      "Neck Pain",
+      "Athletic Recovery"
+    ],
+    "languages_spoken": [
+      "English",
+      "Hindi"
+    ],
+    "clinician_type": "Massage Therapist",
+    "provider_tier": "Basic",
+    "latitude": 30.22695,
+    "longitude": -117.932369,
+    "accreditations": [
+      "PACE"
+    ]
+  },
+  {
+    "provider_name": "Matthew Parker",
+    "clinic_name": "Edwards Inc",
+    "city": "New Debraside",
+    "state": "IN",
+    "phone": "+1-218-606-1700x879",
+    "email": "john57@griffin-wilson.biz",
+    "website": "https://gray.org/",
+    "specialties": [
+      "Shoulder Injuries"
+    ],
+    "languages_spoken": [
+      "Hindi"
+    ],
+    "clinician_type": "Chiropractor",
+    "provider_tier": "Preferred",
+    "latitude": 36.888621,
+    "longitude": -67.300598,
+    "accreditations": [
+      "ACA",
+      "PACE"
+    ]
+  },
+  {
+    "provider_name": "Jennifer Lawrence",
+    "clinic_name": "Strong-Johnson",
+    "city": "West Alicia",
+    "state": "NM",
+    "phone": "001-561-393-0328x013",
+    "email": "ofields@stephenson.com",
+    "website": "http://williams.net/",
+    "specialties": [
+      "Neck Pain",
+      "Shoulder Injuries",
+      "Back Pain"
+    ],
+    "languages_spoken": [
+      "Hindi",
+      "French"
+    ],
+    "clinician_type": "Chiropractor",
+    "provider_tier": "Premier",
+    "latitude": 26.240011,
+    "longitude": -104.480852,
+    "accreditations": [
+      "PACE",
+      "FSBPT"
+    ]
+  },
+  {
+    "provider_name": "Adam Burke",
+    "clinic_name": "Walton, White and Walker",
+    "city": "Josephchester",
+    "state": "OH",
+    "phone": "001-797-003-0243x123",
+    "email": "brandonlambert@christensen.net",
+    "website": "https://www.baldwin-gomez.com/",
+    "specialties": [
+      "Knee Rehab",
+      "Shoulder Injuries"
+    ],
+    "languages_spoken": [
+      "English",
+      "French"
+    ],
+    "clinician_type": "Physical Therapist",
+    "provider_tier": "Preferred",
+    "latitude": 36.242763,
+    "longitude": -85.043454,
+    "accreditations": []
+  },
+  {
+    "provider_name": "Brittany Schmidt",
+    "clinic_name": "Castillo-Freeman",
+    "city": "West Sarahbury",
+    "state": "WA",
+    "phone": "+1-178-261-0248x68796",
+    "email": "robert29@webb-smith.biz",
+    "website": "https://gibson.net/",
+    "specialties": [
+      "Athletic Recovery",
+      "Knee Rehab",
+      "Neck Pain"
+    ],
+    "languages_spoken": [
+      "Spanish"
+    ],
+    "clinician_type": "Chiropractor",
+    "provider_tier": "Basic",
+    "latitude": 45.300978,
+    "longitude": -104.082529,
+    "accreditations": [
+      "PACE",
+      "ACA"
+    ]
+  },
+  {
+    "provider_name": "Alejandro Johnson",
+    "clinic_name": "West-Cole",
+    "city": "Lake Tanyaside",
+    "state": "NH",
+    "phone": "119.902.2516x0447",
+    "email": "pparker@yahoo.com",
+    "website": "https://www.wong.info/",
+    "specialties": [
+      "Shoulder Injuries"
+    ],
+    "languages_spoken": [
+      "Hindi",
+      "English"
+    ],
+    "clinician_type": "Chiropractor",
+    "provider_tier": "Premier",
+    "latitude": 32.938505,
+    "longitude": -115.320841,
+    "accreditations": [
+      "FSBPT",
+      "NATA",
+      "ACA"
+    ]
+  },
+  {
+    "provider_name": "Derek Romero",
+    "clinic_name": "Whitney Inc",
+    "city": "Erinside",
+    "state": "MA",
+    "phone": "(461)318-2240x448",
+    "email": "cgutierrez@freeman.com",
+    "website": "https://bradley.info/",
+    "specialties": [
+      "Shoulder Injuries"
+    ],
+    "languages_spoken": [
+      "French",
+      "Hindi"
+    ],
+    "clinician_type": "Chiropractor",
+    "provider_tier": "Premier",
+    "latitude": 41.446396,
+    "longitude": -107.644485,
+    "accreditations": []
+  },
+  {
+    "provider_name": "Shelia Richardson",
+    "clinic_name": "Hawkins LLC",
+    "city": "Antoniohaven",
+    "state": "RI",
+    "phone": "001-586-807-5147x06871",
+    "email": "walkerkathy@yahoo.com",
+    "website": "https://jordan.biz/",
+    "specialties": [
+      "Knee Rehab"
+    ],
+    "languages_spoken": [
+      "Hindi"
+    ],
+    "clinician_type": "Physical Therapist",
+    "provider_tier": "Premier",
+    "latitude": 28.541927,
+    "longitude": -101.998006,
+    "accreditations": []
+  },
+  {
+    "provider_name": "Jennifer Scott",
+    "clinic_name": "Sloan, Blackwell and Berger",
+    "city": "Brianmouth",
+    "state": "KY",
+    "phone": "+1-366-466-4850x040",
+    "email": "zdean@hotmail.com",
+    "website": "https://welch.com/",
+    "specialties": [
+      "Neck Pain",
+      "Athletic Recovery",
+      "Shoulder Injuries"
+    ],
+    "languages_spoken": [
+      "Hindi"
+    ],
+    "clinician_type": "Chiropractor",
+    "provider_tier": "Preferred",
+    "latitude": 37.872646,
+    "longitude": -106.143244,
+    "accreditations": [
+      "ACA"
+    ]
+  },
+  {
+    "provider_name": "John Barnes",
+    "clinic_name": "Schultz-Malone",
+    "city": "Lake Charles",
+    "state": "ID",
+    "phone": "+1-810-369-9283",
+    "email": "fgood@yahoo.com",
+    "website": "https://klein.net/",
+    "specialties": [
+      "Knee Rehab",
+      "Neck Pain",
+      "Athletic Recovery"
+    ],
+    "languages_spoken": [
+      "English"
+    ],
+    "clinician_type": "Massage Therapist",
+    "provider_tier": "Basic",
+    "latitude": 42.807959,
+    "longitude": -86.527446,
+    "accreditations": [
+      "PACE",
+      "ACA",
+      "FSBPT"
+    ]
+  },
+  {
+    "provider_name": "Amanda Alvarado",
+    "clinic_name": "May, Ross and Williams",
+    "city": "Fowlerberg",
+    "state": "SD",
+    "phone": "+1-346-436-2752x6081",
+    "email": "wilsonalexander@hernandez-johnson.org",
+    "website": "http://nunez.com/",
+    "specialties": [
+      "Athletic Recovery",
+      "Back Pain"
+    ],
+    "languages_spoken": [
+      "English",
+      "Spanish"
+    ],
+    "clinician_type": "Chiropractor",
+    "provider_tier": "Basic",
+    "latitude": 30.167925,
+    "longitude": -73.627072,
+    "accreditations": [
+      "ACA",
+      "FSBPT",
+      "PACE"
+    ]
+  },
+  {
+    "provider_name": "Tammy Reynolds MD",
+    "clinic_name": "Smith, Brown and Henry",
+    "city": "North Johnton",
+    "state": "WY",
+    "phone": "(082)795-2784x082",
+    "email": "hammondtanner@goodman.net",
+    "website": "http://gillespie.net/",
+    "specialties": [
+      "Shoulder Injuries"
+    ],
+    "languages_spoken": [
+      "Hindi"
+    ],
+    "clinician_type": "Athletic Trainer",
+    "provider_tier": "Basic",
+    "latitude": 46.231186,
+    "longitude": -79.764021,
+    "accreditations": []
+  },
+  {
+    "provider_name": "James Camacho",
+    "clinic_name": "Davis Ltd",
+    "city": "Williammouth",
+    "state": "WY",
+    "phone": "+1-796-863-8730x9524",
+    "email": "fredericknicholas@gmail.com",
+    "website": "http://walton-henson.org/",
+    "specialties": [
+      "Knee Rehab",
+      "Back Pain"
+    ],
+    "languages_spoken": [
+      "English"
+    ],
+    "clinician_type": "Chiropractor",
+    "provider_tier": "Premier",
+    "latitude": 40.431695,
+    "longitude": -91.968748,
+    "accreditations": [
+      "FSBPT",
+      "ACA"
+    ]
+  },
+  {
+    "provider_name": "Sabrina Moore",
+    "clinic_name": "Ibarra-Morgan",
+    "city": "South Jerry",
+    "state": "RI",
+    "phone": "001-443-472-3917x7398",
+    "email": "colemantrevor@wallace-ruiz.biz",
+    "website": "https://www.carpenter.com/",
+    "specialties": [
+      "Neck Pain",
+      "Back Pain",
+      "Knee Rehab"
+    ],
+    "languages_spoken": [
+      "Spanish",
+      "Hindi"
+    ],
+    "clinician_type": "Athletic Trainer",
+    "provider_tier": "Basic",
+    "latitude": 33.354647,
+    "longitude": -92.978575,
+    "accreditations": [
+      "ACA"
+    ]
+  },
+  {
+    "provider_name": "Kiara Li",
+    "clinic_name": "Salazar Inc",
+    "city": "New Nataliemouth",
+    "state": "SD",
+    "phone": "(684)358-3951x119",
+    "email": "chris86@hotmail.com",
+    "website": "https://ellis.com/",
+    "specialties": [
+      "Athletic Recovery",
+      "Back Pain"
+    ],
+    "languages_spoken": [
+      "Hindi"
+    ],
+    "clinician_type": "Massage Therapist",
+    "provider_tier": "Basic",
+    "latitude": 43.412082,
+    "longitude": -115.702123,
+    "accreditations": [
+      "BCTMB",
+      "ACA",
+      "PACE"
+    ]
+  },
+  {
+    "provider_name": "Jennifer Young",
+    "clinic_name": "Donovan-Morrow",
+    "city": "Montgomeryborough",
+    "state": "CA",
+    "phone": "+1-193-357-3861",
+    "email": "jasonfitzgerald@yahoo.com",
+    "website": "https://www.larson.com/",
+    "specialties": [
+      "Athletic Recovery"
+    ],
+    "languages_spoken": [
+      "Spanish"
+    ],
+    "clinician_type": "Physical Therapist",
+    "provider_tier": "Basic",
+    "latitude": 40.22844,
+    "longitude": -96.060539,
+    "accreditations": [
+      "FSBPT"
+    ]
+  },
+  {
+    "provider_name": "Michael Ayala",
+    "clinic_name": "Blackwell, Pham and Kim",
+    "city": "Myersburgh",
+    "state": "NH",
+    "phone": "(412)488-5990",
+    "email": "bobby21@walker-lynch.com",
+    "website": "http://cole.com/",
+    "specialties": [
+      "Knee Rehab",
+      "Back Pain"
+    ],
+    "languages_spoken": [
+      "Spanish",
+      "Hindi"
+    ],
+    "clinician_type": "Athletic Trainer",
+    "provider_tier": "Preferred",
+    "latitude": 27.252201,
+    "longitude": -109.145079,
+    "accreditations": [
+      "NATA",
+      "FSBPT"
+    ]
+  },
+  {
+    "provider_name": "John Smith",
+    "clinic_name": "Wilson-Buck",
+    "city": "Garcialand",
+    "state": "TN",
+    "phone": "(917)116-6338x079",
+    "email": "michaelhowe@gmail.com",
+    "website": "https://www.baker-johnson.com/",
+    "specialties": [
+      "Back Pain",
+      "Shoulder Injuries",
+      "Neck Pain"
+    ],
+    "languages_spoken": [
+      "English"
+    ],
+    "clinician_type": "Athletic Trainer",
+    "provider_tier": "Basic",
+    "latitude": 30.317448,
+    "longitude": -91.498335,
+    "accreditations": [
+      "FSBPT",
+      "NATA"
+    ]
+  },
+  {
+    "provider_name": "Jacqueline Perez",
+    "clinic_name": "Walters-Gentry",
+    "city": "Susanview",
+    "state": "NH",
+    "phone": "+1-236-800-9007x8481",
+    "email": "carla97@torres-ortiz.biz",
+    "website": "https://petty.com/",
+    "specialties": [
+      "Athletic Recovery"
+    ],
+    "languages_spoken": [
+      "Spanish",
+      "French"
+    ],
+    "clinician_type": "Massage Therapist",
+    "provider_tier": "Premier",
+    "latitude": 27.076139,
+    "longitude": -115.645147,
+    "accreditations": [
+      "PACE"
+    ]
+  },
+  {
+    "provider_name": "Roy Barber",
+    "clinic_name": "Day Inc",
+    "city": "Johnsonside",
+    "state": "IN",
+    "phone": "(948)408-9535",
+    "email": "carpenterpaul@stone.net",
+    "website": "http://thompson-becker.com/",
+    "specialties": [
+      "Athletic Recovery"
+    ],
+    "languages_spoken": [
+      "English",
+      "French"
+    ],
+    "clinician_type": "Physical Therapist",
+    "provider_tier": "Premier",
+    "latitude": 45.755311,
+    "longitude": -91.552852,
+    "accreditations": []
+  },
+  {
+    "provider_name": "Rebecca Castillo",
+    "clinic_name": "Hurst, Martinez and Becker",
+    "city": "Nataliestad",
+    "state": "OH",
+    "phone": "(882)284-0069x1725",
+    "email": "jake94@villa-flores.com",
+    "website": "http://www.williams.com/",
+    "specialties": [
+      "Athletic Recovery",
+      "Neck Pain",
+      "Shoulder Injuries"
+    ],
+    "languages_spoken": [
+      "Hindi",
+      "English"
+    ],
+    "clinician_type": "Chiropractor",
+    "provider_tier": "Preferred",
+    "latitude": 26.086205,
+    "longitude": -97.297068,
+    "accreditations": [
+      "FSBPT"
+    ]
+  },
+  {
+    "provider_name": "Steven Snyder",
+    "clinic_name": "Lewis, Vasquez and Lewis",
+    "city": "Scottton",
+    "state": "NE",
+    "phone": "271.508.7841x8627",
+    "email": "cindywilliams@gmail.com",
+    "website": "https://johnson.net/",
+    "specialties": [
+      "Shoulder Injuries",
+      "Back Pain"
+    ],
+    "languages_spoken": [
+      "French",
+      "English"
+    ],
+    "clinician_type": "Chiropractor",
+    "provider_tier": "Preferred",
+    "latitude": 37.082232,
+    "longitude": -103.901752,
+    "accreditations": []
+  },
+  {
+    "provider_name": "Monica Chavez",
+    "clinic_name": "Knight-Myers",
+    "city": "South Linda",
+    "state": "SD",
+    "phone": "959.555.1996x838",
+    "email": "lsmith@williams.biz",
+    "website": "https://park-george.com/",
+    "specialties": [
+      "Shoulder Injuries"
+    ],
+    "languages_spoken": [
+      "French",
+      "English"
+    ],
+    "clinician_type": "Athletic Trainer",
+    "provider_tier": "Premier",
+    "latitude": 37.50072,
+    "longitude": -77.500287,
+    "accreditations": [
+      "NATA",
+      "FSBPT",
+      "PACE"
+    ]
+  },
+  {
+    "provider_name": "Gina Nolan",
+    "clinic_name": "Conley Inc",
+    "city": "Lake Richard",
+    "state": "LA",
+    "phone": "(970)452-7232x99533",
+    "email": "lisaharrison@smith.org",
+    "website": "http://jackson-hodges.com/",
+    "specialties": [
+      "Back Pain"
+    ],
+    "languages_spoken": [
+      "French"
+    ],
+    "clinician_type": "Chiropractor",
+    "provider_tier": "Preferred",
+    "latitude": 26.281513,
+    "longitude": -76.941724,
+    "accreditations": []
+  },
+  {
+    "provider_name": "Kathleen Sellers",
+    "clinic_name": "Harris-Rich",
+    "city": "Lauriemouth",
+    "state": "OK",
+    "phone": "+1-127-062-8969",
+    "email": "campbellcorey@martin-hill.com",
+    "website": "http://collins.net/",
+    "specialties": [
+      "Athletic Recovery"
+    ],
+    "languages_spoken": [
+      "English",
+      "French"
+    ],
+    "clinician_type": "Athletic Trainer",
+    "provider_tier": "Preferred",
+    "latitude": 33.499923,
+    "longitude": -117.599316,
+    "accreditations": [
+      "FSBPT",
+      "BCTMB",
+      "NATA"
+    ]
   }
 ]

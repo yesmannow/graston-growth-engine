@@ -33,6 +33,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import SearchBar from '@/components/SearchBar';
 import smallProvidersRaw from '@/lib/smallProviderData.json';
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import ComparisonBar from "@/components/directory/ComparisonBar";
 
 // Type definition for external raw providers JSON
 type RawProvider = {
@@ -62,6 +63,7 @@ const Directory: React.FC = () => {
   const [hoveredProviderId, setHoveredProviderId] = useState<string | null>(null);
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list'); // New state for view mode
+  const [compareList, setCompareList] = useState<string[]>([]);
 
   // Generate a list of ~100 providers by repeating base and external data
   const [localProviders, setLocalProviders] = useState<FullProviderProfile[]>(() => {
@@ -87,12 +89,13 @@ const Directory: React.FC = () => {
       rating: 4,
       reviewCount: 0,
       isFavorite: false,
+      can_compare: p.provider_tier !== 'Basic',
     } as FullProviderProfile));
     const base = [...mockProviders, ...external];
     const list: FullProviderProfile[] = [];
     for (let i = 0; i < 100; i++) {
       const p = base[i % base.length];
-      list.push({ ...p, id: `${p.id}-${i}` });
+      list.push({ ...p, id: `${p.id}-${i}`, can_compare: p.tier !== 'Free' });
     }
     return list;
   });
@@ -180,6 +183,14 @@ const Directory: React.FC = () => {
       )
     );
     showSuccess("Favorite status updated! (This is a demo and won't be saved)");
+  };
+
+  const handleToggleCompare = (providerId: string) => {
+    setCompareList(prev =>
+      prev.includes(providerId)
+        ? prev.filter(id => id !== providerId)
+        : [...prev, providerId]
+    );
   };
 
   // Geocode based on the applied search input
@@ -279,12 +290,16 @@ const Directory: React.FC = () => {
 
   // slice for manual pagination
   const displayedProviders = filteredAndSortedProviders.slice(0, displayCount);
+  const providersInCompareList = useMemo(() => 
+    localProviders.filter(p => compareList.includes(p.id)),
+    [localProviders, compareList]
+  );
 
   return (
     <div className="container mx-auto p-4 md:p-8">
       <div className="relative mb-6 flex items-center gap-2">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-      <Input
+        <Input
           placeholder="Search by name, specialty, or location..."
           className="pl-10 pr-4 py-2 w-full"
           value={searchInput}
@@ -302,29 +317,29 @@ const Directory: React.FC = () => {
         />
         <Button onClick={() => applySearch(searchInput)}>Search</Button>
         {/* autocomplete suggestions */}
-      {suggestions.length > 0 && (
-        <ul className="absolute bg-white border mt-2 w-full max-w-md z-10 shadow-lg max-h-60 overflow-y-auto">
-          {suggestions.map((name, idx) => (
-            <li
-              key={name}
-              className={`px-3 py-1 cursor-pointer ${idx === activeIndex ? 'bg-blue-500 text-white' : 'hover:bg-gray-100'}`}
-              onClick={() => applySearch(name)}
-              onMouseEnter={() => setActiveIndex(idx)}
-            >
-              {(() => {
-                const query = debouncedInput;
-                if (!query) return name;
-                const parts = name.split(new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'i'));
-                return parts.map((part, i) => (
-                  part.toLowerCase() === query.toLowerCase()
-                    ? <span key={i} className="font-semibold">{part}</span>
-                    : <span key={i}>{part}</span>
-                ));
-              })()}
-            </li>
-          ))}
-        </ul>
-      )}
+        {suggestions.length > 0 && (
+          <ul className="absolute bg-white border mt-2 w-full max-w-md z-10 shadow-lg max-h-60 overflow-y-auto">
+            {suggestions.map((name, idx) => (
+              <li
+                key={name}
+                className={`px-3 py-1 cursor-pointer ${idx === activeIndex ? 'bg-blue-500 text-white' : 'hover:bg-gray-100'}`}
+                onClick={() => applySearch(name)}
+                onMouseEnter={() => setActiveIndex(idx)}
+              >
+                {(() => {
+                  const query = debouncedInput;
+                  if (!query) return name;
+                  const parts = name.split(new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'i'));
+                  return parts.map((part, i) => (
+                    part.toLowerCase() === query.toLowerCase()
+                      ? <span key={i} className="font-semibold">{part}</span>
+                      : <span key={i}>{part}</span>
+                  ));
+                })()}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {/* Toggle for List/Map View */}
@@ -391,6 +406,8 @@ const Directory: React.FC = () => {
                     onMouseEnter={() => setHoveredProviderId(provider.id)}
                     onMouseLeave={() => setHoveredProviderId(null)}
                     onToggleFavorite={handleToggleFavorite}
+                    onToggleCompare={handleToggleCompare}
+                    isComparing={compareList.includes(provider.id)}
                   />
                 ))}
             </div>
@@ -437,6 +454,11 @@ const Directory: React.FC = () => {
           </div>
         )}
       </div>
+      <ComparisonBar 
+        providers={providersInCompareList}
+        onClear={() => setCompareList([])}
+        onRemove={handleToggleCompare}
+      />
     </div>
   );
 };

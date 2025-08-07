@@ -82,6 +82,7 @@ export interface FullProviderProfile {
   faqs?: FAQ[];
   views?: number;
   engagementScore?: number;
+  can_compare?: boolean;
 }
 
 export interface MarketingResource {

@@ -17,6 +17,7 @@ import AdminPage from "./pages/Admin";
 import ProviderPage from "./pages/Provider";
 import UpdateProfile from "./pages/UpdateProfile";
 import Index from "./pages/Index"; // Import the new Index page
+import ComparePage from "./pages/ComparePage";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ const App = () => (
             <Route path="/provider/:id" element={<ProviderPage />} />
             <Route path="/provider/:id/update" element={<UpdateProfile />} />
             <Route path="/provider/:id/toolkit" element={<MarketingToolkitPage />} />
+            <Route path="/compare" element={<ComparePage />} />
             {/* Add routes for new pages if needed, e.g. /about, /faq */}
             <Route path="*" element={<NotFound />} />
           </Route>
