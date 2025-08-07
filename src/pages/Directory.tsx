@@ -12,26 +12,23 @@ import {
   Language,
   Condition,
   PatientDemographic,
-  RadiusOption, // Imported RadiusOption
-  ClinicianType, // Imported ClinicianType
+  RadiusOption,
+  ClinicianType,
 } from "@/types";
 import { Search, Filter, X, RefreshCw } from "lucide-react";
 import DirectoryMap from "@/components/directory/DirectoryMap";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import FilterPanel from "@/components/directory/FilterPanel";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useMediaQuery } from "@/hooks/use-mobile";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { showSuccess } from "@/utils/toast";
-import { Card, CardContent } from "@/components/ui/card"; // Imported Card and CardContent
+import { showSuccess, showError } from "@/utils/toast";
+import { Card, CardContent } from "@/components/ui/card";
+import { getGeocode, getLatLng } from "use-places-autocomplete";
 
 const Directory: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const isDesktop = useMediaQuery("(min-width: 1024px)"); // lg breakpoint
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
   const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
   const [filters, setFilters] = useState<DirectoryFilters>({
@@ -39,14 +36,21 @@ const Directory: React.FC = () => {
   });
   const [hoveredProviderId, setHoveredProviderId] = useState<string | null>(null);
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
-  const [providers, setProviders] = useState<FullProviderProfile[]>(mockProviders); // Use state to manage favorites
+  const [providers, setProviders] = useState<FullProviderProfile[]>(mockProviders);
+  const [mapCenter, setMapCenter] = useState({ lat: 39.8283, lng: -98.5795 });
+  const [mapZoom, setMapZoom] = useState(4);
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Sync filters with URL parameters
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const newFilters: DirectoryFilters = {};
+    const urlSearchTerm = params.get('searchTerm');
 
-    if (params.get('searchTerm')) newFilters.searchTerm = params.get('searchTerm') || '';
+    if (urlSearchTerm) {
+      newFilters.searchTerm = urlSearchTerm;
+      setSearchTerm(urlSearchTerm);
+    }
     if (params.get('city')) newFilters.city = params.get('city') || '';
     if (params.get('state')) newFilters.state = params.get('state') || '';
     if (params.get('zipCode')) newFilters.zipCode = params.get('zipCode') || '';
@@ -89,10 +93,6 @@ const Directory: React.FC = () => {
     setFilters(newFilters);
   };
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilters(prev => ({ ...prev, searchTerm: e.target.value }));
-  };
-
   const handleToggleFavorite = (providerId: string) => {
     setProviders(prevProviders =>
       prevProviders.map(p =>
@@ -100,7 +100,20 @@ const Directory: React.FC = () => {
       )
     );
     showSuccess("Favorite status updated!");
-    // In a real app, you'd update this in your backend/local storage
+  };
+
+  const handleGeocodeSearch = async () => {
+    setFilters(prev => ({ ...prev, searchTerm }));
+    if (!searchTerm) return;
+    try {
+      const results = await getGeocode({ address: searchTerm });
+      const { lat, lng } = await getLatLng(results[0]);
+      setMapCenter({ lat, lng });
+      setMapZoom(10);
+    } catch (error) {
+      console.error("Error geocoding search term:", error);
+      showError("Could not find location. Please try a different search term.");
+    }
   };
 
   const specialties: string[] = useMemo(() => Array.from(
@@ -114,7 +127,6 @@ const Directory: React.FC = () => {
   const filteredAndSortedProviders = useMemo(() => {
     let filtered = providers;
 
-    // Apply search term filter
     if (filters.searchTerm) {
       const searchTermLower = filters.searchTerm.toLowerCase();
       filtered = filtered.filter(
@@ -126,8 +138,6 @@ const Directory: React.FC = () => {
           p.services?.some(service => service.toLowerCase().includes(searchTermLower))
       );
     }
-
-    // Apply location filters
     if (filters.city) {
       filtered = filtered.filter(p => p.location?.toLowerCase().includes(filters.city!.toLowerCase()));
     }
@@ -135,14 +145,8 @@ const Directory: React.FC = () => {
       filtered = filtered.filter(p => p.location?.toLowerCase().includes(filters.state!.toLowerCase()));
     }
     if (filters.zipCode) {
-      // This would require zip code data in mockProviders or a geo-coding service
-      // For now, we'll skip actual zip code radius search and just do a simple match if zipCode is present in location string
       filtered = filtered.filter(p => p.clinicAddress?.includes(filters.zipCode!));
     }
-    // Radius filtering would require actual geo-spatial calculations, which is out of scope for mock data.
-    // If coordinates were used, a more complex filter would be needed.
-
-    // Apply provider type filters
     if (filters.clinicianType && filters.clinicianType !== 'All') {
       filtered = filtered.filter(p => p.clinicianType === filters.clinicianType);
     }
@@ -153,11 +157,8 @@ const Directory: React.FC = () => {
       filtered = filtered.filter(p => p.tier === filters.tier);
     }
     if (filters.trainingLevel && filters.trainingLevel !== 'All') {
-      // Ensure filters.trainingLevel is treated as TrainingLevel for includes method
       filtered = filtered.filter(p => p.gtCertifications?.includes(filters.trainingLevel as TrainingLevel));
     }
-
-    // Apply multi-select filters
     if (filters.languages && filters.languages.length > 0) {
       filtered = filtered.filter(p =>
         p.languagesSpoken?.some(lang => filters.languages?.includes(lang))
@@ -173,13 +174,10 @@ const Directory: React.FC = () => {
         p.patientTypes?.some(type => filters.patientTypes?.includes(type))
       );
     }
-
-    // Apply favorites only filter
     if (filters.favoritesOnly) {
       filtered = filtered.filter(p => p.isFavorite);
     }
 
-    // Apply sorting
     filtered.sort((a, b) => {
       if (filters.sortBy === 'premier-first') {
         const tierOrder: Record<Tier, number> = { Premier: 3, Preferred: 2, Free: 1 };
@@ -195,13 +193,6 @@ const Directory: React.FC = () => {
     return filtered;
   }, [providers, filters]);
 
-  const handleMapBoundsChanged = (bounds: google.maps.LatLngBounds) => {
-    // This function would typically be used to fetch providers within the new map bounds
-    // For mock data, we'll just log it.
-    console.log("Map bounds changed:", bounds.toJSON());
-    // In a real app, you might update filters.city/state or fetch new data here
-  };
-
   return (
     <div className="container mx-auto p-4 md:p-8">
       <h1 className="text-3xl font-bold mb-2">Find a Graston Technique® Provider</h1>
@@ -209,19 +200,19 @@ const Directory: React.FC = () => {
         Search our directory of certified clinicians to find the right provider for your needs.
       </p>
 
-      {/* Search Bar */}
-      <div className="relative mb-6">
+      <div className="relative mb-6 flex items-center gap-2">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
         <Input
           placeholder="Search by name, specialty, or location..."
           className="pl-10 pr-4 py-2 w-full"
-          value={filters.searchTerm || ""}
-          onChange={handleSearchChange}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={(e) => { if (e.key === 'Enter') handleGeocodeSearch(); }}
         />
+        <Button onClick={handleGeocodeSearch}>Search</Button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Filter Panel (Desktop) */}
         {isDesktop && (
           <div className="lg:col-span-1">
             <FilterPanel 
@@ -232,9 +223,7 @@ const Directory: React.FC = () => {
           </div>
         )}
 
-        {/* Main Content Area (Providers List + Map) */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Filter Panel (Mobile) */}
           {!isDesktop && (
             <div className="flex justify-between items-center mb-4">
               <Button 
@@ -266,15 +255,14 @@ const Directory: React.FC = () => {
             </div>
           )}
 
-          {/* Map Section */}
           {googleMapsApiKey && (
             <Card className="h-[400px] w-full">
               <CardContent className="p-0 h-full w-full rounded-lg overflow-hidden">
                 <DirectoryMap 
                   providers={filteredAndSortedProviders} 
                   apiKey={googleMapsApiKey} 
-                  hoveredProviderId={hoveredProviderId}
-                  onBoundsChanged={handleMapBoundsChanged}
+                  center={mapCenter}
+                  zoom={mapZoom}
                 />
               </CardContent>
             </Card>
@@ -286,7 +274,6 @@ const Directory: React.FC = () => {
             </div>
           )}
 
-          {/* Provider List */}
           <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
             {filteredAndSortedProviders.length > 0 ? (
               filteredAndSortedProviders.map((provider) => (
@@ -295,7 +282,7 @@ const Directory: React.FC = () => {
                   provider={provider} 
                   onMouseEnter={() => setHoveredProviderId(provider.id)}
                   onMouseLeave={() => setHoveredProviderId(null)}
-                  onToggleFavorite={handleToggleFavorite} // Pass the toggle function
+                  onToggleFavorite={handleToggleFavorite}
                 />
               ))
             ) : (
