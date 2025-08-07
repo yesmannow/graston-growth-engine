@@ -24,6 +24,8 @@ import { useMediaQuery } from "@/hooks/use-mobile";
 import { showSuccess, showError } from "@/utils/toast";
 import { Card, CardContent } from "@/components/ui/card";
 import { getGeocode, getLatLng } from "use-places-autocomplete";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 const Directory: React.FC = () => {
   const navigate = useNavigate();
@@ -40,6 +42,8 @@ const Directory: React.FC = () => {
   const [mapCenter, setMapCenter] = useState({ lat: 39.8283, lng: -98.5795 });
   const [mapZoom, setMapZoom] = useState(4);
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchOnMapMove, setSearchOnMapMove] = useState(false);
+  const [mapBounds, setMapBounds] = useState<google.maps.LatLngBounds | null>(null);
 
   // Sync filters with URL parameters
   useEffect(() => {
@@ -180,6 +184,13 @@ const Directory: React.FC = () => {
       filtered = filtered.filter(p => p.isFavorite);
     }
 
+    // Apply map bounds filter if enabled
+    if (searchOnMapMove && mapBounds) {
+      filtered = filtered.filter(p =>
+        p.coordinates && mapBounds.contains(p.coordinates)
+      );
+    }
+
     filtered.sort((a, b) => {
       if (filters.sortBy === 'premier-first') {
         const tierOrder: Record<Tier, number> = { Premier: 3, Preferred: 2, Free: 1 };
@@ -193,7 +204,7 @@ const Directory: React.FC = () => {
     });
 
     return filtered;
-  }, [providers, filters]);
+  }, [providers, filters, searchOnMapMove, mapBounds]);
 
   return (
     <div className="container mx-auto p-4 md:p-8">
@@ -265,6 +276,7 @@ const Directory: React.FC = () => {
                   apiKey={googleMapsApiKey} 
                   center={mapCenter}
                   zoom={mapZoom}
+                  onBoundsChanged={setMapBounds}
                 />
               </CardContent>
             </Card>
@@ -275,6 +287,17 @@ const Directory: React.FC = () => {
               <p>To enable the interactive map, please set the `VITE_GOOGLE_MAPS_API_KEY` environment variable.</p>
             </div>
           )}
+
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="search-on-move"
+              checked={searchOnMapMove}
+              onCheckedChange={(checked) => setSearchOnMapMove(Boolean(checked))}
+            />
+            <Label htmlFor="search-on-move" className="font-semibold text-sm">
+              Search as I move the map
+            </Label>
+          </div>
 
           <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
             {filteredAndSortedProviders.length > 0 ? (

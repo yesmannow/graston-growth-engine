@@ -134,4 +134,4 @@ const DirectoryMap = ({ providers, apiKey, center, zoom, onBoundsChanged }: Dire
   );
 };
 
-export default DirectoryMap;
+export default React.memo(DirectoryMap);
