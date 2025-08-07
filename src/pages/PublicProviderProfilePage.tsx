@@ -13,6 +13,7 @@ import { showSuccess } from "@/utils/toast";
 import { mockProviders } from "@/lib/mockData";
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { Linkedin, Facebook as FbIcon, Instagram, Twitter } from 'lucide-react';
+import ProviderMap from '@/components/provider/ProviderMap';
 
 const PublicProviderProfilePage = () => {
   const { id } = useParams<{ id: string }>();
@@ -122,10 +123,9 @@ const PublicProviderProfilePage = () => {
                 )}
                 {displayProvider.coordinates && (
                   <div className="w-full h-64">
-                    <iframe
-                      src={`https://maps.google.com/maps?q=${displayProvider.coordinates.lat},${displayProvider.coordinates.lng}&z=15&output=embed`}
-                      className="w-full h-full rounded"
-                      loading="lazy"
+                    <ProviderMap
+                      coordinates={displayProvider.coordinates}
+                      name={displayProvider.name}
                     />
                   </div>
                 )}
