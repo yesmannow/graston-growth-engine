@@ -1,8 +1,9 @@
 "use client";
 
-import React from 'react';
-import { Map, APIProvider, AdvancedMarker, Pin } from '@vis.gl/react-google-maps';
+import React, { useState, useMemo } from 'react';
+import { Map, APIProvider, AdvancedMarker, Pin, InfoWindow } from '@vis.gl/react-google-maps';
 import { FullProviderProfile } from '@/types';
+import MiniProfileCard from './MiniProfileCard';
 
 interface DirectoryMapProps {
   providers: FullProviderProfile[];
@@ -23,9 +24,21 @@ const DirectoryMap: React.FC<DirectoryMapProps> = ({
   hoveredProviderId,
   onMarkerClick,
 }) => {
+  const [selectedProviderId, setSelectedProviderId] = useState<string | null>(null);
+
+  const selectedProvider = useMemo(() => {
+    if (!selectedProviderId) return null;
+    return providers.find(p => p.id === selectedProviderId);
+  }, [selectedProviderId, providers]);
+
   if (!apiKey) {
     return <div className="flex items-center justify-center h-full bg-gray-200"><p>Google Maps API Key is missing.</p></div>;
   }
+
+  const handleLocalMarkerClick = (providerId: string) => {
+    setSelectedProviderId(providerId);
+    onMarkerClick(providerId); // Propagate click for list scrolling
+  };
 
   return (
     <APIProvider apiKey={apiKey}>
@@ -37,6 +50,7 @@ const DirectoryMap: React.FC<DirectoryMapProps> = ({
         gestureHandling={'greedy'}
         disableDefaultUI={true}
         onCameraChanged={onCameraChanged}
+        onClick={() => setSelectedProviderId(null)} // Close info window on map click
       >
         {providers.map((provider) => {
           if (!provider.coordinates) return null;
@@ -47,7 +61,10 @@ const DirectoryMap: React.FC<DirectoryMapProps> = ({
             <AdvancedMarker
               key={provider.id}
               position={provider.coordinates}
-              onClick={() => onMarkerClick(provider.id)}
+              onClick={(e) => {
+                e.domEvent.stopPropagation(); // prevent map click from firing
+                handleLocalMarkerClick(provider.id);
+              }}
             >
               <Pin
                 background={isPremier ? '#157A83' : '#FC7831'} // Teal for Premier, Orange for others
@@ -58,6 +75,16 @@ const DirectoryMap: React.FC<DirectoryMapProps> = ({
             </AdvancedMarker>
           );
         })}
+
+        {selectedProvider && selectedProvider.coordinates && (
+          <InfoWindow
+            position={selectedProvider.coordinates}
+            onCloseClick={() => setSelectedProviderId(null)}
+            pixelOffset={[0, -40]}
+          >
+            <MiniProfileCard provider={selectedProvider} />
+          </InfoWindow>
+        )}
       </Map>
     </APIProvider>
   );
