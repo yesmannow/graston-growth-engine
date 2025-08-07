@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -17,12 +18,16 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithOtp({ email });
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
       if (error) {
         showError(error.message);
       } else {
-        showSuccess('Check your email for a magic link!');
+        showSuccess('Successfully logged in!');
+        // The onAuthStateChange listener below will handle the redirect
       }
     } catch (error) {
       console.error('Login error:', error);
@@ -36,8 +41,8 @@ const Login = () => {
   React.useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session) {
-        // User is logged in, redirect to a default dashboard or home
-        navigate('/'); // Or a more specific dashboard based on user role
+        // User is logged in, redirect to the first provider's dashboard for demo purposes
+        navigate('/provider/1');
       }
     });
 
@@ -50,8 +55,8 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-background">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>Enter your email below to receive a magic link.</CardDescription>
+          <CardTitle className="text-2xl">Provider Login</CardTitle>
+          <CardDescription>Enter your email and password to access your dashboard.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="grid gap-4">
@@ -64,10 +69,23 @@ const Login = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                disabled={loading}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={loading}
               />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Sending Magic Link...' : 'Send Magic Link'}
+              {loading ? 'Logging in...' : 'Login'}
             </Button>
           </form>
         </CardContent>
