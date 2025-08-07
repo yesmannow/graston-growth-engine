@@ -25,8 +25,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { getGeocode, getLatLng } from "use-places-autocomplete";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { mockProviders, specialties as mockSpecialties } from "@/lib/mockData";
-import { Skeleton } from "@/components/ui/skeleton";
+import { mockProviders, specialties } from "@/lib/mockData";
 
 const Directory: React.FC = () => {
   const navigate = useNavigate();
@@ -116,16 +115,6 @@ const Directory: React.FC = () => {
       showError("Could not find location. Please try a different search term.");
     }
   };
-
-  const specialties: string[] = useMemo(() => {
-    return Array.from(
-      new Set<string>(
-        mockProviders.flatMap(
-          (p: FullProviderProfile) => (p.specialty ? [p.specialty] : [])
-        )
-      )
-    );
-  }, []);
 
   const filteredAndSortedProviders = useMemo(() => {
     let filtered = localProviders;

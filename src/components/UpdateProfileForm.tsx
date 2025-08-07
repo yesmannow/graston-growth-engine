@@ -12,10 +12,10 @@ import { Separator } from "@/components/ui/separator";
 import { FullProviderProfile } from "@/types";
 import { showSuccess, showError } from "@/utils/toast";
 import { User, Mail, Phone, MapPin, Globe, Plus, X } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { mockProviders } from "@/lib/mockData";
 
 interface UpdateProfileFormProps {
-  providerId: string; // Pass providerId instead of full provider object
+  providerId: string;
   onUpdate: (updatedProvider: FullProviderProfile) => void;
 }
 
@@ -27,62 +27,10 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
   const [newCertification, setNewCertification] = useState("");
 
   useEffect(() => {
-    const fetchProvider = async () => {
-      setIsLoading(true);
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', providerId)
-        .single();
-
-      if (error) {
-        console.error("Error fetching provider:", error);
-        showError("Failed to load profile data.");
-        setFormData(null);
-      } else if (data) {
-        // Map DB fields to FullProviderProfile type
-        const providerData: FullProviderProfile = {
-          id: data.id,
-          name: data.name || '',
-          email: data.email || '',
-          specialty: data.specialty || undefined,
-          bio: data.bio || undefined,
-          experience: data.experience || undefined,
-          education: data.education || undefined,
-          profileImage: data.profile_image || undefined,
-          phone: data.phone || undefined,
-          website: data.website || undefined,
-          linkedin: data.linkedin || undefined,
-          facebook: data.facebook || undefined,
-          instagram: data.instagram || undefined,
-          twitter: data.twitter || undefined,
-          services: data.services || [],
-          certifications: data.certifications || [],
-          location: data.location || undefined,
-          clinicAddress: data.clinic_address || undefined,
-          coordinates: data.coordinates || undefined,
-          gtCertifications: data.gt_certifications || [],
-          verificationBadges: data.verification_badges || [],
-          accreditationLogos: data.accreditation_logos || [],
-          languagesSpoken: data.languages_spoken || [],
-          patientTypes: data.patient_types || [],
-          conditionsTreated: data.conditions_treated || [],
-          rating: data.rating || undefined,
-          reviewCount: data.review_count || undefined,
-          isFavorite: data.is_favorite || false,
-          tier: data.tier || 'Free', // Default to 'Free' if not set
-          clinicianType: data.clinician_type || undefined,
-          // trialStatus and activity/churnRisk are not in DB for now, keep as mock or derive
-          trialStatus: "N/A", 
-          activity: 0,
-          churnRisk: false,
-        };
-        setFormData(providerData);
-      }
-      setIsLoading(false);
-    };
-
-    fetchProvider();
+    setIsLoading(true);
+    const providerData = mockProviders.find(p => p.id === providerId) || null;
+    setFormData(providerData);
+    setIsLoading(false);
   }, [providerId]);
 
   const handleInputChange = (field: keyof FullProviderProfile, value: any) => {
@@ -135,105 +83,14 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
     if (!formData) return;
 
     setIsSaving(true);
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
-    // Map FullProviderProfile to DB fields
-    const { 
-      id, name, email, specialty, bio, experience, education, profileImage, 
-      phone, website, linkedin, facebook, instagram, twitter, services, 
-      certifications, location, clinicAddress, coordinates, gtCertifications,
-      verificationBadges, accreditationLogos, languagesSpoken, patientTypes,
-      conditionsTreated, rating, reviewCount, isFavorite, tier, clinicianType
-    } = formData;
-
-    const updateData = {
-      name,
-      email,
-      specialty,
-      bio,
-      experience,
-      education,
-      profile_image: profileImage,
-      phone,
-      website,
-      linkedin,
-      facebook,
-      instagram,
-      twitter,
-      services,
-      certifications,
-      location,
-      clinic_address: clinicAddress,
-      coordinates,
-      gt_certifications: gtCertifications,
-      verification_badges: verificationBadges,
-      accreditation_logos: accreditationLogos,
-      languages_spoken: languagesSpoken,
-      patient_types: patientTypes,
-      conditions_treated: conditionsTreated,
-      rating,
-      review_count: reviewCount,
-      is_favorite: isFavorite,
-      tier,
-      clinician_type: clinicianType,
-      updated_at: new Date().toISOString(),
-    };
-
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .upsert(updateData, { onConflict: 'id' })
-        .select()
-        .single();
-
-      if (error) {
-        console.error("Supabase update error:", error);
-        showError("Failed to update profile: " + error.message);
-      } else if (data) {
-        // Re-map updated data back to FullProviderProfile for consistency
-        const updatedProvider: FullProviderProfile = {
-          id: data.id,
-          name: data.name || '',
-          email: data.email || '',
-          specialty: data.specialty || undefined,
-          bio: data.bio || undefined,
-          experience: data.experience || undefined,
-          education: data.education || undefined,
-          profileImage: data.profile_image || undefined,
-          phone: data.phone || undefined,
-          website: data.website || undefined,
-          linkedin: data.linkedin || undefined,
-          facebook: data.facebook || undefined,
-          instagram: data.instagram || undefined,
-          twitter: data.twitter || undefined,
-          services: data.services || [],
-          certifications: data.certifications || [],
-          location: data.location || undefined,
-          clinicAddress: data.clinic_address || undefined,
-          coordinates: data.coordinates || undefined,
-          gtCertifications: data.gt_certifications || [],
-          verificationBadges: data.verification_badges || [],
-          accreditationLogos: data.accreditation_logos || [],
-          languagesSpoken: data.languages_spoken || [],
-          patientTypes: data.patient_types || [],
-          conditionsTreated: data.conditions_treated || [],
-          rating: data.rating || undefined,
-          reviewCount: data.review_count || undefined,
-          isFavorite: data.is_favorite || false,
-          tier: data.tier || 'Free',
-          clinicianType: data.clinician_type || undefined,
-          trialStatus: "N/A", // These are not managed by the form/DB directly
-          activity: 0,
-          churnRisk: false,
-        };
-        onUpdate(updatedProvider);
-        showSuccess("Profile updated successfully!");
-      }
-    } catch (error: any) {
-      console.error("Unexpected error during update:", error);
-      showError("An unexpected error occurred: " + error.message);
-    } finally {
-      setIsSaving(false);
-    }
+    onUpdate(formData);
+    showSuccess("Profile updated successfully! (Mock update)");
+    
+    setIsSaving(false);
   };
 
   if (isLoading) {

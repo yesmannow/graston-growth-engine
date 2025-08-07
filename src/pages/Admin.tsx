@@ -1,17 +1,15 @@
 import { Users, Star, Gem, AlertTriangle, Hourglass } from "lucide-react";
 import { DataTable } from "@/components/data-table/data-table";
 import { columns } from "@/components/data-table/columns";
-import { FullProviderProfile } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import MetricCard from "@/components/dashboards/admin/MetricCard";
-import { Skeleton } from "@/components/ui/skeleton";
 import ProviderTierChart from "@/components/dashboards/admin/ProviderTierChart";
 import EngagementByTypeChart from "@/components/dashboards/admin/EngagementByTypeChart";
 import TopViewedProviders from "@/components/dashboards/admin/TopViewedProviders";
 import { mockProviders } from "@/lib/mockData";
 
 const AdminPage = () => {
-    const providers = mockProviders; // Use mock data
+    const providers = mockProviders;
 
     const freeProviders = providers.filter(p => p.tier === 'Free').length;
     const preferredProviders = providers.filter(p => p.tier === 'Preferred').length;
