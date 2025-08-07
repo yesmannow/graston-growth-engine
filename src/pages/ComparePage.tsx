@@ -128,8 +128,8 @@ const ComparePage = () => {
                         {(() => {
                           const value = p[feature.key as keyof FullProviderProfile];
                           if (feature.key === 'tier') return <TierBadge tier={value as Tier} />;
-                          if (feature.key === 'rating') return <div className="flex items-center justify-center gap-1">{value?.toFixed(1)} <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" /></div>;
-                          if (Array.isArray(value)) return <div className="flex flex-wrap gap-1 justify-center">{value.map(v => <Badge key={v} variant="secondary">{v}</Badge>)}</div>;
+                          if (feature.key === 'rating') return <div className="flex items-center justify-center gap-1">{(value as number)?.toFixed(1)} <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" /></div>;
+                          if (Array.isArray(value)) return <div className="flex flex-wrap gap-1 justify-center">{(value as string[]).map((v, i) => <Badge key={v + i} variant="secondary">{v}</Badge>)}</div>;
                           if (value) return String(value);
                           return <span className="text-muted-foreground">-</span>;
                         })()}
