@@ -154,7 +154,7 @@ const FilterPanel = ({ filters, onFilterChange, specialties }: FilterPanelProps)
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">All States</SelectItem>
-                        {states.map(state => (
+                        {states.map((state: string) => (
                           <SelectItem key={state} value={state}>{state}</SelectItem>
                         ))}
                       </SelectContent>
@@ -373,7 +373,7 @@ const FilterPanel = ({ filters, onFilterChange, specialties }: FilterPanelProps)
               <SelectValue placeholder="Select sort option" />
             </SelectTrigger>
             <SelectContent>
-              {sortOptions.map(option => (
+              {sortOptions.map((option: { value: string, label: string }) => (
                 <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
               ))}
             </SelectContent>
