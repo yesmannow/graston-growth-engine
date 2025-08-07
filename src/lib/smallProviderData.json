@@ -1,0 +1,75 @@
+[
+  {
+    "provider_name": "Robert Bender",
+    "clinic_name": "Williams Inc",
+    "city": "Sarahmouth",
+    "state": "ND",
+    "phone": "908-947-5427x40582",
+    "email": "leonardashley@green.info",
+    "website": "https://klein.com/",
+    "specialties": [
+      "Back Pain",
+      "Knee Rehab"
+    ],
+    "languages_spoken": [
+      "Hindi"
+    ],
+    "clinician_type": "Massage Therapist",
+    "provider_tier": "Preferred",
+    "latitude": 28.020086,
+    "longitude": -90.866257,
+    "accreditations": [
+      "ACA",
+      "BCTMB"
+    ]
+  },
+  {
+    "provider_name": "Robert Clark",
+    "clinic_name": "Potter Group",
+    "city": "Brandonmouth",
+    "state": "NC",
+    "phone": "(623)167-6088x59579",
+    "email": "nwall@mccoy.info",
+    "website": "http://santos-lewis.info/",
+    "specialties": [
+      "Athletic Recovery",
+      "Shoulder Injuries"
+    ],
+    "languages_spoken": [
+      "English"
+    ],
+    "clinician_type": "Physical Therapist",
+    "provider_tier": "Premier",
+    "latitude": 34.088009,
+    "longitude": -86.532182,
+    "accreditations": [
+      "PACE",
+      "NATA"
+    ]
+  },
+  {
+    "provider_name": "Mr. Chad Cooper",
+    "clinic_name": "Lawrence, Williams and Wells",
+    "city": "Pamelaton",
+    "state": "IN",
+    "phone": "001-587-749-7701",
+    "email": "jessica52@martin.biz",
+    "website": "http://garcia.com/",
+    "specialties": [
+      "Shoulder Injuries",
+      "Neck Pain",
+      "Athletic Recovery"
+    ],
+    "languages_spoken": [
+      "Hindi",
+      "English"
+    ],
+    "clinician_type": "Athletic Trainer",
+    "provider_tier": "Basic",
+    "latitude": 43.353971,
+    "longitude": -82.170567,
+    "accreditations": [
+      "BCTMB"
+    ]
+  }
+]

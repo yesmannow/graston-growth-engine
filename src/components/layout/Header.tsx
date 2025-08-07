@@ -1,16 +1,21 @@
 "use client";
 
-import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import { Gem, Menu } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
-import ListItem from "./ListItem";
-import { Gem } from "lucide-react";
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+
+const navItems = [
+  { href: "/directory", label: "Find a Provider" },
+  { href: "/about", label: "About" },
+  { href: "/faq", label: "FAQ" },
+  { href: "/onboarding", label: "Onboarding" },
+  { href: "/support", label: "Support" },
+];
 
 const Header = () => {
   return (
@@ -22,46 +27,56 @@ const Header = () => {
             Graston Provider Directory
           </span>
         </Link>
-        <div className="flex flex-1 items-center justify-end space-x-4">
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Dashboards</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                    <ListItem href="/provider/1" title="Provider Dashboard">
-                      Manage your profile, view analytics, and access resources. (Sample ID: 1)
-                    </ListItem>
-                    <ListItem href="/admin" title="Admin Dashboard">
-                      Oversee all providers, view site-wide analytics, and manage content.
-                    </ListItem>
-                    <ListItem href="/staff" title="Staff Dashboard">
-                      Access provider data tables and perform administrative actions.
-                    </ListItem>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Resources</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                    <ListItem href="/onboarding" title="Onboarding Guide">
-                      New to the directory? Start here to set up your profile for success.
-                    </ListItem>
-                    <ListItem href="/reports" title="Analytics Reports">
-                      Download key insights and performance reports for your listings.
-                    </ListItem>
-                    <ListItem href="/provider/1/toolkit" title="Marketing Toolkit">
-                      Access guides, templates, and resources to grow your practice. (Sample ID: 1)
-                    </ListItem>
-                    <ListItem href="/support" title="Support & Ticketing">
-                      Need help? Contact our support team for assistance.
-                    </ListItem>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
+        <nav className="hidden flex-1 items-center justify-end space-x-6 md:flex">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.href}
+              to={item.href}
+              className={({ isActive }) =>
+                `text-sm font-medium transition-colors hover:text-primary ${
+                  isActive ? "text-primary" : "text-muted-foreground"
+                }`
+              }
+            >
+              {item.label}
+            </NavLink>
+          ))}
+          <Button asChild>
+            <Link to="/provider/1">Dashboard</Link>
+          </Button>
+        </nav>
+        <div className="flex flex-1 items-center justify-end md:hidden">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle Menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right">
+              <nav className="grid gap-6 text-lg font-medium">
+                <Link
+                  to="/"
+                  className="flex items-center gap-2 text-lg font-semibold"
+                >
+                  <Gem className="h-6 w-6 text-primary" />
+                  <span className="sr-only">Graston Directory</span>
+                </Link>
+                {navItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+                 <Button asChild>
+                    <Link to="/provider/1">Dashboard</Link>
+                </Button>
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </header>

@@ -26,6 +26,27 @@ import { getGeocode, getLatLng } from "use-places-autocomplete";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { mockProviders, specialties } from "@/lib/mockData";
+import Fuse from 'fuse.js';
+import { useDebounce } from '@/hooks/useDebounce';
+import SearchBar from '@/components/SearchBar';
+import smallProvidersRaw from '@/lib/smallProviderData.json';
+// Type definition for external raw providers JSON
+type RawProvider = {
+  provider_name: string;
+  clinic_name: string;
+  city: string;
+  state: string;
+  phone: string;
+  email: string;
+  website: string;
+  specialties: string[];
+  languages_spoken: string[];
+  clinician_type: string;
+  provider_tier: string;
+  latitude: number;
+  longitude: number;
+  bio?: string;
+};
 
 const Directory: React.FC = () => {
   const navigate = useNavigate();
@@ -36,12 +57,65 @@ const Directory: React.FC = () => {
   const [filters, setFilters] = useState<DirectoryFilters>({ sortBy: "premier-first" });
   const [hoveredProviderId, setHoveredProviderId] = useState<string | null>(null);
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
-  const [localProviders, setLocalProviders] = useState<FullProviderProfile[]>(mockProviders);
+  // Generate a list of ~100 providers by repeating base and external data
+  const [localProviders, setLocalProviders] = useState<FullProviderProfile[]>(() => {
+    const external = (smallProvidersRaw as RawProvider[]).map((p: RawProvider, idx: number) => ({
+      ...p,
+      id: `ext-${idx}`,
+      name: p.provider_name,
+      specialty: p.specialties.join(', '),
+      profileImage: `https://i.pravatar.cc/150?u=ext-${idx}`,
+      location: `${p.city}, ${p.state}`,
+      clinicAddress: p.clinic_name,
+      coordinates: { lat: p.latitude, lng: p.longitude },
+      tier: (p.provider_tier === 'Basic' ? 'Free' : p.provider_tier) as Tier,
+      clinicianType: p.clinician_type as ClinicianType,
+      languagesSpoken: p.languages_spoken as Language[],
+      email: p.email,
+      phone: p.phone,
+      website: p.website,
+      bio: p.bio || '',
+      trialStatus: 'N/A',
+      activity: 0,
+      churnRisk: false,
+      rating: 4,
+      reviewCount: 0,
+      isFavorite: false,
+    } as FullProviderProfile));
+    const base = [...mockProviders, ...external];
+    const list: FullProviderProfile[] = [];
+    for (let i = 0; i < 100; i++) {
+      const p = base[i % base.length];
+      list.push({ ...p, id: `${p.id}-${i}` });
+    }
+    return list;
+  });
   const [mapCenter, setMapCenter] = useState({ lat: 39.8283, lng: -98.5795 });
   const [mapZoom, setMapZoom] = useState(4);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchInput, setSearchInput] = useState(''); // controlled input for search
+  const debouncedInput = useDebounce(searchInput, 300);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [activeIndex, setActiveIndex] = useState(-1);
   const [searchOnMapMove, setSearchOnMapMove] = useState(false);
   const [mapBounds, setMapBounds] = useState<google.maps.LatLngBounds | null>(null);
+  // pagination for manual load more
+  const [displayCount, setDisplayCount] = useState(10);
+
+  // build fuse index
+  const fuse = useMemo(() =>
+    new Fuse(localProviders, { keys: ['name', 'specialty', 'bio'], threshold: 0.4 }),
+  [localProviders]);
+
+  // update suggestions when user types
+  useEffect(() => {
+    if (debouncedInput) {
+      const results = fuse.search(debouncedInput).slice(0, 5).map(r => r.item.name);
+      setSuggestions(results);
+      setActiveIndex(-1);
+    } else {
+      setSuggestions([]);
+    }
+  }, [debouncedInput, fuse]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -50,7 +124,7 @@ const Directory: React.FC = () => {
 
     if (urlSearchTerm) {
       newFilters.searchTerm = urlSearchTerm;
-      setSearchTerm(urlSearchTerm);
+      setSearchInput(urlSearchTerm);
     }
     if (params.get('city')) newFilters.city = params.get('city') || '';
     if (params.get('state')) newFilters.state = params.get('state') || '';
@@ -102,11 +176,11 @@ const Directory: React.FC = () => {
     showSuccess("Favorite status updated! (This is a demo and won't be saved)");
   };
 
-  const handleGeocodeSearch = async () => {
-    setFilters(prev => ({ ...prev, searchTerm }));
-    if (!searchTerm) return;
+  // Geocode based on the applied search input
+  const handleGeocode = async (query: string) => {
+    if (!query) return;
     try {
-      const results = await getGeocode({ address: searchTerm });
+      const results = await getGeocode({ address: query });
       const { lat, lng } = await getLatLng(results[0]);
       setMapCenter({ lat, lng });
       setMapZoom(10);
@@ -114,6 +188,12 @@ const Directory: React.FC = () => {
       console.error("Error geocoding search term:", error);
       showError("Could not find location. Please try a different search term.");
     }
+  };
+
+  const applySearch = (query: string) => {
+    setFilters(prev => ({ ...prev, searchTerm: query }));
+    setSearchInput(query);
+    handleGeocode(query);
   };
 
   const filteredAndSortedProviders = useMemo(() => {
@@ -191,36 +271,69 @@ const Directory: React.FC = () => {
     return filtered;
   }, [localProviders, filters, searchOnMapMove, mapBounds]);
 
+  // slice for manual pagination
+  const displayedProviders = filteredAndSortedProviders.slice(0, displayCount);
+
   return (
     <div className="container mx-auto p-4 md:p-8">
       <div className="relative mb-6 flex items-center gap-2">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-        <Input
+      <Input
           placeholder="Search by name, specialty, or location..."
           className="pl-10 pr-4 py-2 w-full"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          onKeyDown={(e) => { if (e.key === 'Enter') handleGeocodeSearch(); }}
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            if (activeIndex >= 0) applySearch(suggestions[activeIndex]);
+            else applySearch(searchInput);
+          } else if (e.key === 'ArrowDown') {
+            setActiveIndex(prev => Math.min(prev + 1, suggestions.length - 1));
+          } else if (e.key === 'ArrowUp') {
+            setActiveIndex(prev => Math.max(prev - 1, 0));
+          }
+        }}
         />
-        <Button onClick={handleGeocodeSearch}>Search</Button>
+        <Button onClick={() => applySearch(searchInput)}>Search</Button>
+        {/* autocomplete suggestions */}
+      {suggestions.length > 0 && (
+        <ul className="absolute bg-white border mt-2 w-full max-w-md z-10 shadow-lg max-h-60 overflow-y-auto">
+          {suggestions.map((name, idx) => (
+            <li
+              key={name}
+              className={`px-3 py-1 cursor-pointer ${idx === activeIndex ? 'bg-blue-500 text-white' : 'hover:bg-gray-100'}`}
+              onClick={() => applySearch(name)}
+              onMouseEnter={() => setActiveIndex(idx)}
+            >
+              {(() => {
+                const query = debouncedInput;
+                if (!query) return name;
+                const parts = name.split(new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'i'));
+                return parts.map((part, i) => (
+                  part.toLowerCase() === query.toLowerCase()
+                    ? <span key={i} className="font-semibold">{part}</span>
+                    : <span key={i}>{part}</span>
+                ));
+              })()}
+            </li>
+          ))}
+        </ul>
+      )}
       </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {isDesktop && (
-          <div className="lg:col-span-1">
-            <FilterPanel 
-              filters={filters} 
-              onFilterChange={handleFilterChange} 
-              specialties={specialties} 
-            />
+      <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
+        {/* Reset display count when filters change */}
+        {filteredAndSortedProviders.length === 0 && (
+          <div className="col-span-full text-center py-12 text-muted-foreground">
+            <p>No providers found matching your criteria.</p>
+            <Button variant="link" onClick={() => setFilters({ sortBy: "premier-first" })}>
+              Reset Filters
+            </Button>
           </div>
         )}
-
-        <div className="lg:col-span-2 space-y-6">
-          {!isDesktop && (
-            <div className="flex justify-between items-center mb-4">
-              <Button 
-                variant="outline" 
+        {filteredAndSortedProviders.length > 0 && (
+          <div className="lg:col-span-1">
+            <div className="flex flex-col gap-4">
+              <Button
                 onClick={() => setIsFilterPanelOpen(true)}
                 className="flex items-center gap-2"
               >
@@ -246,60 +359,68 @@ const Directory: React.FC = () => {
                 Reset Filters
               </Button>
             </div>
-          )}
+          </div>
+        )}
 
-          {googleMapsApiKey && (
-            <Card className="h-[400px] w-full">
-              <CardContent className="p-0 h-full w-full rounded-lg overflow-hidden">
-                <DirectoryMap 
-                  providers={filteredAndSortedProviders} 
-                  apiKey={googleMapsApiKey} 
-                  center={mapCenter}
-                  zoom={mapZoom}
-                  onBoundsChanged={setMapBounds}
-                />
-              </CardContent>
-            </Card>
-          )}
-          {!googleMapsApiKey && (
-            <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4" role="alert">
-              <p className="font-bold">Google Maps API Key Missing</p>
-              <p>To enable the interactive map, please set the `VITE_GOOGLE_MAPS_API_KEY` environment variable.</p>
+        {googleMapsApiKey && (
+          <Card className="h-[400px] w-full">
+            <CardContent className="p-0 h-full w-full rounded-lg overflow-hidden">
+              <DirectoryMap 
+                providers={filteredAndSortedProviders} 
+                apiKey={googleMapsApiKey} 
+                center={mapCenter}
+                zoom={mapZoom}
+                onBoundsChanged={setMapBounds}
+              />
+            </CardContent>
+          </Card>
+        )}
+        {!googleMapsApiKey && (
+          <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4" role="alert">
+            <p className="font-bold">Google Maps API Key Missing</p>
+            <p>To enable the interactive map, please set the `VITE_GOOGLE_MAPS_API_KEY` environment variable.</p>
+          </div>
+        )}
+
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="search-on-move"
+            checked={searchOnMapMove}
+            onCheckedChange={(checked) => setSearchOnMapMove(Boolean(checked))}
+          />
+          <Label htmlFor="search-on-move" className="font-semibold text-sm">
+            Search as I move the map
+          </Label>
+        </div>
+
+        <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
+          {displayedProviders.length > 0 ? (
+            displayedProviders.map(provider => (
+              <ProviderCard
+                key={provider.id}
+                provider={provider}
+                onMouseEnter={() => setHoveredProviderId(provider.id)}
+                onMouseLeave={() => setHoveredProviderId(null)}
+                onToggleFavorite={handleToggleFavorite}
+              />
+            ))
+          ) : (
+            <div className="col-span-full text-center py-12 text-muted-foreground">
+              <p>No providers found matching your criteria.</p>
+              <Button variant="link" onClick={() => setFilters({ sortBy: "premier-first" })}>
+                Reset Filters
+              </Button>
             </div>
           )}
-
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="search-on-move"
-              checked={searchOnMapMove}
-              onCheckedChange={(checked) => setSearchOnMapMove(Boolean(checked))}
-            />
-            <Label htmlFor="search-on-move" className="font-semibold text-sm">
-              Search as I move the map
-            </Label>
-          </div>
-
-          <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
-            {filteredAndSortedProviders.length > 0 ? (
-              filteredAndSortedProviders.map((provider) => (
-                <ProviderCard 
-                  key={provider.id} 
-                  provider={provider} 
-                  onMouseEnter={() => setHoveredProviderId(provider.id)}
-                  onMouseLeave={() => setHoveredProviderId(null)}
-                  onToggleFavorite={handleToggleFavorite}
-                />
-              ))
-            ) : (
-              <div className="col-span-full text-center py-12 text-muted-foreground">
-                <p>No providers found matching your criteria.</p>
-                <Button variant="link" onClick={() => setFilters({ sortBy: "premier-first" })}>
-                  Reset Filters
-                </Button>
-              </div>
-            )}
-          </div>
         </div>
+        {/* Load more button for manual pagination */}
+        {displayCount < filteredAndSortedProviders.length && (
+          <div className="text-center mt-6">
+            <Button onClick={() => setDisplayCount(prev => prev + 10)}>
+              Load More
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

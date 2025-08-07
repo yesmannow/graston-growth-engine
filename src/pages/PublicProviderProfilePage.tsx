@@ -11,6 +11,8 @@ import ContactCard from "@/components/provider/ContactCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { showSuccess } from "@/utils/toast";
 import { mockProviders } from "@/lib/mockData";
+import { Card, CardHeader, CardContent } from '@/components/ui/card';
+import { Linkedin, Facebook as FbIcon, Instagram, Twitter } from 'lucide-react';
 
 const PublicProviderProfilePage = () => {
   const { id } = useParams<{ id: string }>();
@@ -109,6 +111,66 @@ const PublicProviderProfilePage = () => {
                 <ContactCard provider={displayProvider} />
               </div>
             )}
+            {/* Additional Information Section */}
+            <Card>
+              <CardHeader>
+                <h2 className="text-xl font-semibold">Additional Information</h2>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {displayProvider.clinicAddress && (
+                  <div><span className="font-semibold">Address:</span> {displayProvider.clinicAddress}</div>
+                )}
+                {displayProvider.coordinates && (
+                  <div className="w-full h-64">
+                    <iframe
+                      src={`https://maps.google.com/maps?q=${displayProvider.coordinates.lat},${displayProvider.coordinates.lng}&z=15&output=embed`}
+                      className="w-full h-full rounded"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
+                {displayProvider.verificationBadges && displayProvider.verificationBadges.length > 0 && (
+                  <div>
+                    <span className="font-semibold">Badges:</span>
+                    {displayProvider.verificationBadges.map((url: string, i: number) => (
+                      <img key={i} src={url} alt="Badge" className="inline-block h-6 mx-1" />
+                    ))}
+                  </div>
+                )}
+                {displayProvider.accreditationLogos && displayProvider.accreditationLogos.length > 0 && (
+                  <div>
+                    <span className="font-semibold">Accreditations:</span>
+                    {displayProvider.accreditationLogos.map((a) => (
+                      <img key={a.name} src={a.logoUrl} alt={a.name} className="inline-block h-6 mx-1" />
+                    ))}
+                  </div>
+                )}
+                {(displayProvider.linkedin || displayProvider.facebook || displayProvider.instagram || displayProvider.twitter) && (
+                  <div className="flex items-center gap-4">
+                    {displayProvider.linkedin && (
+                      <a href={displayProvider.linkedin} target="_blank" rel="noopener noreferrer">
+                        <Linkedin className="h-6 w-6 text-blue-700" />
+                      </a>
+                    )}
+                    {displayProvider.facebook && (
+                      <a href={displayProvider.facebook} target="_blank" rel="noopener noreferrer">
+                        <FbIcon className="h-6 w-6 text-blue-800" />
+                      </a>
+                    )}
+                    {displayProvider.instagram && (
+                      <a href={displayProvider.instagram} target="_blank" rel="noopener noreferrer">
+                        <Instagram className="h-6 w-6 text-pink-500" />
+                      </a>
+                    )}
+                    {displayProvider.twitter && (
+                      <a href={displayProvider.twitter} target="_blank" rel="noopener noreferrer">
+                        <Twitter className="h-6 w-6 text-blue-400" />
+                      </a>
+                    )}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>

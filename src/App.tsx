@@ -16,6 +16,7 @@ import Layout from "./components/layout/Layout";
 import AdminPage from "./pages/Admin";
 import ProviderPage from "./pages/Provider";
 import UpdateProfile from "./pages/UpdateProfile";
+import Index from "./pages/Index"; // Import the new Index page
 
 const queryClient = new QueryClient();
 
@@ -28,7 +29,7 @@ const App = () => (
         <AnalyticsTracker />
         <Routes>
           <Route element={<Layout />}>
-            <Route path="/" element={<Directory />} />
+            <Route path="/" element={<Index />} /> {/* Set new Index as default */}
             <Route path="/directory" element={<Directory />} />
             <Route path="/directory/provider/:id" element={<PublicProviderProfilePage />} />
             <Route path="/onboarding" element={<Onboarding />} />
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/provider/:id" element={<ProviderPage />} />
             <Route path="/provider/:id/update" element={<UpdateProfile />} />
             <Route path="/provider/:id/toolkit" element={<MarketingToolkitPage />} />
+            {/* Add routes for new pages if needed, e.g. /about, /faq */}
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
