@@ -6,7 +6,6 @@ import ProfileHero from '@/components/provider/ProfileHero';
 import ProfileSidebar from '@/components/provider/ProfileSidebar';
 import { mockProviders } from '@/lib/mockData';
 import { FullProviderProfile } from '@/types';
-import { Container } from '@/components/ui/card';
 
 const PublicProviderProfilePage = () => {
   const { id } = useParams<{ id: string }>();
