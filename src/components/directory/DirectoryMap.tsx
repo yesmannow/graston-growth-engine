@@ -4,6 +4,7 @@ import { GoogleMap, useJsApiLoader, Marker, InfoWindow, MarkerClusterer } from '
 import { FullProviderProfile, Tier } from '@/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useState, useCallback } from 'react';
+import React from 'react';
 import MiniProfileCard from './MiniProfileCard';
 
 const containerStyle = {
@@ -48,7 +49,7 @@ const getMarkerIcon = (tier: Tier, isHovered: boolean) => {
   };
   
   const icon = baseIcons[tier];
-  if (isHovered) {
+  if (isHovered && icon.scale) {
     return { ...icon, scale: icon.scale * 1.2, strokeColor: '#FBBF24' }; // Enlarge and add yellow border on hover
   }
   return icon;
@@ -99,23 +100,25 @@ const DirectoryMap = ({ providers, apiKey, center, zoom, onBoundsChanged }: Dire
       }}
     >
       <MarkerClusterer>
-        {(clusterer) =>
-          providers.map(provider => (
-            provider.coordinates && (
-              <Marker 
-                key={provider.id} 
-                position={provider.coordinates} 
-                title={provider.name}
-                clusterer={clusterer}
-                onClick={() => setSelectedProvider(provider)}
-                onMouseOver={() => setHoveredProviderId(provider.id)}
-                onMouseOut={() => setHoveredProviderId(null)}
-                icon={getMarkerIcon(provider.tier, provider.id === hoveredProviderId || provider.id === selectedProvider?.id)}
-                zIndex={provider.id === hoveredProviderId || provider.id === selectedProvider?.id ? 1000 : 1}
-              />
-            )
-          ))
-        }
+        {(clusterer) => (
+          <React.Fragment>
+            {providers
+              .filter(provider => provider.coordinates)
+              .map(provider => (
+                <Marker 
+                  key={provider.id} 
+                  position={provider.coordinates!} 
+                  title={provider.name}
+                  clusterer={clusterer}
+                  onClick={() => setSelectedProvider(provider)}
+                  onMouseOver={() => setHoveredProviderId(provider.id)}
+                  onMouseOut={() => setHoveredProviderId(null)}
+                  icon={getMarkerIcon(provider.tier, provider.id === hoveredProviderId || provider.id === selectedProvider?.id)}
+                  zIndex={provider.id === hoveredProviderId || provider.id === selectedProvider?.id ? 1000 : 1}
+                />
+              ))}
+          </React.Fragment>
+        )}
       </MarkerClusterer>
 
       {selectedProvider && selectedProvider.coordinates && (
