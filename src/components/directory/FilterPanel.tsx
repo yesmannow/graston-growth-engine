@@ -129,14 +129,14 @@ const FilterPanel = ({ filters, onFilterChange, specialties }: FilterPanelProps)
                   <div className="space-y-1">
                     <Label htmlFor="state" className="text-xs">State</Label>
                     <Select 
-                      value={filters.state || ''} 
-                      onValueChange={(value) => handleFilterChange('state', value)}
+                      value={filters.state || 'all'} 
+                      onValueChange={(value) => handleFilterChange('state', value === 'all' ? undefined : value)}
                     >
                       <SelectTrigger id="state" className="h-8 text-sm">
                         <SelectValue placeholder="Select state" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">All States</SelectItem>
+                        <SelectItem value="all">All States</SelectItem>
                         {states.map(state => (
                           <SelectItem key={state} value={state}>{state}</SelectItem>
                         ))}
@@ -158,14 +158,14 @@ const FilterPanel = ({ filters, onFilterChange, specialties }: FilterPanelProps)
                   <div className="space-y-1">
                     <Label htmlFor="radius" className="text-xs">Search Radius</Label>
                     <Select 
-                      value={filters.radius?.toString() || ''} 
-                      onValueChange={(value) => handleFilterChange('radius', value ? parseInt(value) as RadiusOption : undefined)}
+                      value={filters.radius?.toString() || 'all'} 
+                      onValueChange={(value) => handleFilterChange('radius', value === 'all' ? undefined : parseInt(value) as RadiusOption)}
                     >
                       <SelectTrigger id="radius" className="h-8 text-sm">
                         <SelectValue placeholder="Select radius" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">Any Distance</SelectItem>
+                        <SelectItem value="all">Any Distance</SelectItem>
                         {radiusOptions.map(radius => (
                           <SelectItem key={radius} value={radius.toString()}>{radius} miles</SelectItem>
                         ))}
