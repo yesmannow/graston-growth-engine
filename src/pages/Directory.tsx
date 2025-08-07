@@ -22,7 +22,7 @@ const Directory = () => {
   const isMobile = useMediaQuery("(max-width: 1024px)");
 
   // Extract unique specialties for the filter dropdown
-  const specialties = [...new Set(mockProviders.map(p => p.specialty).filter(Boolean))];
+  const specialties = [...new Set(mockProviders.flatMap(p => p.specialty ? [p.specialty] : []))];
 
   // Apply filters and search whenever dependencies change
   useEffect(() => {

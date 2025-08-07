@@ -1,78 +1,117 @@
-import { FullProviderProfile, ClinicianType, TrainingLevel, Language, Tier, SortOption } from "@/types";
-import rawProviders from "../dummy_provider_directory_with_taxonomies.json";
-
-// Helper function to ensure a string is a valid ClinicianType
-const getClinicianType = (type: string | undefined): ClinicianType | undefined => {
-  if (!type) return undefined;
-  const validTypes: ClinicianType[] = ["Physical Therapist", "Chiropractor", "Occupational Therapist", "Athletic Trainer", "Medical Doctor", "Other"];
-  return validTypes.includes(type as ClinicianType) ? (type as ClinicianType) : "Other";
-};
-
-// Helper function to ensure a string is a valid TrainingLevel
-const getTrainingLevel = (level: string | undefined): TrainingLevel | undefined => {
-  if (!level) return undefined;
-  const validLevels: TrainingLevel[] = ["GTS", "Advanced", "Essential"];
-  return validLevels.includes(level as TrainingLevel) ? (level as TrainingLevel) : undefined;
-};
-
-// Helper function to ensure a string is a valid Language
-const getLanguage = (lang: string | undefined): Language | undefined => {
-  if (!lang) return undefined;
-  const validLanguages: Language[] = ["English", "Spanish", "French", "German", "Mandarin", "Arabic"];
-  return validLanguages.includes(lang as Language) ? (lang as Language) : undefined;
-};
-
-export const mockProviders: FullProviderProfile[] = rawProviders.map((provider: any) => ({
-  id: provider.id,
-  name: provider.name,
-  email: provider.email,
-  tier: provider.tier as Tier,
-  trialStatus: provider.trialStatus,
-  activity: provider.activity,
-  churnRisk: provider.churnRisk,
-  profileImage: provider.profileImage,
-  specialty: provider.specialty,
-  bio: provider.bio,
-  experience: provider.experience,
-  education: provider.education,
-  socialMedia: provider.socialMedia,
-  services: provider.services,
-  certifications: provider.certifications,
-  location: provider.location,
-  coordinates: provider.latitude && provider.longitude ? { lat: provider.latitude, lng: provider.longitude } : undefined,
-  city: provider.city,
-  state: provider.state,
-  zipCode: provider.zipCode,
-  clinicianType: getClinicianType(provider.clinicianType),
-  trainingLevel: getTrainingLevel(provider.trainingLevel),
-  languagesSpoken: provider.languagesSpoken?.map(getLanguage).filter(Boolean) as Language[],
-  rating: provider.rating,
-  reviewCount: provider.reviewCount,
-  activityScore: provider.activityScore,
-  galleryImages: provider.galleryImages,
-  testimonials: provider.testimonials,
-  faqs: provider.faqs,
-  contactInfo: provider.contactInfo,
-}));
-
-export const states = [
-  "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"
-];
-
-export const clinicianTypes: ClinicianType[] = [
-  "Physical Therapist", "Chiropractor", "Occupational Therapist", "Athletic Trainer", "Medical Doctor", "Other"
-];
+import { FullProviderProfile, Language, ClinicianType, RadiusOption, SortOption, Tier, TrainingLevel } from '@/types';
 
 export const languages: Language[] = [
   "English", "Spanish", "French", "German", "Mandarin", "Arabic"
 ];
 
-export const radiusOptions = [5, 10, 25, 50, 100];
+export const states: string[] = [
+    'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia',
+    'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland',
+    'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey',
+    'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina',
+    'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+];
 
-export const sortOptions: { label: string; value: SortOption }[] = [
-  { label: "Premier First", value: "premier-first" },
-  { label: "Closest to Me", value: "closest" },
-  { label: "Top Rated", value: "top-rated" },
-  { label: "Most Active", value: "most-active" },
-  { label: "Most Reviewed", value: "most-reviewed" },
+export const clinicianTypes: ClinicianType[] = [
+    "Chiropractor", "Physical Therapist", "Athletic Trainer", "Massage Therapist", "Medical Doctor", "Other"
+];
+
+export const radiusOptions: RadiusOption[] = [5, 10, 25, 50, 100];
+
+export const sortOptions: { value: SortOption, label: string }[] = [
+    { value: 'premier-first', label: 'Premier First' },
+    { value: 'closest', label: 'Closest' },
+    { value: 'top-rated', label: 'Top Rated' },
+    { value: 'most-active', label: 'Most Active' },
+    { value: 'most-reviewed', label: 'Most Reviewed' },
+];
+
+export const mockProviders: FullProviderProfile[] = [
+  {
+    id: '123',
+    name: 'Dr. John Doe',
+    email: 'john.doe@example.com',
+    tier: 'Premier',
+    trialStatus: 'N/A',
+    activity: 150,
+    churnRisk: false,
+    profileImage: 'https://i.pravatar.cc/150?u=123',
+    specialty: 'Physical Therapy',
+    phone: '(555) 123-4567',
+    location: 'New York, NY',
+    bio: 'Dr. John Doe is a premier provider with over 10 years of experience in physical therapy, specializing in the Graston Technique for sports injuries and post-surgical rehabilitation. He is dedicated to providing personalized care to help patients achieve their functional goals.',
+    experience: '10 years',
+    education: 'DPT, New York University',
+    socialMedia: {
+      linkedin: 'https://linkedin.com/in/johndoe',
+      twitter: 'https://twitter.com/johndoept'
+    },
+    services: ['Sports Injury Rehab', 'Post-Surgical Rehab', 'Manual Therapy'],
+    certifications: ['OCS', 'CSCS', 'Graston Technique Certified'],
+    clinicianType: 'Physical Therapist',
+    rating: 4.9,
+    reviewCount: 88,
+    languagesSpoken: ['English', 'Spanish'],
+    contactInfo: {
+      phone: '(555) 123-4567',
+      website: 'https://johndoept.com',
+      email: 'contact@johndoept.com'
+    },
+    coordinates: { lat: 40.7128, lng: -74.0060 },
+    city: 'New York',
+    state: 'New York',
+    zipCode: '10001',
+    trainingLevel: 'Advanced',
+    activityScore: 95,
+    servicesOffered: ['Manual Therapy', 'Graston Technique', 'Dry Needling', 'Kinesio Taping'],
+    galleryImages: ['https://images.unsplash.com/photo-1583512603805-3cc6b41f3edb?w=400', 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400'],
+    testimonials: [
+        { quote: 'Dr. Doe is a miracle worker! My shoulder feels better than ever.', author: 'Jane S.' },
+        { quote: 'The best physical therapist in New York. Highly recommended.', author: 'Mike R.' }
+    ],
+    faqs: [
+        { question: 'Do you accept insurance?', answer: 'Yes, we accept most major insurance plans. Please call our office to verify your coverage.' },
+        { question: 'What should I wear to my appointment?', answer: 'Please wear comfortable, loose-fitting clothing that allows access to the area we will be treating.' }
+    ]
+  },
+  {
+    id: '456',
+    name: 'Dr. Jane Smith',
+    email: 'jane.smith@example.com',
+    tier: 'Preferred',
+    trialStatus: 'Active',
+    activity: 75,
+    churnRisk: true,
+    profileImage: 'https://i.pravatar.cc/150?u=456',
+    specialty: 'Chiropractic',
+    phone: '(555) 987-6543',
+    location: 'Los Angeles, CA',
+    bio: 'Dr. Jane Smith is a preferred provider specializing in chiropractic care and wellness. She is passionate about helping patients live pain-free lives through holistic and evidence-based treatments.',
+    experience: '5 years',
+    education: 'DC, Palmer College of Chiropractic',
+    socialMedia: {
+        instagram: 'https://instagram.com/drjanesmith'
+    },
+    services: ['Spinal Adjustment', 'Pain Management', 'Wellness Coaching'],
+    certifications: ['ART', 'Graston Technique Certified'],
+    clinicianType: 'Chiropractor',
+    rating: 4.7,
+    reviewCount: 45,
+    languagesSpoken: ['English', 'German'],
+    contactInfo: {
+      phone: '(555) 987-6543',
+      website: 'https://janesmithdc.com',
+      email: 'info@janesmithdc.com'
+    },
+    coordinates: { lat: 34.0522, lng: -118.2437 },
+    city: 'Los Angeles',
+    state: 'California',
+    zipCode: '90001',
+    trainingLevel: 'Essential',
+    activityScore: 60,
+    servicesOffered: ['Graston Technique', 'Spinal Decompression'],
+    galleryImages: ['https://images.unsplash.com/photo-1599058917212-d750089bc07e?w=400'],
+    testimonials: [{ quote: 'Dr. Smith really listens and provides excellent care.', author: 'Chris P.' }],
+    faqs: [{ question: 'What is the Graston Technique?', answer: 'It is a form of instrument-assisted soft tissue mobilization that enables clinicians to effectively break down scar tissue and fascial restrictions.' }]
+  }
 ];

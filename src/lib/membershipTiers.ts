@@ -1,88 +1,77 @@
 import { FullProviderProfile, Tier } from "@/types";
 
-// Define which fields are required for each tier
+// Define which fields are required for each tier to be considered "complete"
 const tierRequirements: Record<Tier, (keyof FullProviderProfile)[]> = {
-  Free: ['name', 'email', 'profileImage', 'bio'],
-  Preferred: ['name', 'email', 'profileImage', 'bio', 'website'],
-  Premier: ['name', 'email', 'profileImage', 'bio', 'website', 'socialMedia'],
+  Free: ['name', 'email', 'profileImage', 'bio', 'specialty', 'location'],
+  Preferred: ['name', 'email', 'profileImage', 'bio', 'specialty', 'location', 'phone', 'website', 'services'],
+  Premier: ['name', 'email', 'profileImage', 'bio', 'specialty', 'location', 'phone', 'website', 'services', 'socialMedia', 'certifications'],
 };
 
-// Labels for fields in the UI
+// User-friendly labels for profile fields
 const fieldLabels: Partial<Record<keyof FullProviderProfile, string>> = {
-  id: 'ID',
   name: 'Full Name',
-  tier: 'Tier',
-  membershipTier: 'Membership Tier',
+  email: 'Email Address',
+  profileImage: 'Profile Image',
+  bio: 'Professional Bio',
   specialty: 'Specialty',
   location: 'Location',
-  bio: 'Bio',
-  profileImage: 'Profile Image',
-  email: 'Email',
-  website: 'Website',
-  socialMedia: 'Social Media',
-  trainingLevel: 'Training Level',
-  coordinates: 'Location Coordinates',
-  contactInfo: 'Contact Information',
-  servicesOffered: 'Services Offered',
-  services: 'Services',
-  galleryImages: 'Gallery Images',
-  testimonials: 'Testimonials',
-  faqs: 'FAQs',
-  phone: 'Phone',
-  experience: 'Experience',
-  education: 'Education',
-  churnRisk: 'Churn Risk',
-  trialStatus: 'Trial Status',
+  phone: 'Phone Number',
+  website: 'Website URL',
+  services: 'Services Offered',
+  socialMedia: 'Social Media Links',
   certifications: 'Certifications',
-  // Add the missing properties
-  state: 'State',
-  city: 'City',
-  zipCode: 'Zip Code',
-  clinicianType: 'Clinician Type',
-  languagesSpoken: 'Languages Spoken',
-  rating: 'Rating',
-  reviewCount: 'Review Count',
-  activityScore: 'Activity Score'
 };
 
-// Calculate profile completion score based on tier requirements
+/**
+ * Checks if a value is considered "filled"
+ * @param value The value to check
+ * @returns True if the value is not empty, false otherwise
+ */
+const isFieldFilled = (value: any): boolean => {
+  if (value === null || value === undefined) {
+    return false;
+  }
+  if (typeof value === 'string' && value.trim() === '') {
+    return false;
+  }
+  if (Array.isArray(value) && value.length === 0) {
+    return false;
+  }
+  if (typeof value === 'object' && Object.keys(value).length === 0) {
+    return false;
+  }
+  return true;
+};
+
+/**
+ * Calculates the profile completion score based on the user's tier.
+ * @param user The full provider profile object.
+ * @returns An object containing the score and the next recommended action.
+ */
 export const calculateProfileScore = (user: FullProviderProfile) => {
-  const requirements = tierRequirements[user.membershipTier || user.tier];
-  let completedFields = 0;
-
-  requirements.forEach((field: keyof FullProviderProfile) => {
-    if (user[field]) {
-      completedFields++;
-    }
-  });
-
-  const score = Math.round((completedFields / requirements.length) * 100);
-  let nextAction = '';
-  let status = '';
-
-  if (score === 100) {
-    status = 'Complete';
-    nextAction = 'Your profile is complete!';
-  } else if (score >= 80) {
-    status = 'Almost Complete';
-    nextAction = 'Just a few more fields to complete your profile.';
-  } else if (score >= 50) {
-    status = 'In Progress';
-    nextAction = 'Keep going! Your profile is taking shape.';
-  } else {
-    const missingFields = requirements.filter((field: keyof FullProviderProfile) => !user[field]);
-    if (missingFields.length > 0) {
-      const fieldName = fieldLabels[missingFields[0]] || missingFields[0];
-      nextAction = `Add your ${fieldName} to improve your score.`;
-    } else {
-      nextAction = 'Start filling out your profile.';
-    }
-    status = 'Just Started';
+  const requirements = tierRequirements[user.tier];
+  if (!requirements) {
+    return { score: 0, nextAction: "Invalid membership tier." };
   }
 
-  return {
-    score,
-    status,
-    nextAction
-  };
+  let completedFields = 0;
+  const missingFields: (keyof FullProviderProfile)[] = [];
+
+  for (const field of requirements) {
+    if (isFieldFilled(user[field])) {
+      completedFields++;
+    } else {
+      missingFields.push(field);
+    }
+  }
+
+  const score = Math.round((completedFields / requirements.length) * 100);
+
+  let nextAction = "Your profile is complete for your tier!";
+  if (missingFields.length > 0) {
+    const fieldName = fieldLabels[missingFields[0]] || missingFields[0];
+    nextAction = `Add your ${fieldName} to improve your score.`;
+  }
+
+  return { score, nextAction };
 };
