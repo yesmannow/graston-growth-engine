@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { FullProviderProfile } from "@/types";
+import { FullProviderProfile, ContactInfo } from "@/types";
 import { showSuccess, showError } from "@/utils/toast";
 import { User, Mail, Phone, MapPin, Globe, Plus, X } from "lucide-react";
 
@@ -28,6 +28,16 @@ export const UpdateProfileForm = ({ provider, onUpdate }: UpdateProfileFormProps
     setFormData(prev => ({
       ...prev,
       [field]: value
+    }));
+  };
+
+  const handleContactInfoChange = (field: keyof ContactInfo, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      contactInfo: {
+        ...prev.contactInfo,
+        [field]: value
+      }
     }));
   };
 
@@ -169,8 +179,8 @@ export const UpdateProfileForm = ({ provider, onUpdate }: UpdateProfileFormProps
                       <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="phone"
-                        value={formData.phone || ""}
-                        onChange={(e) => handleInputChange("phone", e.target.value)}
+                        value={formData.contactInfo?.phone || ""}
+                        onChange={(e) => handleContactInfoChange("phone", e.target.value)}
                         className="pl-10"
                         placeholder="(555) 123-4567"
                       />
@@ -243,8 +253,8 @@ export const UpdateProfileForm = ({ provider, onUpdate }: UpdateProfileFormProps
                   <Globe className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="website"
-                    value={formData.website || ""}
-                    onChange={(e) => handleInputChange("website", e.target.value)}
+                    value={formData.contactInfo?.website || ""}
+                    onChange={(e) => handleContactInfoChange("website", e.target.value)}
                     className="pl-10"
                     placeholder="https://yourwebsite.com"
                   />
