@@ -8,46 +8,35 @@ import MediaCard from "@/components/provider/MediaCard";
 import TestimonialsCard from "@/components/provider/TestimonialsCard";
 import FaqCard from "@/components/provider/FaqCard";
 import ContactCard from "@/components/provider/ContactCard";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { mapProfileToFullProviderProfile } from "@/lib/dataMapping";
 import { Skeleton } from "@/components/ui/skeleton";
 import { showSuccess } from "@/utils/toast";
-
-const fetchPublicProvider = async (id: string): Promise<FullProviderProfile | null> => {
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', id)
-    .single();
-
-  if (error) {
-    console.error("Error fetching public provider profile:", error);
-    return null;
-  }
-
-  return data ? mapProfileToFullProviderProfile(data) : null;
-};
+import { mockProviders } from "@/lib/mockData";
 
 const PublicProviderProfilePage = () => {
   const { id } = useParams<{ id: string }>();
   
-  const { data: provider, isLoading, isError } = useQuery<FullProviderProfile | null, Error>({
-    queryKey: ['publicProviderProfile', id],
-    queryFn: () => (id ? fetchPublicProvider(id) : Promise.resolve(null)),
-    enabled: !!id,
-  });
+  const [provider, setProvider] = useState<FullProviderProfile | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (id) {
+      const foundProvider = mockProviders.find(p => p.id === id);
+      setProvider(foundProvider);
+    }
+    setIsLoading(false);
+  }, [id]);
 
   // Local state for favorite, as it's not tied to a logged-in user on this public page
   const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
-    // In a real app, you might check localStorage for saved favorites here
-  }, []);
+    if (provider) {
+      setIsFavorite(provider.isFavorite || false);
+    }
+  }, [provider]);
 
   const handleToggleFavorite = (providerId: string) => {
     setIsFavorite(prev => !prev);
-    // In a real app, you'd likely save this to localStorage for non-logged-in users
     showSuccess("Favorite status updated for this session.");
   };
 
@@ -70,7 +59,7 @@ const PublicProviderProfilePage = () => {
     );
   }
 
-  if (isError || !provider) {
+  if (!provider) {
     return (
       <div className="container mx-auto p-8 text-center">
         <h1 className="text-2xl font-bold">Provider not found</h1>

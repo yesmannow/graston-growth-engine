@@ -25,19 +25,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { getGeocode, getLatLng } from "use-places-autocomplete";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { mapProfileToFullProviderProfile } from "@/lib/dataMapping";
+import { mockProviders, specialties as mockSpecialties } from "@/lib/mockData";
 import { Skeleton } from "@/components/ui/skeleton";
-
-const fetchAllProviders = async (): Promise<FullProviderProfile[]> => {
-  const { data, error } = await supabase.from('profiles').select('*');
-  if (error) {
-    console.error("Error fetching all providers:", error);
-    throw new Error(error.message);
-  }
-  return data.map(mapProfileToFullProviderProfile);
-};
 
 const Directory: React.FC = () => {
   const navigate = useNavigate();
@@ -48,23 +37,12 @@ const Directory: React.FC = () => {
   const [filters, setFilters] = useState<DirectoryFilters>({ sortBy: "premier-first" });
   const [hoveredProviderId, setHoveredProviderId] = useState<string | null>(null);
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
-  const [localProviders, setLocalProviders] = useState<FullProviderProfile[]>([]);
+  const [localProviders, setLocalProviders] = useState<FullProviderProfile[]>(mockProviders);
   const [mapCenter, setMapCenter] = useState({ lat: 39.8283, lng: -98.5795 });
   const [mapZoom, setMapZoom] = useState(4);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchOnMapMove, setSearchOnMapMove] = useState(false);
   const [mapBounds, setMapBounds] = useState<google.maps.LatLngBounds | null>(null);
-
-  const { data: providers, isLoading, isError } = useQuery<FullProviderProfile[], Error>({
-    queryKey: ['allProviders'],
-    queryFn: fetchAllProviders,
-  });
-
-  useEffect(() => {
-    if (providers) {
-      setLocalProviders(providers);
-    }
-  }, [providers]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -140,15 +118,14 @@ const Directory: React.FC = () => {
   };
 
   const specialties: string[] = useMemo(() => {
-    if (!providers) return [];
     return Array.from(
       new Set<string>(
-        providers.flatMap(
+        mockProviders.flatMap(
           (p: FullProviderProfile) => (p.specialty ? [p.specialty] : [])
         )
       )
     );
-  }, [providers]);
+  }, []);
 
   const filteredAndSortedProviders = useMemo(() => {
     let filtered = localProviders;
@@ -225,45 +202,8 @@ const Directory: React.FC = () => {
     return filtered;
   }, [localProviders, filters, searchOnMapMove, mapBounds]);
 
-  if (isLoading) {
-    return (
-      <div className="container mx-auto p-4 md:p-8">
-        <Skeleton className="h-10 w-1/2 mb-6" />
-        <Skeleton className="h-12 w-full mb-6" />
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-1">
-            <Skeleton className="h-96 w-full" />
-          </div>
-          <div className="lg:col-span-2 space-y-6">
-            <Skeleton className="h-[400px] w-full" />
-            <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
-              <Skeleton className="h-48 w-full" />
-              <Skeleton className="h-48 w-full" />
-              <Skeleton className="h-48 w-full" />
-              <Skeleton className="h-48 w-full" />
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <div className="container mx-auto p-8 text-center">
-        <h1 className="text-2xl font-bold text-destructive">Failed to load providers</h1>
-        <p className="text-muted-foreground">There was an error fetching the directory data. Please try again later.</p>
-      </div>
-    );
-  }
-
   return (
     <div className="container mx-auto p-4 md:p-8">
-      <h1 className="text-3xl font-bold mb-2">Find a Graston Technique® Provider</h1>
-      <p className="text-muted-foreground mb-6">
-        Search our directory of certified clinicians to find the right provider for your needs.
-      </p>
-
       <div className="relative mb-6 flex items-center gap-2">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
         <Input

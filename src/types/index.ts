@@ -80,8 +80,8 @@ export interface FullProviderProfile {
   galleryVideos?: string[];
   testimonials?: Testimonial[];
   faqs?: FAQ[];
-  engagementScore?: number;
   views?: number;
+  engagementScore?: number;
 }
 
 export interface MarketingResource {

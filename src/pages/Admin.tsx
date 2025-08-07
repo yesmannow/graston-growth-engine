@@ -1,55 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
 import { Users, Star, Gem, AlertTriangle, Hourglass } from "lucide-react";
 import { DataTable } from "@/components/data-table/data-table";
 import { columns } from "@/components/data-table/columns";
 import { FullProviderProfile } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import MetricCard from "@/components/dashboards/admin/MetricCard";
-import { supabase } from "@/integrations/supabase/client";
-import { mapProfileToFullProviderProfile } from "@/lib/dataMapping";
 import { Skeleton } from "@/components/ui/skeleton";
 import ProviderTierChart from "@/components/dashboards/admin/ProviderTierChart";
 import EngagementByTypeChart from "@/components/dashboards/admin/EngagementByTypeChart";
 import TopViewedProviders from "@/components/dashboards/admin/TopViewedProviders";
-
-const fetchAllProviders = async (): Promise<FullProviderProfile[]> => {
-  const { data, error } = await supabase.from('profiles').select('*');
-  if (error) {
-    console.error("Error fetching all providers:", error);
-    throw new Error(error.message);
-  }
-  return data.map(mapProfileToFullProviderProfile);
-};
+import { mockProviders } from "@/lib/mockData";
 
 const AdminPage = () => {
-    const { data: providers, isLoading, isError } = useQuery<FullProviderProfile[], Error>({
-        queryKey: ['allProvidersAdmin'],
-        queryFn: fetchAllProviders,
-    });
-
-    if (isLoading) {
-        return (
-            <div className="container mx-auto py-10">
-                <Skeleton className="h-8 w-1/3 mb-6" />
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5 mb-6">
-                    {Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-28 w-full" />)}
-                </div>
-                <div className="grid gap-6 lg:grid-cols-3">
-                    <Skeleton className="h-96 w-full lg:col-span-1" />
-                    <Skeleton className="h-96 w-full lg:col-span-2" />
-                </div>
-            </div>
-        );
-    }
-
-    if (isError || !providers) {
-        return (
-            <div className="container mx-auto py-10 text-center">
-                <h1 className="text-2xl font-bold text-destructive">Error</h1>
-                <p className="text-muted-foreground">Could not fetch provider data.</p>
-            </div>
-        );
-    }
+    const providers = mockProviders; // Use mock data
 
     const freeProviders = providers.filter(p => p.tier === 'Free').length;
     const preferredProviders = providers.filter(p => p.tier === 'Preferred').length;

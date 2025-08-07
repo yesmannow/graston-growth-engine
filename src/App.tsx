@@ -3,10 +3,6 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
-import Index from "./pages/Index";
-import AdminPage from "./pages/Admin";
-import ProviderPage from "./pages/Provider";
-import UpdateProfile from "./pages/UpdateProfile";
 import NotFound from "./pages/NotFound";
 import StaffDashboard from "@/components/dashboards/StaffDashboard";
 import MarketingToolkitPage from "./pages/MarketingToolkit";
@@ -19,6 +15,10 @@ import Support from "./pages/Support";
 import { supabase } from "./integrations/supabase/client";
 import { useEffect, useState } from "react";
 import AnalyticsTracker from "./components/AnalyticsTracker";
+import Layout from "./components/layout/Layout";
+import AdminPage from "./pages/Admin";
+import ProviderPage from "./pages/Provider";
+import UpdateProfile from "./pages/UpdateProfile";
 
 const queryClient = new QueryClient();
 
@@ -65,19 +65,21 @@ const App = () => (
       <BrowserRouter>
         <AnalyticsTracker />
         <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/directory" element={<Directory />} />
-          <Route path="/directory/provider/:id" element={<PublicProviderProfilePage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/onboarding" element={<Onboarding />} />
-          <Route path="/reports" element={<Reports />} />
-          <Route path="/support" element={<Support />} />
-          <Route path="/admin" element={<AdminPage />} />
-          <Route path="/staff" element={<StaffDashboard />} />
-          <Route path="/provider/:id" element={<ProtectedRoute><ProviderPage /></ProtectedRoute>} />
-          <Route path="/provider/:id/update" element={<ProtectedRoute><UpdateProfile /></ProtectedRoute>} />
-          <Route path="/provider/:id/toolkit" element={<ProtectedRoute><MarketingToolkitPage /></ProtectedRoute>} />
-          <Route path="*" element={<NotFound />} />
+          <Route element={<Layout />}>
+            <Route path="/" element={<Directory />} />
+            <Route path="/directory" element={<Directory />} />
+            <Route path="/directory/provider/:id" element={<PublicProviderProfilePage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/onboarding" element={<Onboarding />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="/support" element={<Support />} />
+            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/staff" element={<StaffDashboard />} />
+            <Route path="/provider/:id" element={<ProtectedRoute><ProviderPage /></ProtectedRoute>} />
+            <Route path="/provider/:id/update" element={<ProtectedRoute><UpdateProfile /></ProtectedRoute>} />
+            <Route path="/provider/:id/toolkit" element={<ProtectedRoute><MarketingToolkitPage /></ProtectedRoute>} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
