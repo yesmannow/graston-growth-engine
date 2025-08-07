@@ -1,8 +1,8 @@
 export type Tier = 'Premier' | 'Preferred' | 'Free';
 
 export type ClinicianType = 'Chiropractor' | 'Physical Therapist' | 'Athletic Trainer' | 'Massage Therapist' | 'Occupational Therapist' | 'Other' | 'Medical Doctor';
-export type Language = 'English' | 'Spanish' | 'French' | 'German' | 'Mandarin';
-export type Condition = 'Back Pain' | 'Neck Pain' | 'Plantar Fasciitis' | 'Tennis Elbow' | 'Carpal Tunnel Syndrome' | 'Headaches' | 'Sports Injuries' | 'Post-Surgical Rehab';
+export type Language = 'English' | 'Spanish' | 'French' | 'German' | 'Mandarin' | 'Vietnamese' | 'Irish' | 'Hindi' | 'Korean' | 'Italian';
+export type Condition = 'Back Pain' | 'Neck Pain' | 'Plantar Fasciitis' | 'Tennis Elbow' | 'Carpal Tunnel Syndrome' | 'Headaches' | 'Sports Injuries' | 'Post-Surgical Rehab' | 'Chronic Pain';
 export type PatientDemographic = 'Athletes' | 'Pediatrics' | 'Geriatrics' | 'General Population';
 export type TrainingLevel = 'M1 Basic' | 'M2 Advanced' | 'Certified Specialist' | 'GTS' | 'Essential' | 'Advanced';
 

@@ -13,7 +13,8 @@ import {
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useFilterStore } from '@/hooks/useFilterStore';
 import { Search, X } from 'lucide-react';
-import { specialties } from '@/lib/mockData'; // Using mock data for now
+import { specialties, conditions, languages } from '@/lib/mockData';
+import { Condition, Language } from '@/types'; // Import types for casting
 
 const FilterPanel = () => {
   const {
@@ -21,6 +22,10 @@ const FilterPanel = () => {
     setSearchTerm,
     clinicianType,
     setClinicianType,
+    condition,
+    setCondition,
+    language,
+    setLanguage,
     tiers,
     setTiers,
     clearFilters,
@@ -48,11 +53,25 @@ const FilterPanel = () => {
             ))}
           </SelectContent>
         </Select>
-        {/* Placeholder for Condition Filter */}
-        <Select disabled>
+        <Select value={condition || ''} onValueChange={(value) => setCondition(value as Condition)}>
           <SelectTrigger>
-            <SelectValue placeholder="Condition (coming soon)" />
+            <SelectValue placeholder="Condition" />
           </SelectTrigger>
+          <SelectContent>
+            {conditions.map((c) => (
+              <SelectItem key={c} value={c}>{c}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select value={language || ''} onValueChange={(value) => setLanguage(value as Language)}>
+          <SelectTrigger>
+            <SelectValue placeholder="Language" />
+          </SelectTrigger>
+          <SelectContent>
+            {languages.map((l) => (
+              <SelectItem key={l} value={l}>{l}</SelectItem>
+            ))}
+          </SelectContent>
         </Select>
       </div>
       <div>

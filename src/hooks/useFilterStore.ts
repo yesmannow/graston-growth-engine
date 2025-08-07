@@ -1,15 +1,16 @@
 import { create } from 'zustand';
+import { Condition, Language } from '@/types';
 
 interface FilterState {
   searchTerm: string;
   clinicianType: string | null;
-  condition: string | null;
-  language: string | null;
+  condition: Condition | null;
+  language: Language | null;
   tiers: string[];
   setSearchTerm: (term: string) => void;
   setClinicianType: (type: string | null) => void;
-  setCondition: (condition: string | null) => void;
-  setLanguage: (language: string | null) => void;
+  setCondition: (condition: Condition | null) => void;
+  setLanguage: (language: Language | null) => void;
   setTiers: (tiers: string[]) => void;
   clearFilters: () => void;
 }

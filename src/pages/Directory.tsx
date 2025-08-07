@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ProviderCard from "@/components/directory/ProviderCard";
-import { FullProviderProfile } from "@/types";
+import { FullProviderProfile, Condition, Language } from "@/types"; // Import Condition and Language types
 import DirectoryMap from "@/components/directory/DirectoryMap";
 import FilterPanel from "@/components/directory/FilterPanel";
 import { useMediaQuery } from "@/hooks/use-mobile";
@@ -11,8 +11,7 @@ import { mockProviders } from "@/lib/mockData";
 import { useDebounce } from '@/hooks/useDebounce';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useFilterStore } from "@/hooks/useFilterStore";
-// Note: React Query would be used here for real data fetching.
-// import { useQuery } from "@tanstack/react-query";
+import { motion, AnimatePresence } from "framer-motion";
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "";
 
@@ -22,7 +21,7 @@ const Directory: React.FC = () => {
   const isMobile = useMediaQuery("(max-width: 1023px)");
 
   // Global filter state from Zustand
-  const filters = useFilterStore();
+  const { searchTerm, clinicianType, condition, language, tiers, setSearchTerm, setClinicianType, setCondition, setLanguage, setTiers } = useFilterStore();
 
   // Local UI state
   const [providers, setProviders] = useState<FullProviderProfile[]>([]);
@@ -35,40 +34,88 @@ const Directory: React.FC = () => {
   const [mapBounds, setMapBounds] = useState<google.maps.LatLngBounds | null>(null);
   const debouncedBounds = useDebounce(mapBounds, 500);
 
+  // Refs for scrolling to provider cards
+  const providerCardRefs = useRef<Map<string, HTMLDivElement | null>>(new Map());
+
+  // URL State Synchronization - Read from URL on mount
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    setSearchTerm(params.get('search') || '');
+    setClinicianType(params.get('clinicianType') || null);
+    setCondition(params.get('condition') as Condition || null); // Type assertion
+    setLanguage(params.get('language') as Language || null);     // Type assertion
+    setTiers(params.get('tiers')?.split(',') || ['Premier', 'Preferred', 'Free']);
+    
+    const lat = parseFloat(params.get('lat') || '39.8283');
+    const lng = parseFloat(params.get('lng') || '-98.5795');
+    const zoom = parseInt(params.get('zoom') || '4', 10);
+    setMapCenter({ lat, lng });
+    setMapZoom(zoom);
+  }, [location.search, setSearchTerm, setClinicianType, setCondition, setLanguage, setTiers]);
+
+  // URL State Synchronization - Write to URL on state change
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (searchTerm) params.set('search', searchTerm);
+    if (clinicianType) params.set('clinicianType', clinicianType);
+    if (condition) params.set('condition', condition);
+    if (language) params.set('language', language);
+    if (tiers.length < 3) params.set('tiers', tiers.join(','));
+    
+    // Only update map params if map has been interacted with or explicitly set
+    if (mapBounds) { // A simple heuristic to check if map has been initialized/interacted
+      params.set('lat', mapCenter.lat.toFixed(4));
+      params.set('lng', mapCenter.lng.toFixed(4));
+      params.set('zoom', mapZoom.toString());
+    }
+
+    navigate(`?${params.toString()}`, { replace: true });
+  }, [searchTerm, clinicianType, condition, language, tiers, mapCenter, mapZoom, mapBounds, navigate]);
+
+
   // Simulate fetching data based on filters and map bounds
   useEffect(() => {
     setIsLoading(true);
-    console.log("Fetching data for bounds:", debouncedBounds);
     // In a real app, this would be a useQuery call with dependencies on `debouncedBounds` and `filters`
     const filteredProviders = mockProviders.filter(p => {
       const inBounds = debouncedBounds 
-        ? p.coordinates && debouncedBounds.contains(p.coordinates)
+        ? p.coordinates && debouncedBounds.contains(new google.maps.LatLng(p.coordinates.lat, p.coordinates.lng))
         : true;
       
-      const tierMatch = filters.tiers.includes(p.tier);
-      const typeMatch = !filters.clinicianType || p.specialty === filters.clinicianType;
-      const searchMatch = filters.searchTerm === '' || 
-        p.name.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-        (p.specialty || '').toLowerCase().includes(filters.searchTerm.toLowerCase());
+      const tierMatch = tiers.includes(p.tier);
+      const typeMatch = !clinicianType || p.clinicianType === clinicianType;
+      const conditionMatch = !condition || p.conditions_treated?.includes(condition);
+      const languageMatch = !language || p.languages_spoken?.includes(language);
+      const searchMatch = searchTerm === '' || 
+        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (p.specialty || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (p.clinicAddress || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (p.location || '').toLowerCase().includes(searchTerm.toLowerCase());
 
-      return inBounds && tierMatch && typeMatch && searchMatch;
+      return inBounds && tierMatch && typeMatch && conditionMatch && languageMatch && searchMatch;
     });
 
     setProviders(filteredProviders);
     setTimeout(() => setIsLoading(false), 500); // Simulate network delay
-  }, [debouncedBounds, filters]);
+  }, [debouncedBounds, searchTerm, clinicianType, condition, language, tiers]);
 
   const handleMapCameraChanged = useCallback((ev: any) => {
     const newBounds = ev.map.getBounds();
+    const newCenter = ev.map.getCenter();
+    const newZoom = ev.map.getZoom();
     if (newBounds) {
       setMapBounds(newBounds);
+      setMapCenter({ lat: newCenter.lat(), lng: newCenter.lng() });
+      setMapZoom(newZoom);
     }
   }, []);
 
-  const handleMarkerClick = (providerId: string) => {
-    // Logic to scroll list to provider card
-    console.log("Marker clicked:", providerId);
-  };
+  const handleMarkerClick = useCallback((providerId: string) => {
+    const cardElement = providerCardRefs.current.get(providerId);
+    if (cardElement) {
+      cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, []);
 
   const ResultsList = () => (
     <div className="flex flex-col h-full bg-brand-background">
@@ -81,14 +128,29 @@ const Directory: React.FC = () => {
             <p className="text-sm text-brand-text/80 px-2">
               Showing {providers.length} providers in this map area.
             </p>
-            {providers.map(provider => (
-              <ProviderCard
-                key={provider.id}
-                provider={provider}
-                onMouseEnter={() => setHoveredProviderId(provider.id)}
-                onMouseLeave={() => setHoveredProviderId(null)}
-              />
-            ))}
+            <AnimatePresence mode="wait">
+              {providers.map(provider => (
+                <motion.div
+                  key={provider.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                  ref={el => providerCardRefs.current.set(provider.id, el)}
+                >
+                  <ProviderCard
+                    provider={provider}
+                    onMouseEnter={() => setHoveredProviderId(provider.id)}
+                    onMouseLeave={() => setHoveredProviderId(null)}
+                  />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+            {!isLoading && providers.length === 0 && (
+              <div className="text-center text-brand-text/70 p-4">
+                No providers found matching your criteria in this area. Try adjusting your filters or moving the map.
+              </div>
+            )}
           </>
         )}
       </div>
