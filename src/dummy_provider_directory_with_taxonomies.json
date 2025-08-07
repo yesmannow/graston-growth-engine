@@ -1,0 +1,923 @@
+[
+  {
+    "id": "prov_001",
+    "name": "Dr. Emily White",
+    "email": "emily.white@example.com",
+    "tier": "Premier",
+    "trialStatus": "N/A",
+    "activity": 1500,
+    "churnRisk": false,
+    "profileImage": "https://images.unsplash.com/photo-1535713875002-d1d0cfd293ae?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "specialty": "Sports Medicine",
+    "bio": "Dr. Emily White is a highly experienced physical therapist specializing in sports injury rehabilitation and performance enhancement. With over 15 years in practice, she focuses on evidence-based treatments to help athletes of all levels return to their peak condition. Her approach combines manual therapy, therapeutic exercise, and patient education to ensure long-term recovery and injury prevention.",
+    "experience": "15 years",
+    "education": "DPT, University of Southern California",
+    "socialMedia": {
+      "linkedin": "https://linkedin.com/in/emilywhite",
+      "facebook": "https://facebook.com/emilywhitept"
+    },
+    "services": [
+      "Sports Injury Rehab",
+      "Post-Surgical Rehab",
+      "Manual Therapy",
+      "Dry Needling",
+      "Concussion Management"
+    ],
+    "certifications": [
+      "Board-Certified Sports Clinical Specialist (SCS)",
+      "Certified Strength and Conditioning Specialist (CSCS)"
+    ],
+    "location": "Los Angeles, CA",
+    "latitude": 34.0522,
+    "longitude": -118.2437,
+    "city": "Los Angeles",
+    "state": "CA",
+    "zipCode": "90012",
+    "clinicianType": "Physical Therapist",
+    "trainingLevel": "GTS",
+    "languagesSpoken": ["English", "Spanish"],
+    "rating": 4.9,
+    "reviewCount": 128,
+    "activityScore": 95,
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1576091160550-fd428796c875?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1584820927466-0968436e1785?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1550831107-1553278603?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    ],
+    "testimonials": [
+      {
+        "author": "John D.",
+        "quote": "Dr. White helped me recover from my ACL surgery faster than I thought possible. Her expertise is unmatched!"
+      },
+      {
+        "author": "Sarah K.",
+        "quote": "Professional, caring, and highly effective. My chronic back pain is finally under control thanks to Dr. White."
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Do you accept insurance?",
+        "answer": "We are an out-of-network provider but can provide a superbill for reimbursement."
+      },
+      {
+        "question": "What should I bring to my first appointment?",
+        "answer": "Please bring comfortable clothing, any relevant medical records, and a list of your current medications."
+      }
+    ],
+    "contactInfo": {
+      "phone": "(213) 555-0100",
+      "website": "https://emilywhitept.com"
+    }
+  },
+  {
+    "id": "prov_002",
+    "name": "Dr. Michael Chen",
+    "email": "michael.chen@example.com",
+    "tier": "Preferred",
+    "trialStatus": "N/A",
+    "activity": 800,
+    "churnRisk": false,
+    "profileImage": "https://images.unsplash.com/photo-1507003211169-e69adba4c283?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "specialty": "Chiropractic Care",
+    "bio": "Dr. Michael Chen is a dedicated chiropractor focusing on holistic wellness and pain management. He utilizes a variety of techniques including spinal adjustments, soft tissue therapy, and lifestyle counseling to help patients achieve optimal health and mobility. Dr. Chen is passionate about empowering his patients through education and personalized care plans.",
+    "experience": "8 years",
+    "education": "DC, Palmer College of Chiropractic",
+    "socialMedia": {
+      "facebook": "https://facebook.com/michaelchenchiro"
+    },
+    "services": [
+      "Spinal Adjustments",
+      "Posture Correction",
+      "Headache Relief",
+      "Sciatica Treatment"
+    ],
+    "certifications": [
+      "Certified Chiropractic Sports Physician (CCSP)"
+    ],
+    "location": "Chicago, IL",
+    "latitude": 41.8781,
+    "longitude": -87.6298,
+    "city": "Chicago",
+    "state": "IL",
+    "zipCode": "60601",
+    "clinicianType": "Chiropractor",
+    "trainingLevel": "Advanced",
+    "languagesSpoken": ["English", "Mandarin"],
+    "rating": 4.7,
+    "reviewCount": 85,
+    "activityScore": 80,
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1584820927466-0968436e1785?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1576091160550-fd428796c875?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    ],
+    "testimonials": [
+      {
+        "author": "David L.",
+        "quote": "Dr. Chen is fantastic! He really listens and provides effective, personalized care. My neck pain is gone."
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How long is a typical session?",
+        "answer": "Initial consultations are 60 minutes, follow-up sessions are typically 30 minutes."
+      }
+    ],
+    "contactInfo": {
+      "phone": "(312) 555-0200",
+      "website": "https://michaelchenchiro.com"
+    }
+  },
+  {
+    "id": "prov_003",
+    "name": "Sarah Miller, OT",
+    "email": "sarah.miller@example.com",
+    "tier": "Free",
+    "trialStatus": "Active",
+    "activity": 300,
+    "churnRisk": true,
+    "profileImage": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "specialty": "Pediatric Therapy",
+    "bio": "Sarah Miller is a compassionate occupational therapist specializing in pediatric care. She helps children develop the skills needed for daily living and play, addressing challenges related to fine motor skills, sensory processing, and developmental delays. Sarah creates a fun and supportive environment for her young patients.",
+    "experience": "6 years",
+    "education": "MSOT, Boston University",
+    "socialMedia": {
+      "instagram": "https://instagram.com/sarahmilleroct"
+    },
+    "services": [
+      "Fine Motor Skills Development",
+      "Sensory Integration",
+      "Handwriting Skills",
+      "ADL Training"
+    ],
+    "certifications": [],
+    "location": "Boston, MA",
+    "latitude": 42.3601,
+    "longitude": -71.0589,
+    "city": "Boston",
+    "state": "MA",
+    "zipCode": "02108",
+    "clinicianType": "Occupational Therapist",
+    "trainingLevel": "Essential",
+    "languagesSpoken": ["English"],
+    "rating": 4.5,
+    "reviewCount": 42,
+    "activityScore": 60,
+    "galleryImages": [],
+    "testimonials": [],
+    "faqs": [],
+    "contactInfo": {
+      "phone": "(617) 555-0300"
+    }
+  },
+  {
+    "id": "prov_004",
+    "name": "Dr. Alex Rodriguez",
+    "email": "alex.rodriguez@example.com",
+    "tier": "Premier",
+    "trialStatus": "N/A",
+    "activity": 1800,
+    "churnRisk": false,
+    "profileImage": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "specialty": "Orthopedic Surgery",
+    "bio": "Dr. Alex Rodriguez is a board-certified orthopedic surgeon specializing in joint replacement and sports injuries. He is committed to providing the highest quality surgical and non-surgical care, utilizing the latest techniques to ensure optimal patient outcomes. Dr. Rodriguez believes in a collaborative approach, working closely with physical therapists and other specialists.",
+    "experience": "20 years",
+    "education": "MD, Stanford University School of Medicine",
+    "socialMedia": {
+      "linkedin": "https://linkedin.com/in/alexrodriguezmd"
+    },
+    "services": [
+      "Joint Replacement",
+      "Arthroscopy",
+      "Fracture Care",
+      "Sports Injury Surgery"
+    ],
+    "certifications": [
+      "Board-Certified Orthopedic Surgeon"
+    ],
+    "location": "San Francisco, CA",
+    "latitude": 37.7749,
+    "longitude": -122.4194,
+    "city": "San Francisco",
+    "state": "CA",
+    "zipCode": "94102",
+    "clinicianType": "Medical Doctor",
+    "trainingLevel": "GTS",
+    "languagesSpoken": ["English", "Spanish"],
+    "rating": 4.9,
+    "reviewCount": 150,
+    "activityScore": 98,
+    "galleryImages": [],
+    "testimonials": [],
+    "faqs": [],
+    "contactInfo": {
+      "phone": "(415) 555-0400",
+      "website": "https://alexrodriguezortho.com"
+    }
+  },
+  {
+    "id": "prov_005",
+    "name": "Jessica Lee, ATC",
+    "email": "jessica.lee@example.com",
+    "tier": "Preferred",
+    "trialStatus": "N/A",
+    "activity": 700,
+    "churnRisk": false,
+    "profileImage": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "specialty": "Athletic Training",
+    "bio": "Jessica Lee is a certified athletic trainer dedicated to preventing, diagnosing, and treating injuries for active individuals. She works with athletes of all ages and skill levels, providing immediate care, rehabilitation programs, and return-to-play protocols. Jessica is committed to helping her clients maintain an active and healthy lifestyle.",
+    "experience": "7 years",
+    "education": "MS, Athletic Training, University of Florida",
+    "socialMedia": {
+      "twitter": "https://twitter.com/jessicaleeatc"
+    },
+    "services": [
+      "Injury Prevention",
+      "Rehabilitation",
+      "Concussion Management",
+      "Taping & Bracing"
+    ],
+    "certifications": [
+      "Certified Athletic Trainer (ATC)"
+    ],
+    "location": "Orlando, FL",
+    "latitude": 28.5383,
+    "longitude": -81.3792,
+    "city": "Orlando",
+    "state": "FL",
+    "zipCode": "32801",
+    "clinicianType": "Athletic Trainer",
+    "trainingLevel": "Advanced",
+    "languagesSpoken": ["English"],
+    "rating": 4.6,
+    "reviewCount": 60,
+    "activityScore": 75,
+    "galleryImages": [],
+    "testimonials": [],
+    "faqs": [],
+    "contactInfo": {
+      "phone": "(407) 555-0500"
+    }
+  },
+  {
+    "id": "prov_006",
+    "name": "Dr. David Kim",
+    "email": "david.kim@example.com",
+    "tier": "Premier",
+    "trialStatus": "N/A",
+    "activity": 1600,
+    "churnRisk": false,
+    "profileImage": "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "specialty": "Pain Management",
+    "bio": "Dr. David Kim is a leading expert in chronic pain management, offering innovative and personalized treatment plans. He combines interventional procedures with a focus on functional restoration to help patients regain control over their lives. Dr. Kim is committed to improving quality of life for those suffering from persistent pain.",
+    "experience": "18 years",
+    "education": "MD, Johns Hopkins School of Medicine",
+    "socialMedia": {
+      "linkedin": "https://linkedin.com/in/davidkimmd"
+    },
+    "services": [
+      "Epidural Injections",
+      "Nerve Blocks",
+      "Radiofrequency Ablation",
+      "Medication Management"
+    ],
+    "certifications": [
+      "Board-Certified in Anesthesiology and Pain Medicine"
+    ],
+    "location": "New York, NY",
+    "latitude": 40.7128,
+    "longitude": -74.0060,
+    "city": "New York",
+    "state": "NY",
+    "zipCode": "10001",
+    "clinicianType": "Medical Doctor",
+    "trainingLevel": "GTS",
+    "languagesSpoken": ["English", "Korean"],
+    "rating": 4.8,
+    "reviewCount": 110,
+    "activityScore": 92,
+    "galleryImages": [],
+    "testimonials": [],
+    "faqs": [],
+    "contactInfo": {
+      "phone": "(212) 555-0600",
+      "website": "https://davidkimmd.com"
+    }
+  },
+  {
+    "id": "prov_007",
+    "name": "Maria Garcia, PT",
+    "email": "maria.garcia@example.com",
+    "tier": "Preferred",
+    "trialStatus": "N/A",
+    "activity": 950,
+    "churnRisk": false,
+    "profileImage": "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "specialty": "Geriatric Physical Therapy",
+    "bio": "Maria Garcia is a compassionate physical therapist specializing in geriatric care. She helps older adults maintain mobility, reduce pain, and improve their quality of life through tailored exercise programs and functional training. Maria is dedicated to promoting independence and active aging.",
+    "experience": "12 years",
+    "education": "DPT, University of Miami",
+    "socialMedia": {
+      "facebook": "https://facebook.com/mariagarciapt"
+    },
+    "services": [
+      "Balance Training",
+      "Fall Prevention",
+      "Arthritis Management",
+      "Post-Stroke Rehab"
+    ],
+    "certifications": [
+      "Board-Certified Geriatric Clinical Specialist (GCS)"
+    ],
+    "location": "Miami, FL",
+    "latitude": 25.7617,
+    "longitude": -80.1918,
+    "city": "Miami",
+    "state": "FL",
+    "zipCode": "33101",
+    "clinicianType": "Physical Therapist",
+    "trainingLevel": "Advanced",
+    "languagesSpoken": ["English", "Spanish"],
+    "rating": 4.8,
+    "reviewCount": 95,
+    "activityScore": 88,
+    "galleryImages": [],
+    "testimonials": [],
+    "faqs": [],
+    "contactInfo": {
+      "phone": "(305) 555-0700",
+      "website": "https://mariagarciapt.com"
+    }
+  },
+  {
+    "id": "prov_008",
+    "name": "Dr. Kenji Tanaka",
+    "email": "kenji.tanaka@example.com",
+    "tier": "Free",
+    "trialStatus": "Expired",
+    "activity": 250,
+    "churnRisk": true,
+    "profileImage": "https://images.unsplash.com/photo-1564564321837-a051393f03c2?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "specialty": "Acupuncture",
+    "bio": "Dr. Kenji Tanaka is a licensed acupuncturist with a focus on traditional Chinese medicine. He helps patients with a wide range of conditions, including chronic pain, stress, and digestive issues, using acupuncture, herbal medicine, and dietary advice. Dr. Tanaka believes in treating the root cause of illness for lasting relief.",
+    "experience": "10 years",
+    "education": "DAOM, Emperor's College of Traditional Oriental Medicine",
+    "socialMedia": {},
+    "services": [
+      "Acupuncture",
+      "Herbal Medicine",
+      "Cupping Therapy",
+      "Moxibustion"
+    ],
+    "certifications": [
+      "Licensed Acupuncturist (L.Ac.)"
+    ],
+    "location": "Seattle, WA",
+    "latitude": 47.6062,
+    "longitude": -122.3321,
+    "city": "Seattle",
+    "state": "WA",
+    "zipCode": "98101",
+    "clinicianType": "Other",
+    "trainingLevel": "Essential",
+    "languagesSpoken": ["English", "Japanese"],
+    "rating": 4.4,
+    "reviewCount": 30,
+    "activityScore": 55,
+    "galleryImages": [],
+    "testimonials": [],
+    "faqs": [],
+    "contactInfo": {
+      "phone": "(206) 555-0800"
+    }
+  },
+  {
+    "id": "prov_009",
+    "name": "Sophie Dubois, PT",
+    "email": "sophie.dubois@example.com",
+    "tier": "Premier",
+    "trialStatus": "N/A",
+    "activity": 1400,
+    "churnRisk": false,
+    "profileImage": "https://images.unsplash.com/photo-1573496359142-b8d87734b584?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "specialty": "Pelvic Health",
+    "bio": "Sophie Dubois is a specialized physical therapist focusing on pelvic health for all genders. She provides compassionate and effective treatment for conditions such as incontinence, pelvic pain, and pre/post-natal issues. Sophie is dedicated to helping her patients regain confidence and improve their quality of life.",
+    "experience": "9 years",
+    "education": "DPT, McGill University",
+    "socialMedia": {
+      "instagram": "https://instagram.com/sophieduboispt"
+    },
+    "services": [
+      "Pelvic Floor Therapy",
+      "Diastasis Recti Rehab",
+      "Incontinence Treatment",
+      "Pre/Post-Natal Care"
+    ],
+    "certifications": [
+      "Certified Pelvic Rehabilitation Practitioner (PRPC)"
+    ],
+    "location": "Montreal, QC",
+    "latitude": 45.5017,
+    "longitude": -73.5673,
+    "city": "Montreal",
+    "state": "QC",
+    "zipCode": "H3A 2T5",
+    "clinicianType": "Physical Therapist",
+    "trainingLevel": "GTS",
+    "languagesSpoken": ["English", "French"],
+    "rating": 4.9,
+    "reviewCount": 105,
+    "activityScore": 90,
+    "galleryImages": [],
+    "testimonials": [],
+    "faqs": [],
+    "contactInfo": {
+      "phone": "(514) 555-0900",
+      "website": "https://sophieduboispt.ca"
+    }
+  },
+  {
+    "id": "prov_010",
+    "name": "Dr. Ben Carter",
+    "email": "ben.carter@example.com",
+    "tier": "Preferred",
+    "trialStatus": "N/A",
+    "activity": 600,
+    "churnRisk": false,
+    "profileImage": "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "specialty": "Sports Chiropractic",
+    "bio": "Dr. Ben Carter is a sports chiropractor dedicated to helping athletes recover from injuries and optimize their performance. He uses a combination of chiropractic adjustments, soft tissue techniques, and corrective exercises to address biomechanical imbalances and improve athletic function. Dr. Carter is passionate about keeping athletes in the game.",
+    "experience": "7 years",
+    "education": "DC, Logan University",
+    "socialMedia": {
+      "twitter": "https://twitter.com/bencarterchiro"
+    },
+    "services": [
+      "Sports Adjustments",
+      "Graston Technique",
+      "Kinesio Taping",
+      "Rehab Exercises"
+    ],
+    "certifications": [
+      "Certified Chiropractic Sports Physician (CCSP)"
+    ],
+    "location": "Denver, CO",
+    "latitude": 39.7392,
+    "longitude": -104.9903,
+    "city": "Denver",
+    "state": "CO",
+    "zipCode": "80202",
+    "clinicianType": "Chiropractor",
+    "trainingLevel": "Advanced",
+    "languagesSpoken": ["English"],
+    "rating": 4.7,
+    "reviewCount": 70,
+    "activityScore": 78,
+    "galleryImages": [],
+    "testimonials": [],
+    "faqs": [],
+    "contactInfo": {
+      "phone": "(720) 555-1000",
+      "website": "https://bencarterchiro.com"
+    }
+  },
+  {
+    "id": "prov_011",
+    "name": "Dr. Chloe Davis",
+    "email": "chloe.davis@example.com",
+    "tier": "Free",
+    "trialStatus": "Active",
+    "activity": 200,
+    "churnRisk": true,
+    "profileImage": "https://images.unsplash.com/photo-1594744803329-e58b31de8ed5?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "specialty": "Women's Health PT",
+    "bio": "Dr. Chloe Davis is a physical therapist specializing in women's health, providing care for conditions unique to women across their lifespan. Her services include treatment for pregnancy-related pain, postpartum recovery, and pelvic floor dysfunction. Chloe offers a supportive and understanding environment for her patients.",
+    "experience": "5 years",
+    "education": "DPT, University of Washington",
+    "socialMedia": {
+      "facebook": "https://facebook.com/chloedavispt"
+    },
+    "services": [
+      "Pelvic Floor Rehab",
+      "Diastasis Recti",
+      "Pregnancy Pain",
+      "Postpartum Recovery"
+    ],
+    "certifications": [],
+    "location": "Portland, OR",
+    "latitude": 45.5051,
+    "longitude": -122.6750,
+    "city": "Portland",
+    "state": "OR",
+    "zipCode": "97204",
+    "clinicianType": "Physical Therapist",
+    "trainingLevel": "Essential",
+    "languagesSpoken": ["English"],
+    "rating": 4.3,
+    "reviewCount": 25,
+    "activityScore": 50,
+    "galleryImages": [],
+    "testimonials": [],
+    "faqs": [],
+    "contactInfo": {
+      "phone": "(503) 555-1100"
+    }
+  },
+  {
+    "id": "prov_012",
+    "name": "Dr. Olivia Wilson",
+    "email": "olivia.wilson@example.com",
+    "tier": "Premier",
+    "trialStatus": "N/A",
+    "activity": 1700,
+    "churnRisk": false,
+    "profileImage": "https://images.unsplash.com/photo-1582759711000-c5615570769f?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "specialty": "Neurological PT",
+    "bio": "Dr. Olivia Wilson is a highly skilled physical therapist specializing in neurological rehabilitation. She works with patients recovering from stroke, spinal cord injury, Parkinson's disease, and other neurological conditions to improve mobility, balance, and function. Olivia is committed to helping her patients regain independence and enhance their quality of life.",
+    "experience": "14 years",
+    "education": "DPT, Northwestern University",
+    "socialMedia": {
+      "linkedin": "https://linkedin.com/in/oliviawilsonpt"
+    },
+    "services": [
+      "Stroke Rehab",
+      "Spinal Cord Injury Rehab",
+      "Parkinson's Therapy",
+      "Balance Training"
+    ],
+    "certifications": [
+      "Board-Certified Neurologic Clinical Specialist (NCS)"
+    ],
+    "location": "Chicago, IL",
+    "latitude": 41.8781,
+    "longitude": -87.6298,
+    "city": "Chicago",
+    "state": "IL",
+    "zipCode": "60601",
+    "clinicianType": "Physical Therapist",
+    "trainingLevel": "GTS",
+    "languagesSpoken": ["English"],
+    "rating": 4.9,
+    "reviewCount": 135,
+    "activityScore": 96,
+    "galleryImages": [],
+    "testimonials": [],
+    "faqs": [],
+    "contactInfo": {
+      "phone": "(312) 555-1200",
+      "website": "https://oliviawilsonpt.com"
+    }
+  },
+  {
+    "id": "prov_013",
+    "name": "Dr. Noah Brown",
+    "email": "noah.brown@example.com",
+    "tier": "Preferred",
+    "trialStatus": "N/A",
+    "activity": 850,
+    "churnRisk": false,
+    "profileImage": "https://images.unsplash.com/photo-1552058544-fd2b086b6537?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "specialty": "Pediatric Chiropractic",
+    "bio": "Dr. Noah Brown is a compassionate pediatric chiropractor dedicated to supporting the health and development of infants, children, and adolescents. He uses gentle, age-appropriate techniques to address common childhood conditions and promote overall wellness. Dr. Brown creates a welcoming and fun environment for his young patients and their families.",
+    "experience": "6 years",
+    "education": "DC, Life University",
+    "socialMedia": {
+      "instagram": "https://instagram.com/noahbrownchiro"
+    },
+    "services": [
+      "Infant Adjustments",
+      "Colic Relief",
+      "Posture Correction",
+      "Wellness Care for Kids"
+    ],
+    "certifications": [
+      "Certified in Pediatric Chiropractic (CACCP)"
+    ],
+    "location": "Atlanta, GA",
+    "latitude": 33.7490,
+    "longitude": -84.3880,
+    "city": "Atlanta",
+    "state": "GA",
+    "zipCode": "30303",
+    "clinicianType": "Chiropractor",
+    "trainingLevel": "Advanced",
+    "languagesSpoken": ["English"],
+    "rating": 4.6,
+    "reviewCount": 75,
+    "activityScore": 82,
+    "galleryImages": [],
+    "testimonials": [],
+    "faqs": [],
+    "contactInfo": {
+      "phone": "(404) 555-1300",
+      "website": "https://noahbrownchiro.com"
+    }
+  },
+  {
+    "id": "prov_014",
+    "name": "Isabella Rossi, OT",
+    "email": "isabella.rossi@example.com",
+    "tier": "Free",
+    "trialStatus": "Expired",
+    "activity": 180,
+    "churnRisk": true,
+    "profileImage": "https://images.unsplash.com/photo-1584820927466-0968436e1785?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "specialty": "Hand Therapy",
+    "bio": "Isabella Rossi is a certified occupational therapist specializing in hand and upper extremity rehabilitation. She helps patients recover from injuries, surgeries, and chronic conditions affecting the hand, wrist, elbow, and shoulder. Isabella provides individualized treatment plans to restore function and reduce pain.",
+    "experience": "8 years",
+    "education": "MSOT, New York University",
+    "socialMedia": {},
+    "services": [
+      "Hand Rehab",
+      "Wrist & Elbow Therapy",
+      "Custom Splinting",
+      "Post-Surgical Hand Care"
+    ],
+    "certifications": [
+      "Certified Hand Therapist (CHT)"
+    ],
+    "location": "Philadelphia, PA",
+    "latitude": 39.9526,
+    "longitude": -75.1652,
+    "city": "Philadelphia",
+    "state": "PA",
+    "zipCode": "19107",
+    "clinicianType": "Occupational Therapist",
+    "trainingLevel": "Essential",
+    "languagesSpoken": ["English", "Italian"],
+    "rating": 4.2,
+    "reviewCount": 20,
+    "activityScore": 45,
+    "galleryImages": [],
+    "testimonials": [],
+    "faqs": [],
+    "contactInfo": {
+      "phone": "(215) 555-1400"
+    }
+  },
+  {
+    "id": "prov_015",
+    "name": "Liam O'Connell, ATC",
+    "email": "liam.oconnell@example.com",
+    "tier": "Premier",
+    "trialStatus": "N/A",
+    "activity": 1300,
+    "churnRisk": false,
+    "profileImage": "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "specialty": "Concussion Management",
+    "bio": "Liam O'Connell is a certified athletic trainer specializing in concussion management and return-to-sport protocols. He provides comprehensive assessment, treatment, and guidance for athletes recovering from concussions, ensuring a safe and effective return to activity. Liam is dedicated to protecting the long-term health of his clients.",
+    "experience": "10 years",
+    "education": "MS, Athletic Training, University of Michigan",
+    "socialMedia": {
+      "twitter": "https://twitter.com/liamoconnellatc"
+    },
+    "services": [
+      "Concussion Assessment",
+      "Vestibular Rehab",
+      "Return-to-Sport",
+      "Baseline Testing"
+    ],
+    "certifications": [
+      "Certified Athletic Trainer (ATC)",
+      "Concussion Management Specialist"
+    ],
+    "location": "Ann Arbor, MI",
+    "latitude": 42.2808,
+    "longitude": -83.7430,
+    "city": "Ann Arbor",
+    "state": "MI",
+    "zipCode": "48104",
+    "clinicianType": "Athletic Trainer",
+    "trainingLevel": "GTS",
+    "languagesSpoken": ["English"],
+    "rating": 4.8,
+    "reviewCount": 90,
+    "activityScore": 89,
+    "galleryImages": [],
+    "testimonials": [],
+    "faqs": [],
+    "contactInfo": {
+      "phone": "(734) 555-1500",
+      "website": "https://liamoconnellatc.com"
+    }
+  },
+  {
+    "id": "prov_016",
+    "name": "Dr. Chloe Green",
+    "email": "chloe.green@example.com",
+    "tier": "Preferred",
+    "trialStatus": "N/A",
+    "activity": 750,
+    "churnRisk": false,
+    "profileImage": "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "specialty": "Sports Medicine",
+    "bio": "Dr. Chloe Green is a physical therapist specializing in sports injury rehabilitation and performance enhancement. She focuses on evidence-based treatments to help athletes of all levels return to their peak condition. Her approach combines manual therapy, therapeutic exercise, and patient education to ensure long-term recovery and injury prevention.",
+    "experience": "8 years",
+    "education": "DPT, University of Texas",
+    "socialMedia": {
+      "linkedin": "https://linkedin.com/in/chloegreenpt"
+    },
+    "services": [
+      "Sports Injury Rehab",
+      "Post-Surgical Rehab",
+      "Manual Therapy",
+      "Dry Needling"
+    ],
+    "certifications": [
+      "Board-Certified Sports Clinical Specialist (SCS)"
+    ],
+    "location": "Austin, TX",
+    "latitude": 30.2672,
+    "longitude": -97.7431,
+    "city": "Austin",
+    "state": "TX",
+    "zipCode": "78701",
+    "clinicianType": "Physical Therapist",
+    "trainingLevel": "Advanced",
+    "languagesSpoken": ["English"],
+    "rating": 4.7,
+    "reviewCount": 80,
+    "activityScore": 85,
+    "galleryImages": [],
+    "testimonials": [],
+    "faqs": [],
+    "contactInfo": {
+      "phone": "(512) 555-1600",
+      "website": "https://chloegreenpt.com"
+    }
+  },
+  {
+    "id": "prov_017",
+    "name": "Dr. Daniel Lee",
+    "email": "daniel.lee@example.com",
+    "tier": "Premier",
+    "trialStatus": "N/A",
+    "activity": 1900,
+    "churnRisk": false,
+    "profileImage": "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "specialty": "Orthopedic Chiropractic",
+    "bio": "Dr. Daniel Lee is an orthopedic chiropractor specializing in musculoskeletal conditions and sports injuries. He combines chiropractic adjustments with advanced rehabilitation techniques to help patients recover from pain and improve their physical function. Dr. Lee is committed to providing comprehensive, patient-centered care.",
+    "experience": "16 years",
+    "education": "DC, National University of Health Sciences",
+    "socialMedia": {
+      "facebook": "https://facebook.com/danielleechiro"
+    },
+    "services": [
+      "Spinal Adjustments",
+      "Extremity Adjustments",
+      "Rehabilitation Exercises",
+      "Myofascial Release"
+    ],
+    "certifications": [
+      "Board-Certified in Orthopedics (DACBR)"
+    ],
+    "location": "San Diego, CA",
+    "latitude": 32.7157,
+    "longitude": -117.1611,
+    "city": "San Diego",
+    "state": "CA",
+    "zipCode": "92101",
+    "clinicianType": "Chiropractor",
+    "trainingLevel": "GTS",
+    "languagesSpoken": ["English", "Korean"],
+    "rating": 4.9,
+    "reviewCount": 140,
+    "activityScore": 97,
+    "galleryImages": [],
+    "testimonials": [],
+    "faqs": [],
+    "contactInfo": {
+      "phone": "(619) 555-1700",
+      "website": "https://danielleechiro.com"
+    }
+  },
+  {
+    "id": "prov_018",
+    "name": "Emma White, OT",
+    "email": "emma.white@example.com",
+    "tier": "Free",
+    "trialStatus": "Active",
+    "activity": 220,
+    "churnRisk": true,
+    "profileImage": "https://images.unsplash.com/photo-1535713875002-d1d0cfd293ae?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "specialty": "Neuro-Rehabilitation",
+    "bio": "Emma White is an occupational therapist specializing in neuro-rehabilitation. She helps individuals with neurological conditions improve their independence in daily activities, cognitive function, and motor skills. Emma provides personalized, evidence-based interventions to maximize recovery and adaptation.",
+    "experience": "4 years",
+    "education": "MSOT, University of California, San Francisco",
+    "socialMedia": {},
+    "services": [
+      "Cognitive Rehab",
+      "Motor Retraining",
+      "ADL Training",
+      "Adaptive Equipment"
+    ],
+    "certifications": [],
+    "location": "San Jose, CA",
+    "latitude": 37.3382,
+    "longitude": -121.8863,
+    "city": "San Jose",
+    "state": "CA",
+    "zipCode": "95113",
+    "clinicianType": "Occupational Therapist",
+    "trainingLevel": "Essential",
+    "languagesSpoken": ["English"],
+    "rating": 4.1,
+    "reviewCount": 18,
+    "activityScore": 48,
+    "galleryImages": [],
+    "testimonials": [],
+    "faqs": [],
+    "contactInfo": {
+      "phone": "(408) 555-1800"
+    }
+  },
+  {
+    "id": "prov_019",
+    "name": "Dr. James Taylor",
+    "email": "james.taylor@example.com",
+    "tier": "Preferred",
+    "trialStatus": "N/A",
+    "activity": 900,
+    "churnRisk": false,
+    "profileImage": "https://images.unsplash.com/photo-1507003211169-e69adba4c283?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "specialty": "Sports Medicine",
+    "bio": "Dr. James Taylor is a physical therapist specializing in sports injury rehabilitation and performance enhancement. He focuses on evidence-based treatments to help athletes of all levels return to their peak condition. His approach combines manual therapy, therapeutic exercise, and patient education to ensure long-term recovery and injury prevention.",
+    "experience": "10 years",
+    "education": "DPT, University of Colorado",
+    "socialMedia": {
+      "linkedin": "https://linkedin.com/in/jamestaylorpt"
+    },
+    "services": [
+      "Sports Injury Rehab",
+      "Post-Surgical Rehab",
+      "Manual Therapy",
+      "Dry Needling"
+    ],
+    "certifications": [
+      "Board-Certified Sports Clinical Specialist (SCS)"
+    ],
+    "location": "Boulder, CO",
+    "latitude": 40.0150,
+    "longitude": -105.2705,
+    "city": "Boulder",
+    "state": "CO",
+    "zipCode": "80302",
+    "clinicianType": "Physical Therapist",
+    "trainingLevel": "Advanced",
+    "languagesSpoken": ["English"],
+    "rating": 4.7,
+    "reviewCount": 90,
+    "activityScore": 87,
+    "galleryImages": [],
+    "testimonials": [],
+    "faqs": [],
+    "contactInfo": {
+      "phone": "(303) 555-1900",
+      "website": "https://jamestaylorpt.com"
+    }
+  },
+  {
+    "id": "prov_020",
+    "name": "Dr. Sophia Martinez",
+    "email": "sophia.martinez@example.com",
+    "tier": "Premier",
+    "trialStatus": "N/A",
+    "activity": 1750,
+    "churnRisk": false,
+    "profileImage": "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "specialty": "Pediatric Physical Therapy",
+    "bio": "Dr. Sophia Martinez is a dedicated physical therapist specializing in pediatric care. She helps children achieve their developmental milestones, improve motor skills, and overcome physical challenges through playful and engaging therapy sessions. Sophia is passionate about fostering a positive and supportive environment for her young patients and their families.",
+    "experience": "11 years",
+    "education": "DPT, University of Texas Southwestern Medical Center",
+    "socialMedia": {
+      "instagram": "https://instagram.com/sophiamartinezpt"
+    },
+    "services": [
+      "Developmental Delay",
+      "Motor Skill Development",
+      "Gait Training",
+      "Torticollis Treatment"
+    ],
+    "certifications": [
+      "Board-Certified Pediatric Clinical Specialist (PCS)"
+    ],
+    "location": "Dallas, TX",
+    "latitude": 32.7767,
+    "longitude": -96.7970,
+    "city": "Dallas",
+    "state": "TX",
+    "zipCode": "75201",
+    "clinicianType": "Physical Therapist",
+    "trainingLevel": "GTS",
+    "languagesSpoken": ["English", "Spanish"],
+    "rating": 4.9,
+    "reviewCount": 115,
+    "activityScore": 94,
+    "galleryImages": [],
+    "testimonials": [],
+    "faqs": [],
+    "contactInfo": {
+      "phone": "(214) 555-2000",
+      "website": "https://sophiamartinezpt.com"
+    }
+  }
+]
