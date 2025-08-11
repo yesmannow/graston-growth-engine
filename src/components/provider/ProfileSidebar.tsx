@@ -1,3 +1,4 @@
+import React from 'react';
 import { FullProviderProfile, Tier, AccreditationLogo } from '@/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
