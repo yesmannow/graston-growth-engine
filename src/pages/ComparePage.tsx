@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { FullProviderProfile, Tier } from '@/types';
 import { mockProviders } from '@/lib/mockData';
