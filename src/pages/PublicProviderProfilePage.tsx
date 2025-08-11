@@ -39,7 +39,7 @@ const PublicProviderProfilePage = () => {
     }
   }, [provider]);
 
-  const handleToggleFavorite = (providerId: string) => {
+  const handleToggleFavorite = (id: string) => {
     setIsFavorite(prev => !prev);
     showSuccess("Favorite status updated for this session.");
   };

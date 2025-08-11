@@ -38,17 +38,17 @@ const ContentAssistantCard = () => {
 
   const mutation = useMutation<ContentResponse, Error, string>({
     mutationFn: generateContent,
-    onSuccess: (data) => {
-      showSuccess("Content generated successfully!"); // Changed usage
+    onSuccess: () => { // Removed 'data'
+      showSuccess("Content generated successfully!");
     },
-    onError: (error) => {
+    onError: () => { // Removed 'error'
       // Do nothing, the UI will show the error message
     }
   });
 
   const handleGenerate = () => {
     if (!prompt.trim()) {
-      showError("Please enter a prompt for the content you need."); // Changed usage
+      showError("Please enter a prompt for the content you need.");
       return;
     }
     // Clear previous content before new generation
@@ -60,7 +60,7 @@ const ContentAssistantCard = () => {
     if(!generatedContent) return;
     navigator.clipboard.writeText(generatedContent);
     setHasCopied(true);
-    showSuccess("Content copied to clipboard!"); // Changed usage
+    showSuccess("Content copied to clipboard!");
     setTimeout(() => setHasCopied(false), 2000);
   };
 

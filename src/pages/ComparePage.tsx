@@ -5,7 +5,7 @@ import { mockProviders } from '@/lib/mockData';
 import smallProvidersRaw from '@/lib/smallProviderData.json';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Check, Star, X } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';

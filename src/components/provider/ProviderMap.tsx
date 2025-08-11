@@ -6,12 +6,12 @@ import { Coordinates } from '@/types';
 
 interface ProviderMapProps {
   coordinates: Coordinates;
-  name: string;
+  name: string; // Keep name in interface if it's part of the contract
 }
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "";
 
-const ProviderMap: React.FC<ProviderMapProps> = ({ coordinates, name }) => {
+const ProviderMap: React.FC<ProviderMapProps> = ({ coordinates }) => {
   if (!GOOGLE_MAPS_API_KEY) {
     return <div className="flex items-center justify-center h-full bg-gray-200"><p>Google Maps API Key is missing.</p></div>;
   }

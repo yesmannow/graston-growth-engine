@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ProviderCard from "@/components/directory/ProviderCard";
 import { FullProviderProfile, Condition, Language } from "@/types"; // Import Condition and Language types
