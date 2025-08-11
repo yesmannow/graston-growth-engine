@@ -32,6 +32,7 @@ const Onboarding = () => {
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
               <TabsTrigger value="article">First Article</TabsTrigger>
               <TabsTrigger value="support">Support</TabsTrigger>
+              <TabsTrigger value="resources">Resources</TabsTrigger>
             </TabsList>
             
             <TabsContent value="welcome" className="mt-4">
@@ -96,6 +97,44 @@ const Onboarding = () => {
                 <p className="text-muted-foreground">Our support team is here for you.</p>
                 <p>If you have any questions about your profile, billing, or the directory in general, don't hesitate to reach out.</p>
                 <Button asChild><Link to="/support">Contact Support</Link></Button>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="resources" className="mt-4">
+              <div className="p-6 border rounded-lg space-y-4">
+                <h3 className="text-2xl font-semibold">Additional Resources</h3>
+                <ul className="list-disc list-inside space-y-2">
+                  <li>
+                    <a href="https://help.example.com/profile" target="_blank" rel="noopener noreferrer"
+                       className="text-blue-600 hover:underline">
+                      Profile Best Practices Guide
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://help.example.com/videos" target="_blank" rel="noopener noreferrer"
+                       className="text-blue-600 hover:underline">
+                      Video Tutorial: Creating a Compelling Profile
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://help.example.com/analytics" target="_blank" rel="noopener noreferrer"
+                       className="text-blue-600 hover:underline">
+                      Understanding Your Analytics Documentation
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://help.example.com/content-guidelines" target="_blank" rel="noopener noreferrer"
+                       className="text-blue-600 hover:underline">
+                      Article Submission Guidelines
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://help.example.com/support" target="_blank" rel="noopener noreferrer"
+                       className="text-blue-600 hover:underline">
+                      Contact Support & FAQ
+                    </a>
+                  </li>
+                </ul>
               </div>
             </TabsContent>
 
