@@ -16,7 +16,7 @@ import {
   RadiusOption,
   ClinicianType,
 } from "@/types";
-import { Search, Filter, RefreshCw, List, Map } from "lucide-react";
+import { Search, Filter, RefreshCw, List, Map, Star } from "lucide-react";
 import DirectoryMap from "@/components/directory/DirectoryMap";
 import FilterPanel from "@/components/directory/FilterPanel";
 import { Button } from "@/components/ui/button";
@@ -89,13 +89,21 @@ const Directory: React.FC = () => {
       rating: 4,
       reviewCount: 0,
       isFavorite: false,
+      engagementScore: Math.floor(Math.random() * 100),
+      views: Math.floor(Math.random() * 1000),
       can_compare: p.provider_tier !== 'Basic',
     } as FullProviderProfile));
     const base = [...mockProviders, ...external];
     const list: FullProviderProfile[] = [];
     for (let i = 0; i < 100; i++) {
       const p = base[i % base.length];
-      list.push({ ...p, id: `${p.id}-${i}`, can_compare: p.tier !== 'Free' });
+      list.push({ 
+        ...p, 
+        id: `${p.id}-${i}`, 
+        can_compare: p.tier !== 'Free',
+        engagementScore: p.engagementScore || Math.floor(Math.random() * 100),
+        views: p.views || Math.floor(Math.random() * 1000)
+      });
     }
     return list;
   });

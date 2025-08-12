@@ -3,38 +3,29 @@ import { MarketingResource } from "@/types";
 export const marketingResources: MarketingResource[] = [
   {
     id: "res_001",
-    title: "Social Media Post Templates",
-    description: "Ready-to-use templates for Facebook, Instagram, and Twitter to promote your practice.",
-    category: "Social Media",
+    title: "Patient Education Brochure",
+    description: "Comprehensive brochure explaining the Graston Technique benefits",
+    category: "Patient Education",
     tier: "Free",
-    image: "/images/resource-social.jpg",
-    filePath: "/docs/social-media-templates.zip",
+    image: "https://picsum.photos/400/300?random=1",
+    filePath: "/resources/patient-brochure.pdf"
   },
   {
     id: "res_002",
-    title: "Guide to Getting More Reviews",
-    description: "A comprehensive guide on how to ethically and effectively encourage patients to leave positive reviews.",
-    category: "Reputation Management",
+    title: "Social Media Kit",
+    description: "Ready-to-use social media posts and graphics",
+    category: "Marketing Materials",
     tier: "Preferred",
-    image: "/images/resource-reviews.jpg",
-    filePath: "/docs/review-guide.pdf",
+    image: "https://picsum.photos/400/300?random=2",
+    filePath: "/resources/social-media-kit.zip"
   },
   {
     id: "res_003",
-    title: "Local SEO for Clinicians",
-    description: "Learn how to optimize your Google Business Profile and website to attract local patients.",
-    category: "SEO",
+    title: "Treatment Protocol Guide",
+    description: "Step-by-step treatment protocols for common conditions",
+    category: "Clinical Resources",
     tier: "Premier",
-    image: "/images/resource-seo.jpg",
-    filePath: "/docs/local-seo-guide.pdf",
-  },
-  {
-    id: "res_004",
-    title: "Email Newsletter Templates",
-    description: "Engage your patient base with these professionally designed email newsletter templates.",
-    category: "Email Marketing",
-    tier: "Preferred",
-    image: "/images/resource-email.jpg",
-    filePath: "/docs/email-templates.zip",
-  },
+    image: "https://picsum.photos/400/300?random=3",
+    filePath: "/resources/treatment-protocols.pdf"
+  }
 ];

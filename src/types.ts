@@ -1,11 +1,97 @@
-export type Tier = "Premier" | "Preferred" | "Free";
-export type TrainingLevel = "GTS" | "Advanced" | "Essential";
-export type ClinicianType = "Chiropractor" | "Physical Therapist" | "Athletic Trainer" | "Massage Therapist" | "Other" | "Occupational Therapist" | "Medical Doctor";
-export type Language = "English" | "Spanish" | "French" | "German" | "Mandarin" | "Other" | "Cantonese" | "Hindi" | "Arabic" | "Portuguese" | "Russian" | "Japanese" | "Korean" | "Italian" | "Vietnamese";
-export type Condition = "Back Pain" | "Neck Pain" | "Shoulder Pain" | "Knee Pain" | "Plantar Fasciitis" | "Tennis Elbow" | "Shoulder Injuries" | "Headaches" | "Carpal Tunnel Syndrome" | "TMJ Dysfunction" | "Sciatica" | "Sports Injuries" | "Post-Surgical Rehab" | "Chronic Pain" | "Golfers Elbow" | "Shin Splints" | "Rotator Cuff Tendinopathy" | "Achilles Tendinopathy" | "IT Band Syndrome";
-export type PatientDemographic = "Athletes" | "Pediatrics" | "Geriatrics" | "General Population" | "Adults" | "Children" | "Adolescents" | "Pregnant Women" | "Post-Surgical" | "Seniors" | "Post-Surgical Patients";
+export type Tier = 'Free' | 'Preferred' | 'Premier' | 'All';
+export type TrialStatus = 'Active' | 'Expired' | 'N/A';
+export type SortOption = 'premier-first' | 'top-rated' | 'most-reviewed';
 export type RadiusOption = 5 | 10 | 25 | 50 | 100;
-export type SortOption = "premier-first" | "top-rated" | "most-reviewed" | "distance";
+export type ClinicianType = 'All' | 'Therapist' | 'Psychiatrist' | 'Psychologist' | 'Counselor' | 'Social Worker' | 'Coach' | 'Chiropractor' | 'Physical Therapist' | 'Athletic Trainer' | 'Massage Therapist' | 'Medical Doctor' | 'Other';
+export type TrainingLevel = 'All' | 'Level 1' | 'Level 2' | 'Level 3' | 'Consultant' | 'GTS' | 'Advanced' | 'Essential';
+export type Language = 'English' | 'Spanish' | 'French' | 'German' | 'Italian' | 'Portuguese' | 'Chinese' | 'Japanese' | 'Korean' | 'Arabic' | 'Russian' | 'Hindi' | 'Mandarin';
+export type Condition = 'Anxiety' | 'Depression' | 'PTSD' | 'OCD' | 'ADHD' | 'Bipolar' | 'Eating Disorders' | 'Substance Abuse' | 'Relationship Issues' | 'Grief' | 'Trauma' | 'Phobias' | 'Back Pain' | 'Neck Pain' | 'Headaches' | 'Sports Injuries' | 'Post-Surgical Rehab';
+export type PatientDemographic = 'Children' | 'Adolescents' | 'Adults' | 'Seniors' | 'Couples' | 'Families' | 'Groups' | 'LGBTQ+' | 'Veterans' | 'First Responders' | 'Athletes' | 'Pediatrics' | 'Geriatrics' | 'General Population';
+
+export interface Coordinates {
+  lat: number;
+  lng: number;
+}
+
+export interface AccreditationLogo {
+  name: string;
+  imageUrl: string;
+  logoUrl: string;
+  url: string;
+  description?: string;
+}
+
+export interface Testimonial {
+  id: string;
+  patientName: string;
+  rating: number;
+  text: string;
+  date: string;
+  verified: boolean;
+  quote: string;
+  author: string;
+  source?: string;
+}
+
+export interface FAQ {
+  id: string;
+  question: string;
+  answer: string;
+}
+
+export interface MarketingResource {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  tier: Tier;
+  image: string;
+  filePath: string;
+}
+
+export interface FullProviderProfile {
+  id: string;
+  name: string;
+  email: string;
+  profileImage: string;
+  specialty: string;
+  clinicianType: ClinicianType;
+  tier: Tier;
+  trialStatus: TrialStatus;
+  location: string;
+  clinicAddress: string;
+  coordinates?: Coordinates;
+  phone: string;
+  website: string;
+  bio: string;
+  services?: string[];
+  languagesSpoken?: Language[];
+  conditionsTreated?: Condition[];
+  patientTypes?: PatientDemographic[];
+  gtCertifications?: TrainingLevel[];
+  accreditationLogos?: AccreditationLogo[];
+  testimonials?: Testimonial[];
+  faqs?: FAQ[];
+  rating?: number;
+  reviewCount?: number;
+  activity: number;
+  churnRisk: boolean;
+  isFavorite: boolean;
+  // Added missing properties
+  engagementScore?: number;
+  views?: number;
+  can_compare?: boolean;
+  verificationBadges?: string[];
+  galleryImages?: string[];
+  galleryVideos?: string[];
+  experience?: string;
+  education?: string;
+  linkedin?: string;
+  facebook?: string;
+  instagram?: string;
+  twitter?: string;
+  certifications?: string[];
+}
 
 export interface DirectoryFilters {
   searchTerm?: string;
@@ -13,81 +99,13 @@ export interface DirectoryFilters {
   state?: string;
   zipCode?: string;
   radius?: RadiusOption;
-  clinicianType?: ClinicianType | 'All';
-  specialty?: string | 'All';
-  tier?: Tier | 'All';
-  trainingLevel?: TrainingLevel | 'All';
+  clinicianType?: ClinicianType;
+  specialty?: string;
+  tier?: Tier;
+  trainingLevel?: TrainingLevel;
   languages?: Language[];
-  patientTypes?: PatientDemographic[];
   conditionsTreated?: Condition[];
+  patientTypes?: PatientDemographic[];
   sortBy: SortOption;
   favoritesOnly?: boolean;
-}
-
-export interface Testimonial {
-  quote: string;
-  author: string;
-  source?: string;
-  rating?: number;
-}
-
-export interface FAQ {
-  question: string;
-  answer: string;
-}
-
-export interface AccreditationLogo {
-  name: string;
-  logoUrl: string;
-  url: string;
-}
-
-export interface FullProviderProfile {
-  id: string;
-  name: string;
-  email: string;
-  specialty?: string;
-  bio?: string;
-  experience?: string;
-  education?: string;
-  profileImage?: string;
-  phone?: string;
-  website?: string;
-  linkedin?: string;
-  facebook?: string;
-  instagram?: string;
-  twitter?: string;
-  services?: string[];
-  certifications?: string[];
-  location?: string;
-  clinicAddress?: string;
-  coordinates?: { lat: number; lng: number };
-  gtCertifications?: TrainingLevel[];
-  verificationBadges?: string[];
-  accreditationLogos?: AccreditationLogo[];
-  languagesSpoken?: Language[];
-  patientTypes?: PatientDemographic[];
-  conditionsTreated?: Condition[];
-  rating?: number;
-  reviewCount?: number;
-  isFavorite?: boolean;
-  tier: Tier;
-  clinicianType?: ClinicianType;
-  trialStatus: "Active" | "Expired" | "N/A";
-  activity: number;
-  churnRisk: boolean;
-  galleryImages?: string[];
-  galleryVideos?: string[];
-  testimonials?: Testimonial[];
-  faqs?: FAQ[];
-}
-
-export interface MarketingResource {
-  id: string;
-  title: string;
-  description: string;
-  image: string;
-  category: string;
-  tier: Tier;
-  filePath: string;
 }
