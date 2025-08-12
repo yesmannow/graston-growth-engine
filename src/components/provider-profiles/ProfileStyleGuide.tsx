@@ -184,7 +184,9 @@ const ProfileStyleGuide = () => {
                     <div key={type} className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="font-medium capitalize">{type.replace('_', ' ')}</span>
-                        <code className="text-xs bg-gray-100 px-2 py-1 rounded">{classes}</code>
+                        <code className="text-xs bg-gray-100 px-2 py-1 rounded">
+                          {typeof classes === 'string' ? classes : JSON.stringify(classes)}
+                        </code>
                       </div>
                       {typeof classes === 'string' && (
                         <p className={classes}>Sample {type} text</p>

@@ -3,238 +3,158 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Crown, Star, Shield } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import FreeProfile from '@/components/provider-profiles/FreeProfile';
 import PreferredProfile from '@/components/provider-profiles/PreferredProfile';
 import PremierProfile from '@/components/provider-profiles/PremierProfile';
-import { freeProfiles, preferredProfiles, premierProfiles } from '@/data/mockProviderProfiles';
+import { mockProviders, providersByTier } from '@/data/mock-providers';
+import { ProviderProfile } from '@/types/provider-profile';
 
 const ProviderProfileShowcase = () => {
-  const [selectedFree, setSelectedFree] = useState(0);
-  const [selectedPreferred, setSelectedPreferred] = useState(0);
-  const [selectedPremier, setSelectedPremier] = useState(0);
+  const [selectedTier, setSelectedTier] = useState<'Free' | 'Preferred' | 'Premier'>('Free');
+  const [selectedProvider, setSelectedProvider] = useState<ProviderProfile>(providersByTier.Free[0]);
+
+  const handleTierChange = (tier: 'Free' | 'Preferred' | 'Premier') => {
+    setSelectedTier(tier);
+    setSelectedProvider(providersByTier[tier][0]);
+  };
+
+  const handleProviderChange = (providerId: string) => {
+    const provider = mockProviders.find(p => p.id === providerId);
+    if (provider) {
+      setSelectedProvider(provider);
+    }
+  };
+
+  const renderProfile = () => {
+    switch (selectedTier) {
+      case 'Free':
+        return <FreeProfile provider={selectedProvider} />;
+      case 'Preferred':
+        return <PreferredProfile provider={selectedProvider} />;
+      case 'Premier':
+        return <PremierProfile provider={selectedProvider} />;
+      default:
+        return <FreeProfile provider={selectedProvider} />;
+    }
+  };
 
   const tierFeatures = {
-    free: [
+    Free: [
       'Basic provider information',
       'Location (city/state only)',
-      'Specialties display',
-      'Certification badges',
+      'Specialties and languages',
       'Availability status',
-      'Mobile responsive'
+      'Professional verification badge'
     ],
-    preferred: [
+    Preferred: [
       'Everything in Free, plus:',
-      'Professional profile photo',
+      'Profile photo',
       'Full contact information',
-      'Interactive location map',
-      'Detailed bio (150 words)',
-      'Office hours display',
+      'Interactive map',
+      'Office hours',
       'Social media links',
+      'Extended bio (150 words)',
       'Insurance information',
-      'Star ratings & reviews',
-      'Enhanced card layout'
+      'Professional accreditations'
     ],
-    premier: [
+    Premier: [
       'Everything in Preferred, plus:',
-      'Hero banner section',
-      'Video introduction',
+      'Hero banner with clinic photos',
       'Photo gallery with lightbox',
-      'Extended bio (300+ words)',
+      'Video introduction',
+      'Patient testimonials & ratings',
+      'Provider-managed FAQs',
       'Published articles showcase',
-      'Event & workshop promotion',
-      'Patient testimonials',
-      'Interactive FAQ section',
-      'Direct contact form',
-      'Community activity feed',
-      'Custom content sections',
-      'Premium conversion tools'
+      'Upcoming events promotion',
+      'Online booking integration',
+      'Extended bio (300+ words)',
+      'Custom content sections'
     ]
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Provider Profile Tiers
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Explore our three distinct profile tiers, each designed to showcase the unique value proposition 
-            of Free, Preferred, and Premier memberships.
-          </p>
-        </div>
-
-        {/* Tier Comparison */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <Card className="border-2 border-gray-200">
-            <CardHeader className="text-center">
-              <div className="mx-auto w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-3">
-                <Shield className="h-6 w-6 text-gray-600" />
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Provider Profile Showcase
+              </h1>
+              <p className="text-gray-600">
+                Experience the power of tier-based digital identities
+              </p>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Select Tier</label>
+                <Tabs value={selectedTier} onValueChange={(value) => handleTierChange(value as any)}>
+                  <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="Free">Free</TabsTrigger>
+                    <TabsTrigger value="Preferred">Preferred</TabsTrigger>
+                    <TabsTrigger value="Premier">Premier</TabsTrigger>
+                  </TabsList>
+                </Tabs>
               </div>
-              <CardTitle className="text-xl">Free Tier</CardTitle>
-              <Badge variant="secondary">Digital Business Card</Badge>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2 text-sm">
-                {tierFeatures.free.map((feature, index) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <div className="w-1.5 h-1.5 bg-gray-400 rounded-full mt-2 flex-shrink-0" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card className="border-2 border-blue-200 bg-blue-50/30">
-            <CardHeader className="text-center">
-              <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-3">
-                <Star className="h-6 w-6 text-blue-600" />
+              
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Select Provider</label>
+                <Select value={selectedProvider.id} onValueChange={handleProviderChange}>
+                  <SelectTrigger className="w-64">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {providersByTier[selectedTier].map((provider) => (
+                      <SelectItem key={provider.id} value={provider.id}>
+                        {provider.provider_name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
-              <CardTitle className="text-xl">Preferred Tier</CardTitle>
-              <Badge className="bg-blue-100 text-blue-800">Professional Showcase</Badge>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2 text-sm">
-                {tierFeatures.preferred.map((feature, index) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card className="border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-blue-50">
-            <CardHeader className="text-center">
-              <div className="mx-auto w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-600 rounded-full flex items-center justify-center mb-3">
-                <Crown className="h-6 w-6 text-white" />
-              </div>
-              <CardTitle className="text-xl">Premier Tier</CardTitle>
-              <Badge className="bg-gradient-to-r from-purple-600 to-blue-600 text-white">Conversion Engine</Badge>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2 text-sm">
-                {tierFeatures.premier.map((feature, index) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <div className="w-1.5 h-1.5 bg-purple-500 rounded-full mt-2 flex-shrink-0" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Profile Previews */}
-        <Tabs defaultValue="free" className="space-y-8">
-          <div className="flex justify-center">
-            <TabsList className="grid w-full max-w-md grid-cols-3">
-              <TabsTrigger value="free">Free</TabsTrigger>
-              <TabsTrigger value="preferred">Preferred</TabsTrigger>
-              <TabsTrigger value="premier">Premier</TabsTrigger>
-            </TabsList>
+            </div>
           </div>
+        </div>
+      </div>
 
-          <TabsContent value="free">
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center gap-2">
-                    <Shield className="h-5 w-5 text-gray-600" />
-                    Free Tier Profile
+      {/* Feature Comparison */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {Object.entries(tierFeatures).map(([tier, features]) => (
+              <Card key={tier} className={`${selectedTier === tier ? 'ring-2 ring-blue-500' : ''}`}>
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between">
+                    {tier} Tier
+                    <Badge variant={tier === selectedTier ? 'default' : 'secondary'}>
+                      {tier === selectedTier ? 'Viewing' : 'Available'}
+                    </Badge>
                   </CardTitle>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-600">Sample:</span>
-                    <select 
-                      value={selectedFree}
-                      onChange={(e) => setSelectedFree(Number(e.target.value))}
-                      className="text-sm border rounded px-2 py-1"
-                    >
-                      {freeProfiles.slice(0, 5).map((_, index) => (
-                        <option key={index} value={index}>
-                          Provider {index + 1}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="border rounded-lg overflow-hidden">
-                  <FreeProfile provider={freeProfiles[selectedFree]} />
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2">
+                    {features.map((feature, index) => (
+                      <li key={index} className="flex items-start text-sm">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0" />
+                        <span className={feature.startsWith('Everything') ? 'font-medium text-blue-600' : 'text-gray-700'}>
+                          {feature}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
 
-          <TabsContent value="preferred">
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center gap-2">
-                    <Star className="h-5 w-5 text-blue-600" />
-                    Preferred Tier Profile
-                  </CardTitle>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-600">Sample:</span>
-                    <select 
-                      value={selectedPreferred}
-                      onChange={(e) => setSelectedPreferred(Number(e.target.value))}
-                      className="text-sm border rounded px-2 py-1"
-                    >
-                      {preferredProfiles.slice(0, 5).map((_, index) => (
-                        <option key={index} value={index}>
-                          Provider {index + 1}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="border rounded-lg overflow-hidden">
-                  <PreferredProfile provider={preferredProfiles[selectedPreferred]} />
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="premier">
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center gap-2">
-                    <Crown className="h-5 w-5 text-purple-600" />
-                    Premier Tier Profile
-                  </CardTitle>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-600">Sample:</span>
-                    <select 
-                      value={selectedPremier}
-                      onChange={(e) => setSelectedPremier(Number(e.target.value))}
-                      className="text-sm border rounded px-2 py-1"
-                    >
-                      {premierProfiles.slice(0, 5).map((_, index) => (
-                        <option key={index} value={index}>
-                          Provider {index + 1}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="border rounded-lg overflow-hidden">
-                  <PremierProfile provider={premierProfiles[selectedPremier]} />
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+      {/* Profile Display */}
+      <div className="relative">
+        {renderProfile()}
       </div>
     </div>
   );
