@@ -27,8 +27,8 @@ const Directory: React.FC = () => {
   const [hoveredProviderId, setHoveredProviderId] = useState<string | null>(null);
   
   // Map state
-  const [mapCenter] = useState({ lat: 39.8283, lng: -98.5795 });
-  const [mapZoom] = useState(4);
+  const [mapCenter, setMapCenter] = useState({ lat: 39.8283, lng: -98.5795 });
+  const [mapZoom, setMapZoom] = useState(4);
   const [mapBounds, setMapBounds] = useState<google.maps.LatLngBounds | null>(null);
   
   // Debounce inputs for API efficiency

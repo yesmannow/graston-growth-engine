@@ -154,7 +154,7 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
             <div className="flex flex-col md:flex-row gap-6">
               <div className="flex flex-col items-center space-y-4">
                 <Avatar className="h-24 w-24">
-                  <AvatarImage src={formData.profile_image ?? undefined} alt={formData.name} />
+                  <AvatarImage src={formData.profile_image || undefined} alt={formData.name} />
                   <AvatarFallback className="text-lg">
                     {formData.name.split(' ').map(n => n[0]).join('')}
                   </AvatarFallback>

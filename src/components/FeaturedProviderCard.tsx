@@ -19,7 +19,7 @@ const FeaturedProviderCard = ({ provider }: FeaturedProviderCardProps) => {
       <div className="p-6 flex-grow">
         <div className="flex items-center gap-4">
           <Avatar className="h-16 w-16 border">
-            <AvatarImage src={provider.profile_image ?? undefined} alt={provider.name} />
+            <AvatarImage src={provider.profile_image || undefined} alt={provider.name} />
             <AvatarFallback>{provider.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
           </Avatar>
           <div className="flex-1">

@@ -29,7 +29,7 @@ const ProviderCard = ({ provider, onMouseEnter, onMouseLeave }: ProviderCardProp
       <CardContent className="p-4 flex-grow">
         <div className="flex items-start gap-4">
           <Avatar className="h-20 w-20 border-2 border-brand-gray">
-            <AvatarImage src={provider.profile_image ?? undefined} alt={provider.name}/>
+            <AvatarImage src={provider.profile_image || undefined} alt={provider.name}/>
             <AvatarFallback>{provider.name.split(' ').map(n=>n[0]).join('')}</AvatarFallback>
           </Avatar>
           <div className="flex-1">

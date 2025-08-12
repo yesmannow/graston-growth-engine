@@ -1,52 +1,65 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { FullProviderProfile, Tier, Condition, Language } from '@/types';
+import { FullProviderProfile, Condition, Language } from '@/types';
 
 interface ProviderFilters {
   searchTerm?: string;
   clinicianType?: string | null;
   condition?: Condition | null;
   language?: Language | null;
-  tiers?: Tier[];
+  tiers?: string[];
   acceptingNewPatients?: boolean;
 }
 
-const fetchProviders = async (filters: ProviderFilters): Promise<FullProviderProfile[]> => {
+const fetchProviders = async ({
+  searchTerm,
+  clinicianType,
+  condition,
+  language,
+  tiers,
+  acceptingNewPatients,
+}: ProviderFilters): Promise<FullProviderProfile[]> => {
   let query = supabase.from('profiles').select('*');
 
-  if (filters.searchTerm) {
-    query = query.ilike('name', `%${filters.searchTerm}%`);
+  if (searchTerm) {
+    const searchString = `name.ilike.%${searchTerm}%,specialty.ilike.%${searchTerm}%,clinic_address.ilike.%${searchTerm}%,location.ilike.%${searchTerm}%`;
+    query = query.or(searchString);
   }
-  if (filters.clinicianType) {
-    query = query.eq('clinician_type', filters.clinicianType);
+
+  if (clinicianType) {
+    query = query.eq('clinician_type', clinicianType);
   }
-  if (filters.condition) {
-    query = query.contains('conditions_treated', [filters.condition]);
+
+  if (condition) {
+    query = query.cs('conditions_treated', [condition]);
   }
-  if (filters.language) {
-    query = query.contains('languages_spoken', [filters.language]);
+
+  if (language) {
+    query = query.cs('languages_spoken', [language]);
   }
-  if (filters.tiers && filters.tiers.length > 0) {
-    query = query.in('tier', filters.tiers);
+
+  if (tiers && tiers.length > 0 && tiers.length < 3) {
+    query = query.in('tier', tiers);
   }
-  if (filters.acceptingNewPatients) {
+
+  if (acceptingNewPatients) {
     query = query.eq('accepting_new_patients', true);
   }
 
-  const { data, error } = await query.limit(100); // Add a limit to avoid fetching too much data
+  const { data, error } = await query;
 
   if (error) {
     console.error('Error fetching providers:', error);
     throw new Error(error.message);
   }
 
-  return (data as FullProviderProfile[]) || [];
+  return data || [];
 };
 
 export const useProviders = (filters: ProviderFilters) => {
-  return useQuery<FullProviderProfile[], Error>({
+  return useQuery<FullProviderProfile[]>({
     queryKey: ['providers', filters],
     queryFn: () => fetchProviders(filters),
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 };

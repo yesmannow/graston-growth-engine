@@ -35,7 +35,7 @@ const PublicProviderProfilePage = () => {
 
   useEffect(() => {
     if (provider) {
-      setIsFavorite(provider.is_favorite || false);
+      setIsFavorite(provider.isFavorite || false);
     }
   }, [provider]);
 

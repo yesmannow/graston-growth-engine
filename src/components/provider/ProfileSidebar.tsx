@@ -51,7 +51,7 @@ const ProfileSidebar = ({ provider, onToggleFavorite }: ProfileSidebarProps) => 
       <Card className="overflow-hidden">
         <CardContent className="p-6 text-center">
           <Avatar className="h-28 w-28 mx-auto mb-4 border-4 border-background shadow-md">
-            <AvatarImage src={provider.profile_image ?? undefined} alt={provider.name} />
+            <AvatarImage src={provider.profile_image || undefined} alt={provider.name} />
             <AvatarFallback className="text-4xl">
               {provider.name.split(' ').map(n => n[0]).join('')}
             </AvatarFallback>
@@ -95,11 +95,11 @@ const ProfileSidebar = ({ provider, onToggleFavorite }: ProfileSidebarProps) => 
           )}
           <div className="grid grid-cols-2 gap-2">
             <Button 
-              variant={provider.is_favorite ? "default" : "outline"} 
+              variant={provider.isFavorite ? "default" : "outline"} 
               className="w-full flex items-center gap-2"
               onClick={() => onToggleFavorite(provider.id)}
             >
-              <Heart className={`h-4 w-4 ${provider.is_favorite ? 'fill-white' : ''}`} />
+              <Heart className={`h-4 w-4 ${provider.isFavorite ? 'fill-white' : ''}`} />
               Favorite
             </Button>
             <Button 
