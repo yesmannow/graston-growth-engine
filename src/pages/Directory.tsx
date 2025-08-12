@@ -65,6 +65,7 @@ const Directory: React.FC = () => {
   const [viewMode, setViewMode] = useState<'list' | 'map'>('map');
   const [compareList, setCompareList] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedMapProvider, setSelectedMapProvider] = useState<FullProviderProfile | null>(null);
 
   const [localProviders, setLocalProviders] = useState<FullProviderProfile[]>([]);
   
@@ -206,6 +207,15 @@ const Directory: React.FC = () => {
     setSearchInput("");
     setMapCenter({ lat: 39.8283, lng: -98.5795 });
     setMapZoom(4);
+    setSelectedMapProvider(null);
+  };
+
+  const handleProviderSelectFromList = (provider: FullProviderProfile) => {
+    if (provider.coordinates) {
+      setMapCenter(provider.coordinates);
+      setMapZoom(14);
+      setSelectedMapProvider(provider);
+    }
   };
 
   return (
@@ -259,6 +269,8 @@ const Directory: React.FC = () => {
                           zoom={mapZoom}
                           onBoundsChanged={setMapBounds}
                           hoveredProviderId={hoveredProviderId}
+                          selectedProvider={selectedMapProvider}
+                          onMarkerClick={setSelectedMapProvider}
                         />
                       </CardContent>
                     </Card>
@@ -287,7 +299,7 @@ const Directory: React.FC = () => {
                                 className="p-3 border rounded-lg hover:bg-muted/50 cursor-pointer transition-colors"
                                 onMouseEnter={() => setHoveredProviderId(provider.id)}
                                 onMouseLeave={() => setHoveredProviderId(null)}
-                                onClick={() => navigate(`/directory/provider/${provider.id}`)}
+                                onClick={() => handleProviderSelectFromList(provider)}
                               >
                                 <div className="flex items-start gap-3">
                                   <img src={provider.profileImage} alt={provider.name} className="w-12 h-12 rounded-full object-cover" />

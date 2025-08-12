@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { GoogleMap, MarkerF, InfoWindowF, useLoadScript } from '@react-google-maps/api';
+import React, { useRef, useEffect, useCallback } from 'react';
+import { GoogleMap, MarkerF, InfoWindowF, useLoadScript, MarkerClustererF } from '@react-google-maps/api';
 import { FullProviderProfile } from '@/types';
-import { Star, MapPin, Phone, Globe } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 
@@ -36,6 +36,8 @@ interface DirectoryMapProps {
   zoom: number;
   onBoundsChanged: (bounds: google.maps.LatLngBounds | null) => void;
   hoveredProviderId?: string | null;
+  selectedProvider: FullProviderProfile | null;
+  onMarkerClick: (provider: FullProviderProfile | null) => void;
 }
 
 const DirectoryMap: React.FC<DirectoryMapProps> = ({
@@ -45,9 +47,10 @@ const DirectoryMap: React.FC<DirectoryMapProps> = ({
   zoom,
   onBoundsChanged,
   hoveredProviderId,
+  selectedProvider,
+  onMarkerClick,
 }) => {
   const mapRef = useRef<google.maps.Map | null>(null);
-  const [selectedProvider, setSelectedProvider] = useState<FullProviderProfile | null>(null);
   const navigate = useNavigate();
 
   const { isLoaded, loadError } = useLoadScript({
@@ -115,27 +118,33 @@ const DirectoryMap: React.FC<DirectoryMapProps> = ({
       onIdle={onIdle}
       options={mapOptions}
     >
-      {providers.map((provider) => {
-        if (!provider.coordinates) return null;
-        const isHovered = hoveredProviderId === provider.id;
-        
-        return (
-          <MarkerF
-            key={provider.id}
-            position={provider.coordinates}
-            icon={getMarkerIcon(provider, isHovered)}
-            title={provider.name}
-            onClick={() => setSelectedProvider(provider)}
-            animation={isHovered ? google.maps.Animation.BOUNCE : undefined}
-            zIndex={isHovered ? 100 : 1}
-          />
-        );
-      })}
+      <MarkerClustererF>
+        {(clusterer) =>
+          providers
+            .filter(provider => provider.coordinates) // Pre-filter providers without coordinates
+            .map((provider) => {
+              const isHovered = hoveredProviderId === provider.id || selectedProvider?.id === provider.id;
+              
+              return (
+                <MarkerF
+                  key={provider.id}
+                  position={provider.coordinates!} // Use non-null assertion as it's filtered
+                  icon={getMarkerIcon(provider, isHovered)}
+                  title={provider.name}
+                  onClick={() => onMarkerClick(provider)}
+                  animation={isHovered ? google.maps.Animation.BOUNCE : undefined}
+                  zIndex={isHovered ? 100 : 1}
+                  clusterer={clusterer}
+                />
+              );
+            })
+        }
+      </MarkerClustererF>
 
       {selectedProvider && selectedProvider.coordinates && (
         <InfoWindowF
           position={selectedProvider.coordinates}
-          onCloseClick={() => setSelectedProvider(null)}
+          onCloseClick={() => onMarkerClick(null)}
           options={{ pixelOffset: new google.maps.Size(0, -30) }}
         >
           <div className="p-2 max-w-xs">
