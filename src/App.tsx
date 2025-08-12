@@ -11,6 +11,7 @@ import ComparePage from '@/pages/ComparePage';
 import UpdateProfile from '@/pages/UpdateProfile';
 import DashboardPage from '@/pages/admin/DashboardPage';
 import ProvidersPage from '@/pages/admin/ProvidersPage';
+import AiAssistantPage from '@/pages/admin/AiAssistantPage'; // New import
 import Reports from '@/pages/Reports';
 import MarketingToolkit from '@/pages/MarketingToolkit';
 import Support from '@/pages/Support';
@@ -42,6 +43,7 @@ function App() {
         <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<DashboardPage />} />
             <Route path="providers" element={<ProvidersPage />} />
+            <Route path="ai-assistant" element={<AiAssistantPage />} /> {/* New route */}
             {/* Add other admin routes here, e.g., analytics */}
         </Route>
       </Routes>
