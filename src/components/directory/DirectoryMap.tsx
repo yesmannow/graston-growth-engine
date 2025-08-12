@@ -134,7 +134,7 @@ const DirectoryMap: React.FC<DirectoryMapProps> = ({
                   onClick={() => onMarkerClick(provider)}
                   animation={isHovered ? google.maps.Animation.BOUNCE : undefined}
                   zIndex={isHovered ? 100 : 1}
-                  clusterer={clusterer}
+                  clusterer={clusterer} // Pass the clusterer prop
                 />
               );
             })
