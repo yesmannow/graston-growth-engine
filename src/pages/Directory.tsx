@@ -1,18 +1,17 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ProviderCard from "@/components/directory/ProviderCard";
 import { FullProviderProfile, Condition, Language } from "@/types";
 import DirectoryMap from "@/components/directory/DirectoryMap";
 import FilterPanel from "@/components/directory/FilterPanel";
 import { useMediaQuery } from "@/hooks/use-mobile";
-import { mockProviders } from "@/lib/mockData";
 import { useDebounce } from '@/hooks/useDebounce';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useFilterStore } from "@/hooks/useFilterStore";
 import { motion, AnimatePresence } from "framer-motion";
-// Removed: import { supabase } from "@/integrations/supabase/client"; // No longer needed for mock data demo
+import { useProviders } from "@/hooks/useProviders";
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "";
 
@@ -25,14 +24,14 @@ const Directory: React.FC = () => {
   const { searchTerm, clinicianType, condition, language, tiers, acceptingNewPatients, setSearchTerm, setClinicianType, setCondition, setLanguage, setTiers } = useFilterStore();
 
   // Local UI state
-  const [providers, setProviders] = useState<FullProviderProfile[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [hoveredProviderId, setHoveredProviderId] = useState<string | null>(null);
   
-  // Map state - always start at default values
+  // Map state
   const [mapCenter, setMapCenter] = useState({ lat: 39.8283, lng: -98.5795 });
   const [mapZoom, setMapZoom] = useState(4);
   const [mapBounds, setMapBounds] = useState<google.maps.LatLngBounds | null>(null);
+  
+  // Debounce inputs for API efficiency
   const debouncedBounds = useDebounce(mapBounds, 500);
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
   const debouncedClinicianType = useDebounce(clinicianType, 500);
@@ -41,10 +40,9 @@ const Directory: React.FC = () => {
   const debouncedTiers = useDebounce(tiers, 500);
   const debouncedAcceptingNewPatients = useDebounce(acceptingNewPatients, 500);
 
-  // Refs for scrolling to provider cards
   const providerCardRefs = useRef<Map<string, HTMLDivElement | null>>(new Map());
 
-  // URL State Synchronization - Read from URL on mount (only filters, not map state)
+  // Read filters from URL on initial load
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     setSearchTerm(params.get('search') || '');
@@ -52,9 +50,9 @@ const Directory: React.FC = () => {
     setCondition(params.get('condition') as Condition || null);
     setLanguage(params.get('language') as Language || null);
     setTiers(params.get('tiers')?.split(',') || ['Premier', 'Preferred', 'Free']);
-  }, [location.search, setSearchTerm, setClinicianType, setCondition, setLanguage, setTiers]);
+  }, []); // Removed dependencies to run only once on mount
 
-  // URL State Synchronization - Write to URL on filter state change (not map state change)
+  // Write filters to URL when they change
   useEffect(() => {
     const params = new URLSearchParams();
     if (searchTerm) params.set('search', searchTerm);
@@ -63,81 +61,35 @@ const Directory: React.FC = () => {
     if (language) params.set('language', language);
     if (tiers.length < 3) params.set('tiers', tiers.join(','));
     
-    if (params.toString() !== new URLSearchParams(location.search).toString()) {
-      navigate(`?${params.toString()}`, { replace: true });
+    // Using `location.pathname` to avoid re-triggering on search change
+    navigate(`${location.pathname}?${params.toString()}`, { replace: true });
+  }, [searchTerm, clinicianType, condition, language, tiers, navigate, location.pathname]);
+
+  // Fetch data from Supabase using our custom hook
+  const { data: allProviders, isLoading } = useProviders({
+    searchTerm: debouncedSearchTerm,
+    clinicianType: debouncedClinicianType,
+    condition: debouncedCondition,
+    language: debouncedLanguage,
+    tiers: debouncedTiers,
+    acceptingNewPatients: debouncedAcceptingNewPatients,
+  });
+
+  // Filter providers based on the current map view (client-side)
+  const providers = useMemo(() => {
+    if (!allProviders) return [];
+    if (debouncedBounds) {
+      return allProviders.filter(p =>
+        p.coordinates && debouncedBounds.contains(new google.maps.LatLng(p.coordinates.lat, p.coordinates.lng))
+      );
     }
-  }, [searchTerm, clinicianType, condition, language, tiers, navigate, location.search]);
-
-  // Fetch and filter data from mock data source
-  useEffect(() => {
-    const processDemoData = () => {
-      setIsLoading(true);
-
-      let filteredData: FullProviderProfile[] = [...mockProviders];
-
-      // Apply text search filter
-      if (debouncedSearchTerm) {
-        const lowercasedTerm = debouncedSearchTerm.toLowerCase();
-        filteredData = filteredData.filter(p =>
-          p.name?.toLowerCase().includes(lowercasedTerm) ||
-          p.specialty?.toLowerCase().includes(lowercasedTerm) ||
-          p.clinic_address?.toLowerCase().includes(lowercasedTerm) ||
-          p.location?.toLowerCase().includes(lowercasedTerm)
-        );
-      }
-
-      // Apply clinician type filter
-      if (debouncedClinicianType) {
-        filteredData = filteredData.filter(p => p.clinician_type === debouncedClinicianType);
-      }
-
-      // Apply condition filter
-      if (debouncedCondition) {
-        filteredData = filteredData.filter(p => p.conditions_treated?.includes(debouncedCondition));
-      }
-
-      // Apply language filter
-      if (debouncedLanguage) {
-        filteredData = filteredData.filter(p => p.languages_spoken?.includes(debouncedLanguage));
-      }
-
-      // Apply tier filter
-      if (debouncedTiers && debouncedTiers.length > 0 && debouncedTiers.length < 3) {
-        filteredData = filteredData.filter(p => p.tier && debouncedTiers.includes(p.tier));
-      }
-
-      // Apply accepting new patients filter
-      if (debouncedAcceptingNewPatients) {
-        filteredData = filteredData.filter(p => p.accepting_new_patients === true);
-      }
-
-      // Apply map bounds filter
-      if (debouncedBounds) {
-        filteredData = filteredData.filter(p =>
-          p.coordinates && debouncedBounds.contains(new google.maps.LatLng(p.coordinates.lat, p.coordinates.lng))
-        );
-      }
-
-      setProviders(filteredData);
-      setIsLoading(false);
-    };
-
-    // Use a timeout to simulate network latency for a better demo experience
-    const timer = setTimeout(() => {
-      processDemoData();
-    }, 300); 
-
-    return () => clearTimeout(timer);
-  }, [debouncedBounds, debouncedSearchTerm, debouncedClinicianType, debouncedCondition, debouncedLanguage, debouncedTiers, debouncedAcceptingNewPatients]);
+    return allProviders;
+  }, [allProviders, debouncedBounds]);
 
   const handleMapCameraChanged = useCallback((ev: any) => {
     const newBounds = ev.map.getBounds();
-    const newCenter = ev.map.getCenter();
-    const newZoom = ev.map.getZoom();
     if (newBounds) {
       setMapBounds(newBounds);
-      setMapCenter({ lat: newCenter.lat(), lng: newCenter.lng() });
-      setMapZoom(newZoom);
     }
   }, []);
 
