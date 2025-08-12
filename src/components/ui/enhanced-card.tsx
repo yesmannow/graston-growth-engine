@@ -1,5 +1,4 @@
 import * as React from "react";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const EnhancedCard = React.forwardRef<
@@ -9,7 +8,7 @@ const EnhancedCard = React.forwardRef<
     clickable?: boolean;
   }
 >(({ className, hoverable = false, clickable = false, ...props }, ref) => (
-  <motion.div
+  <div
     ref={ref}
     className={cn(
       "rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-200",
@@ -17,9 +16,6 @@ const EnhancedCard = React.forwardRef<
       clickable && "cursor-pointer hover:shadow-lg hover:-translate-y-2 active:scale-[0.98]",
       className,
     )}
-    whileHover={hoverable || clickable ? { y: -4, boxShadow: "0 10px 25px -3px rgb(0 0 0 / 0.1)" } : undefined}
-    whileTap={clickable ? { scale: 0.98 } : undefined}
-    transition={{ type: "spring", stiffness: 400, damping: 17 }}
     {...props}
   />
 ));
