@@ -1,8 +1,8 @@
 import { FullProviderProfile } from "@/types";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MapPin, Star, Phone, Globe, Heart } from "lucide-react";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Star, MapPin, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -16,92 +16,84 @@ interface ProviderCardProps {
   isComparing: boolean;
 }
 
-const ProviderCard = ({ provider, onMouseEnter, onMouseLeave, onToggleFavorite, onToggleCompare, isComparing }: ProviderCardProps) => {
+const ProviderCard = ({ 
+  provider, 
+  onMouseEnter, 
+  onMouseLeave,
+  onToggleFavorite,
+  onToggleCompare,
+  isComparing
+}: ProviderCardProps) => {
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    navigate(`/directory/provider/${provider.id}`);
+  const tierColorMap: Record<string, string> = {
+    Premier: "border-purple-500",
+    Preferred: "border-blue-500",
+    Free: "border-gray-300",
   };
 
-  // Tier-specific templates
-  if (provider.tier === 'Premier') {
-    return (
-      <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-200 ease-in-out" onClick={handleClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-        {/* Cover + Avatar */}
-        <div className="relative h-32 bg-gradient-to-r from-purple-600 to-blue-500">
+  return (
+    <Card 
+      className={`flex flex-col h-full transition-all duration-200 hover:shadow-lg hover:-translate-y-1 ${tierColorMap[provider.tier]}`}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      <CardHeader className="p-4">
+        <div className="flex items-start gap-4">
           <img
-            className="absolute bottom-0 left-4 h-24 w-24 rounded-full border-4 border-white object-cover"
             src={provider.profileImage}
             alt={provider.name}
+            className="w-20 h-20 rounded-lg object-cover cursor-pointer"
+            onClick={() => navigate(`/directory/provider/${provider.id}`)}
           />
-        </div>
-        <div className="pt-16 px-6 pb-4">
-          <h2 className="text-2xl font-bold text-gray-900 truncate">{provider.name}</h2>
-          <p className="text-sm text-gray-600 mt-1 truncate">{provider.specialty}</p>
-          <p className="flex items-center text-xs text-gray-500 mt-1">
-            <MapPin className="w-4 h-4 mr-1" />{provider.location}
-          </p>
-        </div>
-        <dl className="grid grid-cols-3 gap-4 px-6 pb-4 text-center">
-          <div>
-            <dt className="text-lg font-semibold text-gray-900">{provider.rating?.toFixed(1)}</dt>
-            <dd className="text-xs text-gray-500">Rating</dd>
-          </div>
-          <div>
-            <dt className="text-lg font-semibold text-gray-900">{provider.reviewCount}</dt>
-            <dd className="text-xs text-gray-500">Reviews</dd>
-          </div>
-          <div>
-            <dt className="text-lg font-semibold text-gray-900">{provider.activity}</dt>
-            <dd className="text-xs text-gray-500">Activity</dd>
-          </div>
-        </dl>
-        <div className="px-6 pb-4"><p className="text-sm text-gray-700 line-clamp-3">{provider.bio}</p></div>
-        <div className="border-t px-6 py-3 bg-gray-50 flex justify-between items-center">
-          <Button variant="ghost" size="sm" onClick={e => e.stopPropagation()}><Phone className="h-5 w-5 mr-1"/>Call</Button>
-          <Button variant="ghost" size="sm" asChild><a href={provider.website} target="_blank" rel="noopener"><Globe className="h-5 w-5 mr-1"/>Website</a></Button>
-          <Button variant="ghost" size="sm" onClick={e => { e.stopPropagation(); onToggleFavorite(provider.id); }}><Heart className={`h-5 w-5 ${provider.isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400'}`}/></Button>
-          {provider.can_compare && (
-            <div className="flex items-center space-x-2" onClick={e => e.stopPropagation()}>
-              <Checkbox id={`compare-${provider.id}`} checked={isComparing} onCheckedChange={() => onToggleCompare(provider.id)} />
-              <Label htmlFor={`compare-${provider.id}`} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer">Compare</Label>
+          <div className="flex-1">
+            <div className="flex justify-between items-start">
+              <CardTitle 
+                className="text-lg font-bold cursor-pointer hover:text-primary"
+                onClick={() => navigate(`/directory/provider/${provider.id}`)}
+              >
+                {provider.name}
+              </CardTitle>
+              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => onToggleFavorite(provider.id)}>
+                <Heart className={`h-5 w-5 ${provider.isFavorite ? 'text-red-500 fill-current' : 'text-muted-foreground'}`} />
+              </Button>
             </div>
+            <p className="text-sm text-muted-foreground">{provider.specialty}</p>
+            <div className="flex items-center mt-2">
+              <Star className="h-4 w-4 text-yellow-500 mr-1" />
+              <span className="font-semibold">{provider.rating?.toFixed(1)}</span>
+              <span className="text-sm text-muted-foreground ml-1">({provider.reviewCount} reviews)</span>
+            </div>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className="p-4 pt-0 flex-grow">
+        <div className="flex items-center text-sm text-muted-foreground mb-3">
+          <MapPin className="h-4 w-4 mr-2" />
+          <span>{provider.location}</span>
+        </div>
+        <p className="text-sm text-foreground line-clamp-3">
+          {provider.bio}
+        </p>
+      </CardContent>
+      <CardFooter className="p-4 bg-muted/50 flex justify-between items-center">
+        <div className="flex items-center space-x-2">
+          {provider.can_compare && (
+            <>
+              <Checkbox 
+                id={`compare-${provider.id}`} 
+                checked={isComparing} 
+                onCheckedChange={() => onToggleCompare(provider.id)}
+              />
+              <Label htmlFor={`compare-${provider.id}`} className="text-sm font-medium">Compare</Label>
+            </>
           )}
         </div>
-      </div>
-    );
-  }
-  if (provider.tier === 'Preferred') {
-    return (
-      <Card className="hover:shadow-lg transition-shadow duration-200 ease-in-out cursor-pointer flex flex-col" onClick={handleClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-        <CardContent className="p-4 flex items-center gap-3 flex-grow">
-          <Avatar className="h-12 w-12"><AvatarImage src={provider.profileImage} alt={provider.name}/><AvatarFallback>{provider.name.split(' ').map(n=>n[0]).join('')}</AvatarFallback></Avatar>
-          <div className="flex-1">
-            <h3 className="font-semibold truncate">{provider.name}</h3>
-            <p className="text-sm text-muted-foreground truncate">{provider.specialty}</p>
-            <div className="flex items-center mt-1">
-              <Star className="h-4 w-4 text-yellow-500" />
-              <span className="text-xs ml-1">{provider.rating?.toFixed(1)}</span>
-            </div>
-          </div>
-        </CardContent>
-        {provider.can_compare && (
-          <CardFooter className="p-4 border-t" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center space-x-2">
-              <Checkbox id={`compare-${provider.id}`} checked={isComparing} onCheckedChange={() => onToggleCompare(provider.id)} />
-              <Label htmlFor={`compare-${provider.id}`} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer">Compare</Label>
-            </div>
-          </CardFooter>
-        )}
-      </Card>
-    );
-  }
-  // Free tier minimal
-  return (
-    <div className="p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 ease-in-out cursor-pointer" onClick={handleClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-      <h3 className="font-medium text-base truncate">{provider.name}</h3>
-      <p className="text-sm text-muted-foreground truncate">{provider.specialty}</p>
-    </div>
+        <Button onClick={() => navigate(`/directory/provider/${provider.id}`)}>
+          View Profile
+        </Button>
+      </CardFooter>
+    </Card>
   );
 };
 

@@ -16,7 +16,7 @@ import {
   RadiusOption,
   ClinicianType,
 } from "@/types";
-import { Search, Filter, RefreshCw, List, Map, Star } from "lucide-react";
+import { Search, Filter, RefreshCw, List, Map, Star, MapPin } from "lucide-react";
 import DirectoryMap from "@/components/directory/DirectoryMap";
 import FilterPanel from "@/components/directory/FilterPanel";
 import { Button } from "@/components/ui/button";
@@ -30,10 +30,10 @@ import { Label } from "@/components/ui/label";
 import { mockProviders, specialties } from "@/lib/mockData";
 import Fuse from 'fuse.js';
 import { useDebounce } from '@/hooks/useDebounce';
-import SearchBar from '@/components/SearchBar';
 import smallProvidersRaw from '@/lib/smallProviderData.json';
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import ComparisonBar from "@/components/directory/ComparisonBar";
+import { MapSidebarSkeleton } from "@/components/ui/skeleton-loader";
 
 // Type definition for external raw providers JSON
 type RawProvider = {
@@ -62,11 +62,14 @@ const Directory: React.FC = () => {
   const [filters, setFilters] = useState<DirectoryFilters>({ sortBy: "premier-first" });
   const [hoveredProviderId, setHoveredProviderId] = useState<string | null>(null);
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<'list' | 'map'>('map'); // Changed default to 'map'
+  const [viewMode, setViewMode] = useState<'list' | 'map'>('map');
   const [compareList, setCompareList] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Generate a list of ~100 providers by repeating base and external data
-  const [localProviders, setLocalProviders] = useState<FullProviderProfile[]>(() => {
+  const [localProviders, setLocalProviders] = useState<FullProviderProfile[]>([]);
+  
+  useEffect(() => {
+    // Simulate loading provider data
     const external = (smallProvidersRaw as RawProvider[]).map((p: RawProvider, idx: number) => ({
       ...p,
       id: `ext-${idx}`,
@@ -86,8 +89,8 @@ const Directory: React.FC = () => {
       trialStatus: 'N/A',
       activity: 0,
       churnRisk: false,
-      rating: 4,
-      reviewCount: 0,
+      rating: 4 + Math.random(),
+      reviewCount: Math.floor(Math.random() * 150),
       isFavorite: false,
       engagementScore: Math.floor(Math.random() * 100),
       views: Math.floor(Math.random() * 1000),
@@ -105,145 +108,48 @@ const Directory: React.FC = () => {
         views: p.views || Math.floor(Math.random() * 1000)
       });
     }
-    return list;
-  });
+    setLocalProviders(list);
+    setIsLoading(false);
+  }, []);
+
   const [mapCenter, setMapCenter] = useState({ lat: 39.8283, lng: -98.5795 });
   const [mapZoom, setMapZoom] = useState(4);
-  const [searchInput, setSearchInput] = useState(''); // controlled input for search
-  const debouncedInput = useDebounce(searchInput, 300);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const [searchOnMapMove, setSearchOnMapMove] = useState(true); // Changed default to true
+  const [searchInput, setSearchInput] = useState('');
+  const debouncedSearch = useDebounce(searchInput, 300);
+  const [searchOnMapMove, setSearchOnMapMove] = useState(true);
   const [mapBounds, setMapBounds] = useState<google.maps.LatLngBounds | null>(null);
-  // pagination for manual load more
   const [displayCount, setDisplayCount] = useState(10);
 
-  // build fuse index
   const fuse = useMemo(() =>
-    new Fuse(localProviders, { keys: ['name', 'specialty', 'bio'], threshold: 0.4 }),
+    new Fuse(localProviders, { keys: ['name', 'specialty', 'bio', 'location'], threshold: 0.4 }),
   [localProviders]);
 
-  // update suggestions when user types
   useEffect(() => {
-    if (debouncedInput) {
-      const results = fuse.search(debouncedInput).slice(0, 5).map(r => r.item.name);
-      setSuggestions(results);
-      setActiveIndex(-1);
-    } else {
-      setSuggestions([]);
-    }
-  }, [debouncedInput, fuse]);
+    setFilters(prev => ({ ...prev, searchTerm: debouncedSearch }));
+  }, [debouncedSearch]);
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const newFilters: DirectoryFilters = { sortBy: "premier-first" };
-    const urlSearchTerm = params.get('searchTerm');
-
-    if (urlSearchTerm) {
-      newFilters.searchTerm = urlSearchTerm;
-      setSearchInput(urlSearchTerm);
-    }
-    if (params.get('city')) newFilters.city = params.get('city') || '';
-    if (params.get('state')) newFilters.state = params.get('state') || '';
-    if (params.get('zipCode')) newFilters.zipCode = params.get('zipCode') || '';
-    if (params.get('radius')) newFilters.radius = parseInt(params.get('radius') || '0') as RadiusOption;
-    if (params.get('clinicianType')) newFilters.clinicianType = (params.get('clinicianType') as ClinicianType) || 'All';
-    if (params.get('specialty')) newFilters.specialty = params.get('specialty') || 'All';
-    if (params.get('tier')) newFilters.tier = (params.get('tier') as Tier) || 'All';
-    if (params.get('trainingLevel')) newFilters.trainingLevel = (params.get('trainingLevel') as TrainingLevel) || 'All';
-    if (params.get('languages')) newFilters.languages = params.get('languages')?.split(',') as Language[];
-    if (params.get('patientTypes')) newFilters.patientTypes = params.get('patientTypes')?.split(',') as PatientDemographic[];
-    if (params.get('conditionsTreated')) newFilters.conditionsTreated = params.get('conditionsTreated')?.split(',') as Condition[];
-    if (params.get('sortBy')) newFilters.sortBy = (params.get('sortBy') as SortOption) || 'premier-first';
-    if (params.get('favoritesOnly') === 'true') newFilters.favoritesOnly = true;
-
-    setFilters(prev => ({ ...prev, ...newFilters }));
-  }, [location.search]);
-
-  useEffect(() => {
-    const params = new URLSearchParams();
-    if (filters.searchTerm) params.set('searchTerm', filters.searchTerm);
-    if (filters.city) params.set('city', filters.city);
-    if (filters.state) params.set('state', filters.state);
-    if (filters.zipCode) params.set('zipCode', filters.zipCode);
-    if (filters.radius) params.set('radius', filters.radius.toString());
-    if (filters.clinicianType && filters.clinicianType !== 'All') params.set('clinicianType', filters.clinicianType);
-    if (filters.specialty && filters.specialty !== 'All') params.set('specialty', filters.specialty);
-    if (filters.tier && filters.tier !== 'All') params.set('tier', filters.tier);
-    if (filters.trainingLevel && filters.trainingLevel !== 'All') params.set('trainingLevel', filters.trainingLevel);
-    if (filters.languages && filters.languages.length > 0) params.set('languages', filters.languages.join(','));
-    if (filters.patientTypes && filters.patientTypes.length > 0) params.set('patientTypes', filters.patientTypes.join(','));
-    if (filters.conditionsTreated && filters.conditionsTreated.length > 0) params.set('conditionsTreated', filters.conditionsTreated.join(','));
-    if (filters.sortBy) params.set('sortBy', filters.sortBy);
-    if (filters.favoritesOnly) params.set('favoritesOnly', 'true');
-
-    navigate(`?${params.toString()}`, { replace: true });
-  }, [filters, navigate]);
-
-  const handleFilterChange = (newFilters: DirectoryFilters) => {
-    setFilters(newFilters);
-  };
-
-  const handleToggleFavorite = (providerId: string) => {
-    setLocalProviders(prevProviders =>
-      prevProviders.map(p =>
-        p.id === providerId ? { ...p, isFavorite: !p.isFavorite } : p
-      )
-    );
-    showSuccess("Favorite status updated! (This is a demo and won't be saved)");
-  };
-
-  const handleToggleCompare = (providerId: string) => {
-    setCompareList(prev =>
-      prev.includes(providerId)
-        ? prev.filter(id => id !== providerId)
-        : [...prev, providerId]
-    );
-  };
-
-  // Geocode based on the applied search input
-  const handleGeocode = async (query: string) => {
+  const handleGeocodeAndSearch = async (query: string) => {
     if (!query) return;
+    setSearchInput(query);
     try {
       const results = await getGeocode({ address: query });
       const { lat, lng } = await getLatLng(results[0]);
       setMapCenter({ lat, lng });
       setMapZoom(10);
     } catch (error) {
-      console.error("Error geocoding search term:", error);
-      showError("Could not find location. Please try a different search term.");
+      console.error("Geocoding error:", error);
+      showError("Could not find that location. Please try another search.");
     }
-  };
-
-  const applySearch = (query: string) => {
-    setFilters(prev => ({ ...prev, searchTerm: query }));
-    setSearchInput(query);
-    handleGeocode(query);
   };
 
   const filteredAndSortedProviders = useMemo(() => {
     let filtered = localProviders;
 
     if (filters.searchTerm) {
-      const searchTermLower = filters.searchTerm.toLowerCase();
-      filtered = filtered.filter(
-        (p) =>
-          p.name.toLowerCase().includes(searchTermLower) ||
-          p.specialty?.toLowerCase().includes(searchTermLower) ||
-          p.location?.toLowerCase().includes(searchTermLower) ||
-          p.bio?.toLowerCase().includes(searchTermLower) ||
-          p.services?.some(service => service.toLowerCase().includes(searchTermLower))
-      );
+      filtered = fuse.search(filters.searchTerm).map(result => result.item);
     }
-    if (filters.city) {
-      filtered = filtered.filter(p => p.location?.toLowerCase().includes(filters.city!.toLowerCase()));
-    }
-    if (filters.state && filters.state !== 'All') {
-      filtered = filtered.filter(p => p.location?.toLowerCase().includes(filters.state!.toLowerCase()));
-    }
-    if (filters.zipCode) {
-      filtered = filtered.filter(p => p.clinicAddress?.includes(filters.zipCode!));
-    }
+    
+    // Apply panel filters
     if (filters.clinicianType && filters.clinicianType !== 'All') {
       filtered = filtered.filter(p => p.clinicianType === filters.clinicianType);
     }
@@ -253,35 +159,18 @@ const Directory: React.FC = () => {
     if (filters.tier && filters.tier !== 'All') {
       filtered = filtered.filter(p => p.tier === filters.tier);
     }
-    if (filters.trainingLevel && filters.trainingLevel !== 'All') {
-      filtered = filtered.filter(p => p.gtCertifications?.includes(filters.trainingLevel as TrainingLevel));
-    }
-    if (filters.languages && filters.languages.length > 0) {
-      filtered = filtered.filter(p =>
-        p.languagesSpoken?.some(lang => filters.languages?.includes(lang))
-      );
-    }
-    if (filters.conditionsTreated && filters.conditionsTreated.length > 0) {
-      filtered = filtered.filter(p =>
-        p.conditionsTreated?.some(cond => filters.conditionsTreated?.includes(cond))
-      );
-    }
-    if (filters.patientTypes && filters.patientTypes.length > 0) {
-      filtered = filtered.filter(p =>
-        p.patientTypes?.some(type => filters.patientTypes?.includes(type))
-      );
-    }
     if (filters.favoritesOnly) {
       filtered = filtered.filter(p => p.isFavorite);
     }
 
-    // Filter by map bounds when in map view and searchOnMapMove is enabled
+    // CRITICAL: Filter by map bounds if the feature is enabled
     if (viewMode === 'map' && searchOnMapMove && mapBounds) {
       filtered = filtered.filter(p =>
         p.coordinates && mapBounds.contains(p.coordinates)
       );
     }
 
+    // Sort results
     filtered.sort((a, b) => {
       if (filters.sortBy === 'premier-first') {
         const tierOrder: Record<Tier, number> = { Premier: 3, Preferred: 2, Free: 1 };
@@ -295,14 +184,29 @@ const Directory: React.FC = () => {
     });
 
     return filtered;
-  }, [localProviders, filters, searchOnMapMove, mapBounds, viewMode]);
+  }, [localProviders, filters, searchOnMapMove, mapBounds, viewMode, fuse]);
 
-  // slice for manual pagination
   const displayedProviders = filteredAndSortedProviders.slice(0, displayCount);
   const providersInCompareList = useMemo(() => 
     localProviders.filter(p => compareList.includes(p.id)),
     [localProviders, compareList]
   );
+
+  const handleToggleFavorite = (providerId: string) => {
+    setLocalProviders(prev => prev.map(p => p.id === providerId ? { ...p, isFavorite: !p.isFavorite } : p));
+    showSuccess("Favorite status updated!");
+  };
+
+  const handleToggleCompare = (providerId: string) => {
+    setCompareList(prev => prev.includes(providerId) ? prev.filter(id => id !== providerId) : [...prev, providerId]);
+  };
+
+  const resetAll = () => {
+    setFilters({ sortBy: "premier-first" });
+    setSearchInput("");
+    setMapCenter({ lat: 39.8283, lng: -98.5795 });
+    setMapZoom(4);
+  };
 
   return (
     <div className="container mx-auto p-4 md:p-8">
@@ -313,103 +217,38 @@ const Directory: React.FC = () => {
           className="pl-10 pr-4 py-2 w-full"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            if (activeIndex >= 0) applySearch(suggestions[activeIndex]);
-            else applySearch(searchInput);
-          } else if (e.key === 'ArrowDown') {
-            setActiveIndex(prev => Math.min(prev + 1, suggestions.length - 1));
-          } else if (e.key === 'ArrowUp') {
-            setActiveIndex(prev => Math.max(prev - 1, 0));
-          }
-        }}
+          onKeyDown={(e) => e.key === 'Enter' && handleGeocodeAndSearch(searchInput)}
         />
-        <Button onClick={() => applySearch(searchInput)}>Search</Button>
-        {/* autocomplete suggestions */}
-        {suggestions.length > 0 && (
-          <ul className="absolute bg-white border mt-2 w-full max-w-md z-10 shadow-lg max-h-60 overflow-y-auto">
-            {suggestions.map((name, idx) => (
-              <li
-                key={name}
-                className={`px-3 py-1 cursor-pointer ${idx === activeIndex ? 'bg-blue-500 text-white' : 'hover:bg-gray-100'}`}
-                onClick={() => applySearch(name)}
-                onMouseEnter={() => setActiveIndex(idx)}
-              >
-                {(() => {
-                  const query = debouncedInput;
-                  if (!query) return name;
-                  const parts = name.split(new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'i'));
-                  return parts.map((part, i) => (
-                    part.toLowerCase() === query.toLowerCase()
-                      ? <span key={i} className="font-semibold">{part}</span>
-                      : <span key={i}>{part}</span>
-                  ));
-                })()}
-              </li>
-            ))}
-          </ul>
-        )}
+        <Button onClick={() => handleGeocodeAndSearch(searchInput)}>Search</Button>
       </div>
 
-      {/* Toggle for List/Map View */}
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-4">
-          <Button
-            onClick={() => setIsFilterPanelOpen(true)}
-            className="flex items-center gap-2"
-            variant="outline"
-          >
-            <Filter className="h-4 w-4" />
-            Filters
+          <Button onClick={() => setIsFilterPanelOpen(true)} variant="outline">
+            <Filter className="h-4 w-4 mr-2" /> Filters
           </Button>
-          <Button variant="outline" onClick={() => setFilters({ sortBy: "premier-first" })}>
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Reset
+          <Button variant="outline" onClick={resetAll}>
+            <RefreshCw className="h-4 w-4 mr-2" /> Reset
           </Button>
         </div>
-        <ToggleGroup type="single" value={viewMode} onValueChange={(value: 'list' | 'map') => setViewMode(value)} aria-label="View mode toggle">
-          <ToggleGroupItem value="map" aria-label="Toggle map view">
-            <Map className="h-4 w-4 mr-2" /> Map View
-          </ToggleGroupItem>
-          <ToggleGroupItem value="list" aria-label="Toggle list view">
-            <List className="h-4 w-4 mr-2" /> List View
-          </ToggleGroupItem>
+        <ToggleGroup type="single" value={viewMode} onValueChange={(value: 'list' | 'map') => value && setViewMode(value)}>
+          <ToggleGroupItem value="map" aria-label="Map view"><Map className="h-4 w-4 mr-2" /> Map</ToggleGroupItem>
+          <ToggleGroupItem value="list" aria-label="List view"><List className="h-4 w-4 mr-2" /> List</ToggleGroupItem>
         </ToggleGroup>
       </div>
 
       <div className="grid gap-6 grid-cols-1 lg:grid-cols-4">
-        {/* Filter Panel */}
         <div className="lg:col-span-1">
           <div className="hidden lg:block">
-            <FilterPanel
-              filters={filters}
-              onFilterChange={handleFilterChange}
-              specialties={specialties}
-            />
+            <FilterPanel filters={filters} onFilterChange={setFilters} specialties={specialties} />
           </div>
-          <Sheet open={isFilterPanelOpen} onOpenChange={setIsFilterPanelOpen}>
-            <SheetContent side="left" className="w-full sm:max-w-sm overflow-y-auto">
-              <div className="p-4">
-                <FilterPanel
-                  filters={filters}
-                  onFilterChange={handleFilterChange}
-                  specialties={specialties}
-                />
-                <Button className="w-full mt-4" onClick={() => setIsFilterPanelOpen(false)}>
-                  Apply Filters
-                </Button>
-              </div>
-            </SheetContent>
-          </Sheet>
         </div>
 
-        {/* Main content area */}
         <div className="lg:col-span-3">
           {viewMode === 'map' ? (
             <div className="space-y-4">
               {googleMapsApiKey ? (
                 <div className="grid gap-4 grid-cols-1 xl:grid-cols-3">
-                  {/* Map */}
                   <div className="xl:col-span-2">
                     <Card className="h-[600px] w-full">
                       <CardContent className="p-0 h-full w-full rounded-lg overflow-hidden">
@@ -424,37 +263,22 @@ const Directory: React.FC = () => {
                       </CardContent>
                     </Card>
                     <div className="flex items-center space-x-2 mt-4">
-                      <Checkbox
-                        id="search-on-move"
-                        checked={searchOnMapMove}
-                        onCheckedChange={(checked) => setSearchOnMapMove(Boolean(checked))}
-                      />
-                      <Label htmlFor="search-on-move" className="font-semibold text-sm">
-                        Filter results as I move the map
-                      </Label>
+                      <Checkbox id="search-on-move" checked={searchOnMapMove} onCheckedChange={(checked) => setSearchOnMapMove(Boolean(checked))} />
+                      <Label htmlFor="search-on-move" className="font-semibold text-sm">Search as I move the map</Label>
                     </div>
                   </div>
                   
-                  {/* Provider List Sidebar */}
                   <div className="xl:col-span-1">
                     <Card className="h-[600px] overflow-hidden">
-                      <CardContent className="p-4 h-full">
-                        <div className="flex justify-between items-center mb-4">
-                          <h3 className="font-semibold text-lg">
-                            Providers ({filteredAndSortedProviders.length})
-                          </h3>
-                        </div>
-                        <div className="space-y-3 overflow-y-auto h-full">
-                          {filteredAndSortedProviders.length === 0 ? (
-                            <div className="text-center py-8 text-muted-foreground">
-                              <p>No providers found in this area.</p>
-                              <Button 
-                                variant="link" 
-                                onClick={() => setFilters({ sortBy: "premier-first" })}
-                                className="mt-2"
-                              >
-                                Reset Filters
-                              </Button>
+                      <CardContent className="p-4 h-full flex flex-col">
+                        <h3 className="font-semibold text-lg mb-4">Providers ({filteredAndSortedProviders.length})</h3>
+                        <div className="space-y-3 overflow-y-auto flex-grow">
+                          {isLoading ? <MapSidebarSkeleton /> :
+                           filteredAndSortedProviders.length === 0 ? (
+                            <div className="text-center py-8 text-muted-foreground h-full flex flex-col justify-center items-center">
+                              <MapPin className="w-12 h-12 mb-4" />
+                              <p className="font-semibold">No providers found.</p>
+                              <p className="text-sm">Try zooming out or clearing filters.</p>
                             </div>
                           ) : (
                             filteredAndSortedProviders.map(provider => (
@@ -466,15 +290,10 @@ const Directory: React.FC = () => {
                                 onClick={() => navigate(`/directory/provider/${provider.id}`)}
                               >
                                 <div className="flex items-start gap-3">
-                                  <img
-                                    src={provider.profileImage}
-                                    alt={provider.name}
-                                    className="w-12 h-12 rounded-full object-cover"
-                                  />
+                                  <img src={provider.profileImage} alt={provider.name} className="w-12 h-12 rounded-full object-cover" />
                                   <div className="flex-1 min-w-0">
                                     <h4 className="font-medium text-sm truncate">{provider.name}</h4>
                                     <p className="text-xs text-muted-foreground truncate">{provider.specialty}</p>
-                                    <p className="text-xs text-muted-foreground truncate">{provider.location}</p>
                                     <div className="flex items-center mt-1">
                                       <Star className="h-3 w-3 text-yellow-500 mr-1" />
                                       <span className="text-xs">{provider.rating?.toFixed(1)}</span>
@@ -490,52 +309,56 @@ const Directory: React.FC = () => {
                   </div>
                 </div>
               ) : (
-                <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4" role="alert">
+                <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role="alert">
                   <p className="font-bold">Google Maps API Key Missing</p>
-                  <p>To enable the interactive map, please set the `VITE_GOOGLE_MAPS_API_KEY` environment variable.</p>
+                  <p>Please set `VITE_GOOGLE_MAPS_API_KEY` to enable the map.</p>
                 </div>
               )}
             </div>
           ) : (
             <div>
-              {filteredAndSortedProviders.length === 0 && (
+              {filteredAndSortedProviders.length === 0 ? (
                 <div className="col-span-full text-center py-12 text-muted-foreground">
                   <p>No providers found matching your criteria.</p>
-                  <Button variant="link" onClick={() => setFilters({ sortBy: "premier-first" })}>
-                    Reset Filters
-                  </Button>
+                  <Button variant="link" onClick={resetAll}>Reset Filters</Button>
                 </div>
-              )}
-              <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
-                {displayedProviders.length > 0 &&
-                  displayedProviders.map(provider => (
-                    <ProviderCard
-                      key={provider.id}
-                      provider={provider}
-                      onMouseEnter={() => setHoveredProviderId(provider.id)}
-                      onMouseLeave={() => setHoveredProviderId(null)}
-                      onToggleFavorite={handleToggleFavorite}
-                      onToggleCompare={handleToggleCompare}
-                      isComparing={compareList.includes(provider.id)}
-                    />
-                  ))}
-              </div>
-              {displayCount < filteredAndSortedProviders.length && (
-                <div className="text-center mt-6">
-                  <Button onClick={() => setDisplayCount(prev => prev + 10)}>
-                    Load More
-                  </Button>
-                </div>
+              ) : (
+                <>
+                  <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
+                    {displayedProviders.map(provider => (
+                      <ProviderCard
+                        key={provider.id}
+                        provider={provider}
+                        onMouseEnter={() => setHoveredProviderId(provider.id)}
+                        onMouseLeave={() => setHoveredProviderId(null)}
+                        onToggleFavorite={handleToggleFavorite}
+                        onToggleCompare={handleToggleCompare}
+                        isComparing={compareList.includes(provider.id)}
+                      />
+                    ))}
+                  </div>
+                  {displayCount < filteredAndSortedProviders.length && (
+                    <div className="text-center mt-6">
+                      <Button onClick={() => setDisplayCount(prev => prev + 10)}>Load More</Button>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}
         </div>
       </div>
-      <ComparisonBar 
-        providers={providersInCompareList}
-        onClear={() => setCompareList([])}
-        onRemove={handleToggleCompare}
-      />
+      
+      <Sheet open={isFilterPanelOpen} onOpenChange={setIsFilterPanelOpen}>
+        <SheetContent side="left" className="w-full sm:max-w-sm overflow-y-auto">
+          <div className="p-4">
+            <FilterPanel filters={filters} onFilterChange={setFilters} specialties={specialties} />
+            <Button className="w-full mt-4" onClick={() => setIsFilterPanelOpen(false)}>Apply Filters</Button>
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      <ComparisonBar providers={providersInCompareList} onClear={() => setCompareList([])} onRemove={handleToggleCompare} />
     </div>
   );
 };

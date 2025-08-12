@@ -34,7 +34,7 @@ interface DirectoryMapProps {
   apiKey: string;
   center: { lat: number; lng: number };
   zoom: number;
-  onBoundsChanged: (bounds: google.maps.LatLngBounds) => void;
+  onBoundsChanged: (bounds: google.maps.LatLngBounds | null) => void;
   hoveredProviderId?: string | null;
 }
 
@@ -47,7 +47,6 @@ const DirectoryMap: React.FC<DirectoryMapProps> = ({
   hoveredProviderId,
 }) => {
   const mapRef = useRef<google.maps.Map | null>(null);
-  const [mapLoaded, setMapLoaded] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState<FullProviderProfile | null>(null);
   const navigate = useNavigate();
 
@@ -58,13 +57,12 @@ const DirectoryMap: React.FC<DirectoryMapProps> = ({
 
   const onLoad = useCallback(function callback(map: google.maps.Map) {
     mapRef.current = map;
-    setMapLoaded(true);
   }, []);
 
   const onUnmount = useCallback(function callback() {
     mapRef.current = null;
-    setMapLoaded(false);
-  }, []);
+    onBoundsChanged(null);
+  }, [onBoundsChanged]);
 
   const onIdle = useCallback(() => {
     if (mapRef.current) {
@@ -76,35 +74,31 @@ const DirectoryMap: React.FC<DirectoryMapProps> = ({
   }, [onBoundsChanged]);
 
   useEffect(() => {
-    if (mapLoaded && mapRef.current) {
+    if (isLoaded && mapRef.current) {
       mapRef.current.setCenter(center);
       mapRef.current.setZoom(zoom);
     }
-  }, [center, zoom, mapLoaded]);
+  }, [center, zoom, isLoaded]);
 
   const getMarkerIcon = (provider: FullProviderProfile, isHovered: boolean) => {
     let color = '#dc2626'; // red for Free tier
-    let size = 32;
+    let scale = 8;
     
     if (provider.tier === 'Premier') {
       color = '#7c3aed'; // purple for Premier
-      size = 40;
+      scale = 12;
     } else if (provider.tier === 'Preferred') {
       color = '#2563eb'; // blue for Preferred
-      size = 36;
+      scale = 10;
     }
     
-    if (isHovered) {
-      size += 8;
-    }
-
     return {
       path: google.maps.SymbolPath.CIRCLE,
       fillColor: color,
-      fillOpacity: 0.8,
+      fillOpacity: 0.9,
       strokeColor: '#ffffff',
       strokeWeight: 2,
-      scale: size / 4,
+      scale: isHovered ? scale * 1.5 : scale,
     };
   };
 
@@ -133,6 +127,7 @@ const DirectoryMap: React.FC<DirectoryMapProps> = ({
             title={provider.name}
             onClick={() => setSelectedProvider(provider)}
             animation={isHovered ? google.maps.Animation.BOUNCE : undefined}
+            zIndex={isHovered ? 100 : 1}
           />
         );
       })}
@@ -141,8 +136,9 @@ const DirectoryMap: React.FC<DirectoryMapProps> = ({
         <InfoWindowF
           position={selectedProvider.coordinates}
           onCloseClick={() => setSelectedProvider(null)}
+          options={{ pixelOffset: new google.maps.Size(0, -30) }}
         >
-          <div className="p-3 max-w-sm">
+          <div className="p-2 max-w-xs">
             <div className="flex items-start gap-3 mb-3">
               <img
                 src={selectedProvider.profileImage}
@@ -150,56 +146,22 @@ const DirectoryMap: React.FC<DirectoryMapProps> = ({
                 className="w-12 h-12 rounded-full object-cover"
               />
               <div className="flex-1">
-                <h3 className="font-semibold text-lg">{selectedProvider.name}</h3>
-                <p className="text-sm text-gray-600">{selectedProvider.specialty}</p>
+                <h3 className="font-semibold text-base">{selectedProvider.name}</h3>
+                <p className="text-xs text-gray-600">{selectedProvider.specialty}</p>
                 <div className="flex items-center mt-1">
                   <Star className="h-4 w-4 text-yellow-500 mr-1" />
                   <span className="text-sm">{selectedProvider.rating?.toFixed(1)}</span>
-                  <span className="text-sm text-gray-500 ml-1">
-                    ({selectedProvider.reviewCount} reviews)
-                  </span>
                 </div>
               </div>
             </div>
             
-            <div className="flex items-center text-sm text-gray-600 mb-2">
-              <MapPin className="h-4 w-4 mr-1" />
-              {selectedProvider.location}
-            </div>
-            
-            {selectedProvider.bio && (
-              <p className="text-sm text-gray-700 mb-3 line-clamp-2">
-                {selectedProvider.bio}
-              </p>
-            )}
-            
-            <div className="flex gap-2">
-              <Button
-                size="sm"
-                onClick={() => navigate(`/directory/provider/${selectedProvider.id}`)}
-                className="flex-1"
-              >
-                View Profile
-              </Button>
-              {selectedProvider.phone && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => window.open(`tel:${selectedProvider.phone}`)}
-                >
-                  <Phone className="h-4 w-4" />
-                </Button>
-              )}
-              {selectedProvider.website && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => window.open(selectedProvider.website, '_blank')}
-                >
-                  <Globe className="h-4 w-4" />
-                </Button>
-              )}
-            </div>
+            <Button
+              size="sm"
+              onClick={() => navigate(`/directory/provider/${selectedProvider.id}`)}
+              className="w-full"
+            >
+              View Profile
+            </Button>
           </div>
         </InfoWindowF>
       )}
