@@ -1,5 +1,3 @@
-Summary: Ensuring all necessary interfaces (MediaItem, Testimonial, Faq, FullProviderProfile) are correctly defined and exported.
-typescript
 export type Tier = 'Premier' | 'Preferred' | 'Free';
 
 export interface DirectoryFilters {
