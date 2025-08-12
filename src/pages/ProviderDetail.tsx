@@ -4,10 +4,10 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useProvider } from "@/hooks/useProvider";
 import type { FullProviderProfile } from "@/types";
-import ProfileHeader from "@/components/provider/ProfileHeader";
-import ContactCard from "@/components/provider/ContactCard";
-import LocationCard from "@/components/provider/LocationCard";
-import ProfileBody from "@/components/provider/ProfileBody";
+import ProfileHeader from "@/components/ProfileHeader";
+import ContactCard from "@/components/ContactCard";
+import LocationCard from "@/components/LocationCard";
+import ProfileBody from "@/components/ProfileBody";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const ProviderDetail = () => {
