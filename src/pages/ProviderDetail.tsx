@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getProviderById } from "@/api/providers";
+import { fetchProviderById } from "@/api/providers";
 import { Provider } from "@/types/provider";
 import ProfileHeader from "@/components/ProfileHeader";
 import ContactCard from "@/components/ContactCard";
@@ -17,10 +17,15 @@ const ProviderDetail = () => {
   useEffect(() => {
     if (!providerId) return;
     setLoading(true);
-    getProviderById(Number(providerId)).then(data => {
-      setProvider(data);
-      setLoading(false);
-    });
+    fetchProviderById(Number(providerId))
+      .then((data: Provider) => {
+        setProvider(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setProvider(null);
+        setLoading(false);
+      });
   }, [providerId]);
 
   if (loading) return <p>Loading…</p>;

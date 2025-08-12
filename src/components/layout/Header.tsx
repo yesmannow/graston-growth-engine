@@ -6,14 +6,18 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import NotificationBell from "./NotificationBell";
 import CommandPaletteShortcut from "./CommandPaletteShortcut";
-import { useAuthStore } from "@/store/auth";
+import { useAuthStore, AuthState } from "@/store/auth";
 
 const navItems = [
-  // ...
+  { href: "/directory", label: "Find a Provider" },
+  { href: "/about", label: "About" },
+  { href: "/faq", label: "FAQ" },
+  { href: "/onboarding", label: "Onboarding" },
+  { href: "/support", label: "Support" },
 ];
 
 const Header = () => {
-  const isAdmin = useAuthStore((s) => s.isAdmin);
+  const isAdmin = useAuthStore((s: AuthState) => s.isAdmin);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
