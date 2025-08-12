@@ -9,12 +9,13 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-const navItems = [
-  { href: "/directory", label: "Find a Provider" },
-  { href: "/about", label: "About" },
-  { href: "/faq", label: "FAQ" },
-  { href: "/onboarding", label: "Onboarding" },
-  { href: "/support", label: "Support" },
+const navigationItems = [
+  { name: 'Directory', href: '/directory' },
+  { name: 'Compare', href: '/compare' },
+  { name: 'Reports', href: '/reports' },
+  { name: 'Marketing', href: '/marketing-toolkit' },
+  { name: 'FAQ', href: '/faq' },
+  { name: 'Support', href: '/support' },
 ];
 
 const Header = () => {
@@ -28,7 +29,7 @@ const Header = () => {
           </span>
         </Link>
         <nav className="hidden flex-1 items-center justify-end space-x-6 md:flex">
-          {navItems.map((item) => (
+          {navigationItems.map((item) => (
             <NavLink
               key={item.href}
               to={item.href}
@@ -38,7 +39,7 @@ const Header = () => {
                 }`
               }
             >
-              {item.label}
+              {item.name}
             </NavLink>
           ))}
           <Button asChild>
@@ -62,13 +63,13 @@ const Header = () => {
                   <Gem className="h-6 w-6 text-primary" />
                   <span className="sr-only">Graston Directory</span>
                 </Link>
-                {navItems.map((item) => (
+                {navigationItems.map((item) => (
                   <Link
                     key={item.href}
                     to={item.href}
                     className="text-muted-foreground hover:text-foreground"
                   >
-                    {item.label}
+                    {item.name}
                   </Link>
                 ))}
                  <Button asChild>
