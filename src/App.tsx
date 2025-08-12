@@ -9,7 +9,8 @@ import Provider from '@/pages/Provider';
 import PublicProviderProfilePage from '@/pages/PublicProviderProfilePage';
 import ComparePage from '@/pages/ComparePage';
 import UpdateProfile from '@/pages/UpdateProfile';
-import Admin from '@/pages/Admin';
+import DashboardPage from '@/pages/admin/DashboardPage';
+import ProvidersPage from '@/pages/admin/ProvidersPage';
 import Reports from '@/pages/Reports';
 import MarketingToolkit from '@/pages/MarketingToolkit';
 import Support from '@/pages/Support';
@@ -39,8 +40,9 @@ function App() {
         </Route>
         
         <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<Admin />} />
-            {/* Add other admin routes here, e.g., providers, analytics */}
+            <Route index element={<DashboardPage />} />
+            <Route path="providers" element={<ProvidersPage />} />
+            {/* Add other admin routes here, e.g., analytics */}
         </Route>
       </Routes>
       <Toaster />
