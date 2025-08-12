@@ -20,6 +20,7 @@ import SupportDashboard from '@/pages/support/SupportDashboard';
 import Onboarding from '@/pages/Onboarding';
 import BadgeShowcase from '@/pages/BadgeShowcase';
 import FaqPage from '@/pages/FaqPage';
+import ProviderProfileShowcase from '@/pages/ProviderProfileShowcase';
 import NotFound from '@/pages/NotFound';
 import './App.css';
 
@@ -40,6 +41,7 @@ function App() {
           <Route path="support" element={<Support />} />
           <Route path="support-dashboard" element={<SupportDashboard />} />
           <Route path="faq" element={<FaqPage />} />
+          <Route path="profile-showcase" element={<ProviderProfileShowcase />} />
           <Route path="onboarding" element={<Onboarding />} />
           <Route path="badges" element={<BadgeShowcase />} />
           <Route path="*" element={<NotFound />} />
