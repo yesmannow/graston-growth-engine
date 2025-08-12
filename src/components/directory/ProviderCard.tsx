@@ -26,7 +26,7 @@ const ProviderCard = ({ provider, onMouseEnter, onMouseLeave, onToggleFavorite, 
   // Tier-specific templates
   if (provider.tier === 'Premier') {
     return (
-      <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow" onClick={handleClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+      <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-200 ease-in-out" onClick={handleClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
         {/* Cover + Avatar */}
         <div className="relative h-32 bg-gradient-to-r from-purple-600 to-blue-500">
           <img
@@ -73,7 +73,7 @@ const ProviderCard = ({ provider, onMouseEnter, onMouseLeave, onToggleFavorite, 
   }
   if (provider.tier === 'Preferred') {
     return (
-      <Card className="hover:shadow-lg transition-shadow cursor-pointer flex flex-col" onClick={handleClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+      <Card className="hover:shadow-lg transition-shadow duration-200 ease-in-out cursor-pointer flex flex-col" onClick={handleClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
         <CardContent className="p-4 flex items-center gap-3 flex-grow">
           <Avatar className="h-12 w-12"><AvatarImage src={provider.profileImage} alt={provider.name}/><AvatarFallback>{provider.name.split(' ').map(n=>n[0]).join('')}</AvatarFallback></Avatar>
           <div className="flex-1">
@@ -98,7 +98,7 @@ const ProviderCard = ({ provider, onMouseEnter, onMouseLeave, onToggleFavorite, 
   }
   // Free tier minimal
   return (
-    <div className="p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={handleClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+    <div className="p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 ease-in-out cursor-pointer" onClick={handleClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <h3 className="font-medium text-base truncate">{provider.name}</h3>
       <p className="text-sm text-muted-foreground truncate">{provider.specialty}</p>
     </div>

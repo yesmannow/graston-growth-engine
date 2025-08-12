@@ -14,7 +14,7 @@ const FeaturedProviderCard = ({ provider }: FeaturedProviderCardProps) => {
 
   return (
     <div 
-      className="bg-card text-card-foreground rounded-xl border shadow-sm transition-all hover:shadow-lg hover:-translate-y-1 cursor-pointer flex flex-col"
+      className="bg-card text-card-foreground rounded-xl border shadow-sm transition-all duration-200 ease-in-out hover:shadow-lg hover:-translate-y-1 cursor-pointer flex flex-col"
       onClick={() => navigate(`/directory/provider/${provider.id}`)}
     >
       <div className="p-6 flex-grow">
