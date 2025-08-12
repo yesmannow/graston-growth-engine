@@ -62,7 +62,7 @@ const Directory: React.FC = () => {
   const [filters, setFilters] = useState<DirectoryFilters>({ sortBy: "premier-first" });
   const [hoveredProviderId, setHoveredProviderId] = useState<string | null>(null);
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<'list' | 'map'>('list'); // New state for view mode
+  const [viewMode, setViewMode] = useState<'list' | 'map'>('map'); // Changed default to 'map'
   const [compareList, setCompareList] = useState<string[]>([]);
 
   // Generate a list of ~100 providers by repeating base and external data
@@ -105,7 +105,7 @@ const Directory: React.FC = () => {
   const debouncedInput = useDebounce(searchInput, 300);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [activeIndex, setActiveIndex] = useState(-1);
-  const [searchOnMapMove, setSearchOnMapMove] = useState(false);
+  const [searchOnMapMove, setSearchOnMapMove] = useState(true); // Changed default to true
   const [mapBounds, setMapBounds] = useState<google.maps.LatLngBounds | null>(null);
   // pagination for manual load more
   const [displayCount, setDisplayCount] = useState(10);
@@ -267,7 +267,8 @@ const Directory: React.FC = () => {
       filtered = filtered.filter(p => p.isFavorite);
     }
 
-    if (searchOnMapMove && mapBounds) {
+    // Filter by map bounds when in map view and searchOnMapMove is enabled
+    if (viewMode === 'map' && searchOnMapMove && mapBounds) {
       filtered = filtered.filter(p =>
         p.coordinates && mapBounds.contains(p.coordinates)
       );
@@ -286,7 +287,7 @@ const Directory: React.FC = () => {
     });
 
     return filtered;
-  }, [localProviders, filters, searchOnMapMove, mapBounds]);
+  }, [localProviders, filters, searchOnMapMove, mapBounds, viewMode]);
 
   // slice for manual pagination
   const displayedProviders = filteredAndSortedProviders.slice(0, displayCount);
@@ -343,116 +344,184 @@ const Directory: React.FC = () => {
       </div>
 
       {/* Toggle for List/Map View */}
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex items-center gap-4">
+          <Button
+            onClick={() => setIsFilterPanelOpen(true)}
+            className="flex items-center gap-2"
+            variant="outline"
+          >
+            <Filter className="h-4 w-4" />
+            Filters
+          </Button>
+          <Button variant="outline" onClick={() => setFilters({ sortBy: "premier-first" })}>
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Reset
+          </Button>
+        </div>
         <ToggleGroup type="single" value={viewMode} onValueChange={(value: 'list' | 'map') => setViewMode(value)} aria-label="View mode toggle">
-          <ToggleGroupItem value="list" aria-label="Toggle list view">
-            <List className="h-4 w-4 mr-2" /> List View
-          </ToggleGroupItem>
           <ToggleGroupItem value="map" aria-label="Toggle map view">
             <Map className="h-4 w-4 mr-2" /> Map View
+          </ToggleGroupItem>
+          <ToggleGroupItem value="list" aria-label="Toggle list view">
+            <List className="h-4 w-4 mr-2" /> List View
           </ToggleGroupItem>
         </ToggleGroup>
       </div>
 
-      <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
-        {/* Filter Panel (always visible) */}
+      <div className="grid gap-6 grid-cols-1 lg:grid-cols-4">
+        {/* Filter Panel */}
         <div className="lg:col-span-1">
-          <div className="flex flex-col gap-4">
-            <Button
-              onClick={() => setIsFilterPanelOpen(true)}
-              className="flex items-center gap-2"
-            >
-              <Filter className="h-4 w-4" />
-              Filters
-            </Button>
-            <Sheet open={isFilterPanelOpen} onOpenChange={setIsFilterPanelOpen}>
-              <SheetContent side="left" className="w-full sm:max-w-sm overflow-y-auto">
-                <div className="p-4">
-                  <FilterPanel
-                    filters={filters}
-                    onFilterChange={handleFilterChange}
-                    specialties={specialties}
-                  />
-                  <Button className="w-full mt-4" onClick={() => setIsFilterPanelOpen(false)}>
-                    Apply Filters
-                  </Button>
-                </div>
-              </SheetContent>
-            </Sheet>
-            <Button variant="outline" onClick={() => setFilters({ sortBy: "premier-first" })}>
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Reset Filters
-            </Button>
+          <div className="hidden lg:block">
+            <FilterPanel
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              specialties={specialties}
+            />
           </div>
+          <Sheet open={isFilterPanelOpen} onOpenChange={setIsFilterPanelOpen}>
+            <SheetContent side="left" className="w-full sm:max-w-sm overflow-y-auto">
+              <div className="p-4">
+                <FilterPanel
+                  filters={filters}
+                  onFilterChange={handleFilterChange}
+                  specialties={specialties}
+                />
+                <Button className="w-full mt-4" onClick={() => setIsFilterPanelOpen(false)}>
+                  Apply Filters
+                </Button>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
 
-        {/* Main content area (conditionally rendered) */}
-        {viewMode === 'list' ? (
-          <div className="lg:col-span-2">
-            {filteredAndSortedProviders.length === 0 && (
-              <div className="col-span-full text-center py-12 text-muted-foreground">
-                <p>No providers found matching your criteria.</p>
-                <Button variant="link" onClick={() => setFilters({ sortBy: "premier-first" })}>
-                  Reset Filters
-                </Button>
-              </div>
-            )}
-            <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
-              {displayedProviders.length > 0 &&
-                displayedProviders.map(provider => (
-                  <ProviderCard
-                    key={provider.id}
-                    provider={provider}
-                    onMouseEnter={() => setHoveredProviderId(provider.id)}
-                    onMouseLeave={() => setHoveredProviderId(null)}
-                    onToggleFavorite={handleToggleFavorite}
-                    onToggleCompare={handleToggleCompare}
-                    isComparing={compareList.includes(provider.id)}
-                  />
-                ))}
+        {/* Main content area */}
+        <div className="lg:col-span-3">
+          {viewMode === 'map' ? (
+            <div className="space-y-4">
+              {googleMapsApiKey ? (
+                <div className="grid gap-4 grid-cols-1 xl:grid-cols-3">
+                  {/* Map */}
+                  <div className="xl:col-span-2">
+                    <Card className="h-[600px] w-full">
+                      <CardContent className="p-0 h-full w-full rounded-lg overflow-hidden">
+                        <DirectoryMap
+                          providers={filteredAndSortedProviders}
+                          apiKey={googleMapsApiKey}
+                          center={mapCenter}
+                          zoom={mapZoom}
+                          onBoundsChanged={setMapBounds}
+                          hoveredProviderId={hoveredProviderId}
+                        />
+                      </CardContent>
+                    </Card>
+                    <div className="flex items-center space-x-2 mt-4">
+                      <Checkbox
+                        id="search-on-move"
+                        checked={searchOnMapMove}
+                        onCheckedChange={(checked) => setSearchOnMapMove(Boolean(checked))}
+                      />
+                      <Label htmlFor="search-on-move" className="font-semibold text-sm">
+                        Filter results as I move the map
+                      </Label>
+                    </div>
+                  </div>
+                  
+                  {/* Provider List Sidebar */}
+                  <div className="xl:col-span-1">
+                    <Card className="h-[600px] overflow-hidden">
+                      <CardContent className="p-4 h-full">
+                        <div className="flex justify-between items-center mb-4">
+                          <h3 className="font-semibold text-lg">
+                            Providers ({filteredAndSortedProviders.length})
+                          </h3>
+                        </div>
+                        <div className="space-y-3 overflow-y-auto h-full">
+                          {filteredAndSortedProviders.length === 0 ? (
+                            <div className="text-center py-8 text-muted-foreground">
+                              <p>No providers found in this area.</p>
+                              <Button 
+                                variant="link" 
+                                onClick={() => setFilters({ sortBy: "premier-first" })}
+                                className="mt-2"
+                              >
+                                Reset Filters
+                              </Button>
+                            </div>
+                          ) : (
+                            filteredAndSortedProviders.map(provider => (
+                              <div
+                                key={provider.id}
+                                className="p-3 border rounded-lg hover:bg-muted/50 cursor-pointer transition-colors"
+                                onMouseEnter={() => setHoveredProviderId(provider.id)}
+                                onMouseLeave={() => setHoveredProviderId(null)}
+                                onClick={() => navigate(`/directory/provider/${provider.id}`)}
+                              >
+                                <div className="flex items-start gap-3">
+                                  <img
+                                    src={provider.profileImage}
+                                    alt={provider.name}
+                                    className="w-12 h-12 rounded-full object-cover"
+                                  />
+                                  <div className="flex-1 min-w-0">
+                                    <h4 className="font-medium text-sm truncate">{provider.name}</h4>
+                                    <p className="text-xs text-muted-foreground truncate">{provider.specialty}</p>
+                                    <p className="text-xs text-muted-foreground truncate">{provider.location}</p>
+                                    <div className="flex items-center mt-1">
+                                      <Star className="h-3 w-3 text-yellow-500 mr-1" />
+                                      <span className="text-xs">{provider.rating?.toFixed(1)}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4" role="alert">
+                  <p className="font-bold">Google Maps API Key Missing</p>
+                  <p>To enable the interactive map, please set the `VITE_GOOGLE_MAPS_API_KEY` environment variable.</p>
+                </div>
+              )}
             </div>
-            {displayCount < filteredAndSortedProviders.length && (
-              <div className="text-center mt-6">
-                <Button onClick={() => setDisplayCount(prev => prev + 10)}>
-                  Load More
-                </Button>
+          ) : (
+            <div>
+              {filteredAndSortedProviders.length === 0 && (
+                <div className="col-span-full text-center py-12 text-muted-foreground">
+                  <p>No providers found matching your criteria.</p>
+                  <Button variant="link" onClick={() => setFilters({ sortBy: "premier-first" })}>
+                    Reset Filters
+                  </Button>
+                </div>
+              )}
+              <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
+                {displayedProviders.length > 0 &&
+                  displayedProviders.map(provider => (
+                    <ProviderCard
+                      key={provider.id}
+                      provider={provider}
+                      onMouseEnter={() => setHoveredProviderId(provider.id)}
+                      onMouseLeave={() => setHoveredProviderId(null)}
+                      onToggleFavorite={handleToggleFavorite}
+                      onToggleCompare={handleToggleCompare}
+                      isComparing={compareList.includes(provider.id)}
+                    />
+                  ))}
               </div>
-            )}
-          </div>
-        ) : ( // viewMode === 'map'
-          <div className="lg:col-span-2">
-            {googleMapsApiKey && (
-              <Card className="h-[600px] w-full"> {/* Increased height for better map view */}
-                <CardContent className="p-0 h-full w-full rounded-lg overflow-hidden">
-                  <DirectoryMap
-                    providers={filteredAndSortedProviders}
-                    apiKey={googleMapsApiKey}
-                    center={mapCenter}
-                    zoom={mapZoom}
-                    onBoundsChanged={setMapBounds}
-                    hoveredProviderId={hoveredProviderId} // Pass hovered ID to map
-                  />
-                </CardContent>
-              </Card>
-            )}
-            {!googleMapsApiKey && (
-              <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4" role="alert">
-                <p className="font-bold">Google Maps API Key Missing</p>
-                <p>To enable the interactive map, please set the `VITE_GOOGLE_MAPS_API_KEY` environment variable.</p>
-              </div>
-            )}
-            <div className="flex items-center space-x-2 mt-4">
-              <Checkbox
-                id="search-on-move"
-                checked={searchOnMapMove}
-                onCheckedChange={(checked) => setSearchOnMapMove(Boolean(checked))}
-              />
-              <Label htmlFor="search-on-move" className="font-semibold text-sm">
-                Search as I move the map
-              </Label>
+              {displayCount < filteredAndSortedProviders.length && (
+                <div className="text-center mt-6">
+                  <Button onClick={() => setDisplayCount(prev => prev + 10)}>
+                    Load More
+                  </Button>
+                </div>
+              )}
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
       <ComparisonBar 
         providers={providersInCompareList}
