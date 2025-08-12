@@ -18,9 +18,7 @@ const COLORS: Record<Tier, string> = {
 const ProviderTierChart = ({ providers }: ProviderTierChartProps) => {
   const tierData = useMemo(() => {
     const counts = providers.reduce((acc, provider) => {
-      if (provider.tier) {
-        acc[provider.tier] = (acc[provider.tier] || 0) + 1;
-      }
+      acc[provider.tier] = (acc[provider.tier] || 0) + 1;
       return acc;
     }, {} as Record<Tier, number>);
 

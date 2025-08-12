@@ -24,7 +24,7 @@ const TopViewedProviders = ({ providers }: TopViewedProvidersProps) => {
           >
             <div className="flex items-center gap-3">
               <Avatar className="h-9 w-9">
-                <AvatarImage src={provider.profile_image || undefined} alt={provider.name} />
+                <AvatarImage src={provider.profileImage} alt={provider.name} />
                 <AvatarFallback>{provider.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
               </Avatar>
               <div>

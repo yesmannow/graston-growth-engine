@@ -13,8 +13,6 @@ import { showSuccess } from "@/utils/toast";
 import { mockProviders } from "@/lib/mockData";
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { Linkedin, Facebook as FbIcon, Instagram, Twitter } from 'lucide-react';
-import ProviderMap from '@/components/provider/ProviderMap';
-import { AccreditationLogo } from '@/types';
 
 const PublicProviderProfilePage = () => {
   const { id } = useParams<{ id: string }>();
@@ -39,7 +37,7 @@ const PublicProviderProfilePage = () => {
     }
   }, [provider]);
 
-  const handleToggleFavorite = () => {
+  const handleToggleFavorite = (providerId: string) => {
     setIsFavorite(prev => !prev);
     showSuccess("Favorite status updated for this session.");
   };
@@ -93,10 +91,10 @@ const PublicProviderProfilePage = () => {
               <ServicesCard services={displayProvider.services} />
             )}
 
-            {displayProvider.tier === 'Premier' && (displayProvider.gallery_images || displayProvider.gallery_videos) && (
+            {displayProvider.tier === 'Premier' && (displayProvider.galleryImages || displayProvider.galleryVideos) && (
               <MediaCard 
-                galleryImages={displayProvider.gallery_images || []} 
-                galleryVideos={displayProvider.gallery_videos || []} 
+                galleryImages={displayProvider.galleryImages || []} 
+                galleryVideos={displayProvider.galleryVideos || []} 
               />
             )}
 
@@ -119,29 +117,30 @@ const PublicProviderProfilePage = () => {
                 <h2 className="text-xl font-semibold">Additional Information</h2>
               </CardHeader>
               <CardContent className="space-y-4">
-                {displayProvider.clinic_address && (
-                  <div><span className="font-semibold">Address:</span> {displayProvider.clinic_address}</div>
+                {displayProvider.clinicAddress && (
+                  <div><span className="font-semibold">Address:</span> {displayProvider.clinicAddress}</div>
                 )}
                 {displayProvider.coordinates && (
                   <div className="w-full h-64">
-                    <ProviderMap
-                      coordinates={displayProvider.coordinates}
-                      name={displayProvider.name}
+                    <iframe
+                      src={`https://maps.google.com/maps?q=${displayProvider.coordinates.lat},${displayProvider.coordinates.lng}&z=15&output=embed`}
+                      className="w-full h-full rounded"
+                      loading="lazy"
                     />
                   </div>
                 )}
-                {displayProvider.verification_badges && displayProvider.verification_badges.length > 0 && (
+                {displayProvider.verificationBadges && displayProvider.verificationBadges.length > 0 && (
                   <div>
                     <span className="font-semibold">Badges:</span>
-                    {displayProvider.verification_badges.map((url: string, i: number) => (
+                    {displayProvider.verificationBadges.map((url: string, i: number) => (
                       <img key={i} src={url} alt="Badge" className="inline-block h-6 mx-1" />
                     ))}
                   </div>
                 )}
-                {displayProvider.accreditation_logos && displayProvider.accreditation_logos.length > 0 && (
+                {displayProvider.accreditationLogos && displayProvider.accreditationLogos.length > 0 && (
                   <div>
                     <span className="font-semibold">Accreditations:</span>
-                    {displayProvider.accreditation_logos.map((a: AccreditationLogo) => (
+                    {displayProvider.accreditationLogos.map((a) => (
                       <img key={a.name} src={a.logoUrl} alt={a.name} className="inline-block h-6 mx-1" />
                     ))}
                   </div>

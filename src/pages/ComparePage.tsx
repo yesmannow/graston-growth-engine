@@ -1,11 +1,11 @@
-import { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { FullProviderProfile, Tier } from '@/types';
 import { mockProviders } from '@/lib/mockData';
 import smallProvidersRaw from '@/lib/smallProviderData.json';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Star } from 'lucide-react';
+import { Check, Star, X } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -109,7 +109,7 @@ const ComparePage = () => {
                     <TableHead key={p.id} className="w-[200px] md:w-[250px]">
                       <div className="flex flex-col items-center text-center gap-2">
                         <Avatar className="h-16 w-16">
-                          <AvatarImage src={p.profile_image || undefined} />
+                          <AvatarImage src={p.profileImage} />
                           <AvatarFallback>{p.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                         </Avatar>
                         <Link to={`/directory/provider/${p.id}`} className="font-semibold text-base hover:underline">{p.name}</Link>
@@ -128,8 +128,8 @@ const ComparePage = () => {
                         {(() => {
                           const value = p[feature.key as keyof FullProviderProfile];
                           if (feature.key === 'tier') return <TierBadge tier={value as Tier} />;
-                          if (feature.key === 'rating') return <div className="flex items-center justify-center gap-1">{(value as number)?.toFixed(1)} <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" /></div>;
-                          if (Array.isArray(value)) return <div className="flex flex-wrap gap-1 justify-center">{(value as string[]).map((v, i) => <Badge key={v + i} variant="secondary">{v}</Badge>)}</div>;
+                          if (feature.key === 'rating') return <div className="flex items-center justify-center gap-1">{value?.toFixed(1)} <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" /></div>;
+                          if (Array.isArray(value)) return <div className="flex flex-wrap gap-1 justify-center">{value.map(v => <Badge key={v} variant="secondary">{v}</Badge>)}</div>;
                           if (value) return String(value);
                           return <span className="text-muted-foreground">-</span>;
                         })()}

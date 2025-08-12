@@ -21,7 +21,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, placeholder }) => {
     <div className="flex w-full max-w-xl">
       <Input
         value={value}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
+        onChange={(e) => setValue(e.target.value)}
         placeholder={placeholder || 'Search...'}
         className="rounded-l-md"
         onKeyDown={handleKeyDown}

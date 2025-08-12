@@ -62,11 +62,11 @@ const RoiCalculatorCard = () => {
         </div>
         <div className="space-y-2">
           <Label htmlFor="newPatientsPerMonth">2. Estimated new patients per month from the directory?</Label>
-          <Input id="newPatientsPerMonth" type="number" placeholder="e.g., 2" value={newPatients} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewPatients(e.target.value)} />
+          <Input id="newPatientsPerMonth" type="number" placeholder="e.g., 2" value={newPatients} onChange={(e) => setNewPatients(e.target.value)} />
         </div>
         <div className="space-y-2">
           <Label htmlFor="averagePatientValue">3. What is the average value of a new patient?</Label>
-          <Input id="averagePatientValue" type="number" placeholder="e.g., 450" value={patientValue} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPatientValue(e.target.value)} />
+          <Input id="averagePatientValue" type="number" placeholder="e.g., 450" value={patientValue} onChange={(e) => setPatientValue(e.target.value)} />
         </div>
         
         <Button onClick={handleCalculate} className="w-full">Calculate My Potential ROI</Button>

@@ -1,63 +1,59 @@
 import { FullProviderProfile, Tier } from "@/types";
 
-const requiredProfileFields: Record<Tier, (keyof FullProviderProfile)[]> = {
-  Free: ['name', 'specialty', 'location', 'phone', 'email'],
-  Preferred: [
-    'name', 'specialty', 'location', 'phone', 'email', 
-    'profile_image', 'bio', 'website', 'services'
-  ],
-  Premier: [
-    'name', 'specialty', 'location', 'phone', 'email', 
-    'profile_image', 'bio', 'website', 'services', 
-    'certifications', 'gallery_images', 'testimonials', 'faqs'
-  ],
+// Helper to get nested property
+function getNestedProperty(obj: any, path: string) {
+  return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+}
+
+// Define required fields for each tier using dot notation for nested properties
+const requiredProfileFields: Record<Tier, string[]> = {
+  Free: ['name', 'email', 'profileImage', 'bio', 'specialty', 'location'],
+  Preferred: ['name', 'email', 'profileImage', 'bio', 'specialty', 'location', 'contactInfo.phone', 'contactInfo.website', 'services'],
+  Premier: ['name', 'email', 'profileImage', 'bio', 'specialty', 'location', 'contactInfo.phone', 'contactInfo.website', 'services', 'socialMedia', 'certifications'],
 };
 
-const getNestedProperty = (obj: any, path: string): any => {
-  return path.split('.').reduce((o, p) => (o && o[p] !== undefined ? o[p] : null), obj);
+// Labels for profile fields, using dot notation for nested properties
+const fieldLabels: Record<string, string> = {
+  name: 'Full Name',
+  email: 'Email',
+  profileImage: 'Profile Image',
+  bio: 'Professional Bio',
+  specialty: 'Specialty',
+  location: 'Location',
+  'contactInfo.phone': 'Phone Number',
+  'contactInfo.website': 'Website URL',
+  services: 'Services Offered',
+  socialMedia: 'Social Media Links',
+  certifications: 'Certifications',
 };
 
-export const calculateProfileCompleteness = (user: FullProviderProfile): number => {
-  if (!user.tier) return 0; // Add guard clause for null/undefined tier
-
+export const calculateProfileScore = (user: FullProviderProfile) => {
   let completedFields = 0;
   const requiredFields = requiredProfileFields[user.tier];
-  if (!requiredFields) return 0;
 
-  requiredFields.forEach((fieldPath: string) => { // Explicitly type fieldPath
+  const missingFields: string[] = [];
+
+  requiredFields.forEach(fieldPath => {
     const value = getNestedProperty(user, fieldPath);
-    if (value !== null && value !== undefined && value !== '' && (!Array.isArray(value) || value.length > 0)) {
+    
+    // Check if the value is defined, not null, not an empty string, not an empty array, and not an empty object
+    if (value !== undefined && value !== null && value !== '' &&
+        !(Array.isArray(value) && value.length === 0) &&
+        !(typeof value === 'object' && Object.keys(value).length === 0)) {
       completedFields++;
+    } else {
+      missingFields.push(fieldLabels[fieldPath] || fieldPath);
     }
   });
 
-  return Math.round((completedFields / requiredFields.length) * 100);
-};
+  const score = Math.round((completedFields / requiredFields.length) * 100);
 
-export const calculateProfileScore = (user: FullProviderProfile): { score: number; nextAction: string } => {
-  if (!user.tier) {
-    return { score: 0, nextAction: "Please select a membership tier to see your profile score." };
+  let nextAction = '';
+  if (score < 100) {
+    nextAction = `Complete your profile to reach 100%. Missing: ${missingFields.join(', ')}.`;
+  } else {
+    nextAction = 'Your profile is 100% complete!';
   }
-
-  const score = calculateProfileCompleteness(user);
-
-  if (score === 100) {
-    return { score: 100, nextAction: "Your profile is complete! Great job." };
-  }
-
-  const requiredFields = requiredProfileFields[user.tier];
-  if (!requiredFields) {
-    return { score: 0, nextAction: "Could not determine required fields for your tier." };
-  }
-
-  const missingField = requiredFields.find(fieldPath => {
-    const value = getNestedProperty(user, fieldPath as keyof FullProviderProfile);
-    return value === null || value === undefined || value === '' || (Array.isArray(value) && value.length === 0);
-  });
-
-  const nextAction = missingField
-    ? `To improve your score, add your ${missingField.replace(/_/g, ' ')}.`
-    : "Your profile is looking great!";
 
   return { score, nextAction };
 };

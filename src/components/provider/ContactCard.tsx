@@ -67,7 +67,7 @@ const ContactCard = ({ provider }: ContactCardProps) => {
           <Input
             placeholder="Your Name"
             value={contactName}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContactName(e.target.value)}
+            onChange={(e) => setContactName(e.target.value)}
             disabled={isSubmitting}
             required
             aria-label="Your Name"
@@ -76,7 +76,7 @@ const ContactCard = ({ provider }: ContactCardProps) => {
             type="email"
             placeholder="Your Email"
             value={contactEmail}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContactEmail(e.target.value)}
+            onChange={(e) => setContactEmail(e.target.value)}
             disabled={isSubmitting}
             required
             aria-label="Your Email"
@@ -85,7 +85,7 @@ const ContactCard = ({ provider }: ContactCardProps) => {
             placeholder="Your Message (e.g., 'I'd like to inquire about treatment for shoulder pain.')"
             rows={4}
             value={contactMessage}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setContactMessage(e.target.value)}
+            onChange={(e) => setContactMessage(e.target.value)}
             disabled={isSubmitting}
             required
             aria-label="Your Message"

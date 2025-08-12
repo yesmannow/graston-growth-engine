@@ -1,8 +1,9 @@
 import { FullProviderProfile } from "@/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { MapPin } from "lucide-react";
+import { MapPin, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
 
 interface FeaturedProviderCardProps {
   provider: FullProviderProfile;
@@ -19,7 +20,7 @@ const FeaturedProviderCard = ({ provider }: FeaturedProviderCardProps) => {
       <div className="p-6 flex-grow">
         <div className="flex items-center gap-4">
           <Avatar className="h-16 w-16 border">
-            <AvatarImage src={provider.profile_image || undefined} alt={provider.name} />
+            <AvatarImage src={provider.profileImage} alt={provider.name} />
             <AvatarFallback>{provider.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
           </Avatar>
           <div className="flex-1">

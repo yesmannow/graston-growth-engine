@@ -14,7 +14,7 @@ const MiniProfileCard = ({ provider }: MiniProfileCardProps) => {
     <div className="p-1 font-sans">
       <div className="flex items-center gap-3">
         <Avatar className="h-12 w-12">
-          <AvatarImage src={provider.profile_image || undefined} alt={provider.name} />
+          <AvatarImage src={provider.profileImage} alt={provider.name} />
           <AvatarFallback>{provider.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
         </Avatar>
         <div className="min-w-0">

@@ -12,8 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { FullProviderProfile } from "@/types";
 import { showSuccess, showError } from "@/utils/toast";
 import { User, Mail, Phone, MapPin, Globe, Plus, X } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { Switch } from "@/components/ui/switch";
+import { mockProviders } from "@/lib/mockData";
 
 interface UpdateProfileFormProps {
   providerId: string;
@@ -28,27 +27,10 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
   const [newCertification, setNewCertification] = useState("");
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      setIsLoading(true);
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', providerId)
-        .single();
-
-      if (error) {
-        showError("Failed to load profile data.");
-        console.error(error);
-        setFormData(null);
-      } else {
-        setFormData(data as FullProviderProfile);
-      }
-      setIsLoading(false);
-    };
-
-    if (providerId) {
-      fetchProfile();
-    }
+    setIsLoading(true);
+    const providerData = mockProviders.find(p => p.id === providerId) || null;
+    setFormData(providerData);
+    setIsLoading(false);
   }, [providerId]);
 
   const handleInputChange = (field: keyof FullProviderProfile, value: any) => {
@@ -102,20 +84,11 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
 
     setIsSaving(true);
     
-    const { data, error } = await supabase
-      .from('profiles')
-      .update(formData)
-      .eq('id', providerId)
-      .select()
-      .single();
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
-    if (error) {
-      showError("Failed to update profile.");
-      console.error(error);
-    } else {
-      onUpdate(data as FullProviderProfile);
-      showSuccess("Profile updated successfully!");
-    }
+    onUpdate(formData);
+    showSuccess("Profile updated successfully! (Mock update)");
     
     setIsSaving(false);
   };
@@ -154,7 +127,7 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
             <div className="flex flex-col md:flex-row gap-6">
               <div className="flex flex-col items-center space-y-4">
                 <Avatar className="h-24 w-24">
-                  <AvatarImage src={formData.profile_image || undefined} alt={formData.name} />
+                  <AvatarImage src={formData.profileImage} alt={formData.name} />
                   <AvatarFallback className="text-lg">
                     {formData.name.split(' ').map(n => n[0]).join('')}
                   </AvatarFallback>
@@ -163,8 +136,8 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
                   <Label htmlFor="profileImage">Profile Image URL</Label>
                   <Input
                     id="profileImage"
-                    value={formData.profile_image || ""}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange("profile_image", e.target.value)}
+                    value={formData.profileImage || ""}
+                    onChange={(e) => handleInputChange("profileImage", e.target.value)}
                     placeholder="https://example.com/image.jpg"
                   />
                 </div>
@@ -177,7 +150,7 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
                     <Input
                       id="name"
                       value={formData.name}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange("name", e.target.value)}
+                      onChange={(e) => handleInputChange("name", e.target.value)}
                       required
                     />
                   </div>
@@ -186,21 +159,10 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
                     <Input
                       id="specialty"
                       value={formData.specialty || ""}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange("specialty", e.target.value)}
+                      onChange={(e) => handleInputChange("specialty", e.target.value)}
                       placeholder="e.g., Physical Therapy"
                     />
                   </div>
-                </div>
-                
-                <div className="flex items-center space-x-2 pt-2">
-                  <Switch
-                    id="accepting-new-patients"
-                    checked={formData.accepting_new_patients ?? false}
-                    onCheckedChange={(checked: boolean) => handleInputChange("accepting_new_patients", checked)}
-                  />
-                  <Label htmlFor="accepting-new-patients" className="text-base">
-                    Accepting New Patients
-                  </Label>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -212,7 +174,7 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
                         id="email"
                         type="email"
                         value={formData.email}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange("email", e.target.value)}
+                        onChange={(e) => handleInputChange("email", e.target.value)}
                         className="pl-10"
                         required
                       />
@@ -225,7 +187,7 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
                       <Input
                         id="phone"
                         value={formData.phone || ""}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange("phone", e.target.value)}
+                        onChange={(e) => handleInputChange("phone", e.target.value)}
                         className="pl-10"
                         placeholder="(555) 123-4567"
                       />
@@ -240,7 +202,7 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
                     <Input
                       id="location"
                       value={formData.location || ""}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange("location", e.target.value)}
+                      onChange={(e) => handleInputChange("location", e.target.value)}
                       className="pl-10"
                       placeholder="City, State"
                     />
@@ -257,7 +219,7 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
               <Textarea
                 id="bio"
                 value={formData.bio || ""}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleInputChange("bio", e.target.value)}
+                onChange={(e) => handleInputChange("bio", e.target.value)}
                 placeholder="Tell potential clients about your experience and expertise..."
                 rows={4}
               />
@@ -272,7 +234,7 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
                 <Input
                   id="experience"
                   value={formData.experience || ""}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange("experience", e.target.value)}
+                  onChange={(e) => handleInputChange("experience", e.target.value)}
                   placeholder="e.g., 10 years"
                 />
               </div>
@@ -281,7 +243,7 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
                 <Input
                   id="education"
                   value={formData.education || ""}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange("education", e.target.value)}
+                  onChange={(e) => handleInputChange("education", e.target.value)}
                   placeholder="e.g., MD, Harvard Medical School"
                 />
               </div>
@@ -299,7 +261,7 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
                   <Input
                     id="website"
                     value={formData.website || ""}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange("website", e.target.value)}
+                    onChange={(e) => handleInputChange("website", e.target.value)}
                     className="pl-10"
                     placeholder="https://yourwebsite.com"
                   />
@@ -312,7 +274,7 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
                   <Input
                     id="linkedin"
                     value={formData.linkedin || ""}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange("linkedin", e.target.value)}
+                    onChange={(e) => handleInputChange("linkedin", e.target.value)}
                     placeholder="https://linkedin.com/in/yourprofile"
                   />
                 </div>
@@ -321,7 +283,7 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
                   <Input
                     id="facebook"
                     value={formData.facebook || ""}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange("facebook", e.target.value)}
+                    onChange={(e) => handleInputChange("facebook", e.target.value)}
                     placeholder="https://facebook.com/yourpage"
                   />
                 </div>
@@ -330,7 +292,7 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
                   <Input
                     id="instagram"
                     value={formData.instagram || ""}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange("instagram", e.target.value)}
+                    onChange={(e) => handleInputChange("instagram", e.target.value)}
                     placeholder="https://instagram.com/youraccount"
                   />
                 </div>
@@ -339,7 +301,7 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
                   <Input
                     id="twitter"
                     value={formData.twitter || ""}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange("twitter", e.target.value)}
+                    onChange={(e) => handleInputChange("twitter", e.target.value)}
                     placeholder="https://twitter.com/youraccount"
                   />
                 </div>
@@ -365,7 +327,7 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
               <div className="flex gap-2">
                 <Input
                   value={newService}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewService(e.target.value)}
+                  onChange={(e) => setNewService(e.target.value)}
                   placeholder="Add a service..."
                   onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addService())}
                 />
@@ -394,7 +356,7 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
               <div className="flex gap-2">
                 <Input
                   value={newCertification}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewCertification(e.target.value)}
+                  onChange={(e) => setNewCertification(e.target.value)}
                   placeholder="Add a certification..."
                   onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addCertification())}
                 />

@@ -92,7 +92,7 @@ const MarketingToolkitPage = () => {
           <h3 className="text-2xl font-bold">{featuredResource.title}</h3>
           <p className="text-muted-foreground mt-2 mb-4">{featuredResource.description}</p>
           {isLoading ? <ResourceCardSkeleton /> : (
-            provider.tier && <ResourceCard 
+            <ResourceCard 
               resource={featuredResource} 
               userTier={provider.tier} 
               providerId={provider.id}
@@ -111,7 +111,7 @@ const MarketingToolkitPage = () => {
             placeholder="Search resources..." 
             className="pl-10"
             value={searchTerm}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <div className="flex gap-2 overflow-x-auto pb-2">
@@ -134,7 +134,7 @@ const MarketingToolkitPage = () => {
             Array.from({ length: 6 }).map((_, index) => <ResourceCardSkeleton key={index} />)
         ) : (
             filteredResources.map((resource: MarketingResource) => (
-              provider.tier && <ResourceCard 
+                <ResourceCard 
                     key={resource.id} 
                     resource={resource} 
                     userTier={provider.tier} 

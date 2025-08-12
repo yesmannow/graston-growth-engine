@@ -41,7 +41,7 @@ const Index = () => {
                 placeholder="Enter a city, state, or provider name..."
                 className="pl-10"
                 value={searchTerm}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <Button type="submit">Search</Button>

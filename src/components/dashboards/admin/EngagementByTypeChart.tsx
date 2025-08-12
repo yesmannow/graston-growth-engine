@@ -14,7 +14,7 @@ const EngagementByTypeChart = ({ providers }: EngagementByTypeChartProps) => {
     const engagementByTpe: Record<string, { totalViews: number, count: number }> = {};
 
     providers.forEach(provider => {
-      const type = provider.clinician_type || 'Other';
+      const type = provider.clinicianType || 'Other';
       if (!engagementByTpe[type]) {
         engagementByTpe[type] = { totalViews: 0, count: 0 };
       }

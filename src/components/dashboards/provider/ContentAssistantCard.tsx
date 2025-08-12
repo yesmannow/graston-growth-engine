@@ -31,6 +31,7 @@ const generateContent = async (prompt: string): Promise<ContentResponse> => {
   return data;
 };
 
+
 const ContentAssistantCard = () => {
   const [prompt, setPrompt] = useState('');
   const [generatedContent, setGeneratedContent] = useState('');
@@ -38,17 +39,17 @@ const ContentAssistantCard = () => {
 
   const mutation = useMutation<ContentResponse, Error, string>({
     mutationFn: generateContent,
-    onSuccess: () => { // Removed 'data'
-      showSuccess("Content generated successfully!");
+    onSuccess: (data) => {
+      showSuccess("Content generated successfully!"); // Changed usage
     },
-    onError: () => { // Removed 'error'
+    onError: (error) => {
       // Do nothing, the UI will show the error message
     }
   });
 
   const handleGenerate = () => {
     if (!prompt.trim()) {
-      showError("Please enter a prompt for the content you need.");
+      showError("Please enter a prompt for the content you need."); // Changed usage
       return;
     }
     // Clear previous content before new generation
@@ -60,7 +61,7 @@ const ContentAssistantCard = () => {
     if(!generatedContent) return;
     navigator.clipboard.writeText(generatedContent);
     setHasCopied(true);
-    showSuccess("Content copied to clipboard!");
+    showSuccess("Content copied to clipboard!"); // Changed usage
     setTimeout(() => setHasCopied(false), 2000);
   };
 
@@ -78,7 +79,7 @@ const ContentAssistantCard = () => {
             placeholder="e.g., 'Write a short, friendly bio for my profile focusing on sports injuries' or 'Create a list of 5 video ideas for patient testimonials'" 
             rows={4}
             value={prompt}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setPrompt(e.target.value)}
+            onChange={(e) => setPrompt(e.target.value)}
             disabled={mutation.isPending}
           />
         </div>

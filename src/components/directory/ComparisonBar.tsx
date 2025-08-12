@@ -29,7 +29,7 @@ const ComparisonBar = ({ providers, onClear, onRemove }: ComparisonBarProps) => 
             {providers.map(p => (
               <div key={p.id} className="relative shrink-0" title={p.name}>
                 <Avatar>
-                  <AvatarImage src={p.profile_image || undefined} alt={p.name} />
+                  <AvatarImage src={p.profileImage} alt={p.name} />
                   <AvatarFallback>{p.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                 </Avatar>
                 <button onClick={() => onRemove(p.id)} className="absolute -top-1 -right-1 bg-secondary text-secondary-foreground rounded-full p-0.5 hover:bg-destructive hover:text-destructive-foreground transition-colors">
