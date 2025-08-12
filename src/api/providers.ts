@@ -1,7 +1,9 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { FullProviderProfile } from "@/types";
 
-export async function fetchProviderById(id: number): Promise<FullProviderProfile> {
+export async function fetchProviderById(
+  id: number
+): Promise<FullProviderProfile> {
   const { data, error } = await supabase
     .from("providers")
     .select(`
