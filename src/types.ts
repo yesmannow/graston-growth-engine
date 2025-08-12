@@ -1,4 +1,5 @@
-export type Tier = 'Free' | 'Preferred' | 'Premier' | 'All';
+export type Tier = 'Free' | 'Preferred' | 'Premier';
+export type TierFilter = Tier | 'All';
 export type TrialStatus = 'Active' | 'Expired' | 'N/A';
 export type SortOption = 'premier-first' | 'top-rated' | 'most-reviewed';
 export type RadiusOption = 5 | 10 | 25 | 50 | 100;
@@ -77,7 +78,6 @@ export interface FullProviderProfile {
   activity: number;
   churnRisk: boolean;
   isFavorite: boolean;
-  // Added missing properties
   engagementScore?: number;
   views?: number;
   can_compare?: boolean;
@@ -101,7 +101,7 @@ export interface DirectoryFilters {
   radius?: RadiusOption;
   clinicianType?: ClinicianType;
   specialty?: string;
-  tier?: Tier;
+  tier?: TierFilter;
   trainingLevel?: TrainingLevel;
   languages?: Language[];
   conditionsTreated?: Condition[];

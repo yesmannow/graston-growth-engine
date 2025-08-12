@@ -1,9 +1,13 @@
 import { FullProviderProfile, ClinicianType, Language, Condition, PatientDemographic } from "@/types";
 
 export const states = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
+
 export const clinicianTypes: ClinicianType[] = ["Chiropractor", "Physical Therapist", "Athletic Trainer", "Massage Therapist", "Other"];
+
 export const languages: Language[] = ["English", "Spanish", "French", "German", "Mandarin"];
+
 export const radiusOptions = [5, 10, 25, 50, 100];
+
 export const specialties = [
   "Chiropractic Care",
   "Physical Therapy", 
@@ -11,8 +15,16 @@ export const specialties = [
   "Orthopedic Rehabilitation",
   "Manual Therapy"
 ];
+
 export const conditions: Condition[] = ["Back Pain", "Neck Pain", "Headaches", "Sports Injuries", "Post-Surgical Rehab"];
+
 export const patientDemographics: PatientDemographic[] = ["Athletes", "Pediatrics", "Geriatrics", "General Population"];
+
+export const sortOptions = [
+  { value: 'premier-first', label: 'Premier First' },
+  { value: 'top-rated', label: 'Top Rated' },
+  { value: 'most-reviewed', label: 'Most Reviewed' }
+];
 
 export const mockProviders: FullProviderProfile[] = [
     {

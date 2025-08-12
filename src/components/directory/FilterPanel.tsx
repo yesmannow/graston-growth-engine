@@ -30,6 +30,7 @@ import {
   RadiusOption, 
   SortOption, 
   Tier, 
+  TierFilter,
   TrainingLevel,
   Condition,
   PatientDemographic
@@ -239,7 +240,7 @@ const FilterPanel = ({ filters, onFilterChange, specialties }: FilterPanelProps)
                   <Label htmlFor="tier" className="text-xs">Membership Tier</Label>
                   <Select 
                     value={filters.tier || 'All'} 
-                    onValueChange={(value) => handleFilterChange('tier', value === 'All' ? 'All' : value as Tier)}
+                    onValueChange={(value) => handleFilterChange('tier', value as TierFilter)}
                   >
                     <SelectTrigger id="tier" className="h-8 text-sm">
                       <SelectValue placeholder="Select tier" />
@@ -373,7 +374,7 @@ const FilterPanel = ({ filters, onFilterChange, specialties }: FilterPanelProps)
               <SelectValue placeholder="Select sort option" />
             </SelectTrigger>
             <SelectContent>
-              {sortOptions.map(option => (
+              {sortOptions.map((option: { value: string; label: string }) => (
                 <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
               ))}
             </SelectContent>
