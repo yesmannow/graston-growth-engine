@@ -44,6 +44,10 @@ const ProviderCard = ({
             alt={provider.name}
             className="w-20 h-20 rounded-lg object-cover cursor-pointer"
             onClick={() => navigate(`/directory/provider/${provider.id}`)}
+            onError={(e) => {
+              e.currentTarget.src = '/images/placeholder.png';
+              e.currentTarget.onerror = null;
+            }}
           />
           <div className="flex-1">
             <div className="flex justify-between items-start">

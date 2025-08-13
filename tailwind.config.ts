@@ -18,6 +18,11 @@ export default {
       },
     },
     extend: {
+      boxShadow: {
+        'subtle': '0 4px 12px -2px rgb(0 0 0 / 0.05)',
+        'md': '0 8px 24px -4px rgb(0 0 0 / 0.1)',
+        'lg': '0 20px 40px -12px rgb(0 0 0 / 0.2)',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -92,5 +97,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 } satisfies Config;

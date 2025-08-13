@@ -11,7 +11,7 @@ const HeroSection = () => {
         muted
         playsInline
         className="absolute top-0 left-0 w-full h-full object-cover opacity-20"
-        poster="https://grastontechnique.com/wp-content/uploads/2023/01/GT-Homepage-Banner-1.jpg"
+        poster="/images/graston-hero-poster.jpeg"
       >
         {/* In a real app, use a more optimized video format */}
         <source src="https://grastontechnique.com/wp-content/uploads/2023/01/GT-Website-Banner-Video-V2-1.mp4" type="video/mp4" />

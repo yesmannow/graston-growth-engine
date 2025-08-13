@@ -4,32 +4,32 @@ export const instruments = [
   {
     name: "GT1: Scanner",
     description: "Used for scanning and detecting adhesions in broad areas of the body.",
-    imageUrl: "/images/gt-instrument-1.png"
+    imageUrl: "/images/instrument-gt1.png"
   },
   {
     name: "GT2: Handlebar",
     description: "Designed for treating large muscle groups like the back, hamstrings, and quadriceps.",
-    imageUrl: "/images/gt-instrument-2.png"
+    imageUrl: "/images/instrument-gt2.png"
   },
   {
     name: "GT3: Concave/Convex",
     description: "A versatile tool for treating both large and small muscle groups with its dual-sided design.",
-    imageUrl: "/images/gt-instrument-3.png"
+    imageUrl: "/images/instrument-gt3.png"
   },
   {
     name: "GT4: Beak",
     description: "Ideal for targeting specific, smaller areas and deeper tissues.",
-    imageUrl: "/images/gt-instrument-4.png"
+    imageUrl: "/images/instrument-gt4.png"
   },
   {
     name: "GT5: Boomerang",
     description: "Used for treating areas with significant contours, like the shoulder or foot.",
-    imageUrl: "/images/gt-instrument-5.png"
+    imageUrl: "/images/instrument-gt5.png"
   },
   {
     name: "GT6: Pointed",
     description: "For precise treatment of small, specific adhesions, often in the hands or feet.",
-    imageUrl: "/images/gt-instrument-6.png"
+    imageUrl: "/images/instrument-gt6.png"
   }
 ];
 

@@ -196,7 +196,7 @@ const FaqPage = () => {
           </div>
 
           {/* Main Content */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-3 prose max-w-none">
             {!searchTerm && <TopQuestions />}
             
             {filteredFaqs.length === 0 ? (
