@@ -1,37 +1,19 @@
-import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
-import { AuthProvider } from './hooks/useAuth';
-import NavBar from './components/NavBar';
-import FindProviderPage from './pages/FindProviderPage';
-import ProviderProfilePage from './pages/ProviderProfilePage';
-
-// Placeholder components for routes
-const AboutPage = () => <div className="p-8">About Us</div>;
-const ContactPage = () => <div className="p-8">Contact Us</div>;
-const AdminPage = () => <div className="p-8">Admin Dashboard</div>;
-
-const AppLayout = () => (
-  <>
-    <NavBar />
-    <main>
-      <Outlet />
-    </main>
-  </>
-);
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Layout from "@/components/layout/Layout";
+import Index from "@/pages/Index";
+import ProviderDetail from "@/pages/ProviderDetail";
+import "./App.css";
 
 function App() {
   return (
     <Router>
-      <AuthProvider>
-        <Routes>
-          <Route element={<AppLayout />}>
-            <Route path="/" element={<FindProviderPage />} />
-            <Route path="/provider/:providerId" element={<ProviderProfilePage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/admin" element={<AdminPage />} />
-          </Route>
-        </Routes>
-      </AuthProvider>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Index />} />
+          <Route path="providers/:providerId" element={<ProviderDetail />} />
+          {/* ... other existing routes ... */}
+        </Route>
+      </Routes>
     </Router>
   );
 }

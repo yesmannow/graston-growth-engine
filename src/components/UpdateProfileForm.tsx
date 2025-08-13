@@ -12,7 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { FullProviderProfile } from "@/types";
 import { showSuccess, showError } from "@/utils/toast";
 import { User, Mail, Phone, MapPin, Globe, Plus, X } from "lucide-react";
-import { mockProviderData } from "@/lib/mockData";
+import { mockProviders } from "@/lib/mockData";
 
 interface UpdateProfileFormProps {
   providerId: string;
@@ -28,7 +28,7 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
 
   useEffect(() => {
     setIsLoading(true);
-    const providerData = mockProviderData.find((p: any) => p.id === providerId) || null;
+    const providerData = mockProviders.find(p => p.id === providerId) || null;
     setFormData(providerData);
     setIsLoading(false);
   }, [providerId]);
