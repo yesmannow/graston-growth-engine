@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 
 const navLinks = [
   { id: 'symptom-checker', label: 'Is It For You?' },
+  { id: 'instruments', label: 'The Instruments' },
   { id: 'benefits', label: 'Benefits' },
   { id: 'conditions', label: 'Conditions' },
   { id: 'case-studies', label: 'Case Studies' },

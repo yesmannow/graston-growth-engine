@@ -2,6 +2,7 @@ import StickyNav from '@/components/graston/StickyNav';
 import HeroSection from '@/components/graston/HeroSection';
 import SymptomChecker from '@/components/graston/SymptomChecker';
 import DeeperDiveSection from '@/components/graston/DeeperDiveSection';
+import InstrumentsSection from '@/components/graston/InstrumentsSection';
 import BenefitsSection from '@/components/graston/BenefitsSection';
 import ConditionsSection from '@/components/graston/ConditionsSection';
 import CaseStudiesSection from '@/components/graston/CaseStudiesSection';
@@ -17,6 +18,7 @@ const WhatIsGrastonPage = () => {
       <main>
         <SymptomChecker />
         <DeeperDiveSection />
+        <InstrumentsSection />
         <BenefitsSection />
         <ConditionsSection />
         <CaseStudiesSection />
