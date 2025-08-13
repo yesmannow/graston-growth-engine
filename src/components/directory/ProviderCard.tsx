@@ -44,13 +44,13 @@ const ProviderCard = ({
             src={provider.profileImage}
             alt={provider.name}
             className="w-20 h-20 rounded-lg object-cover cursor-pointer"
-            onClick={() => navigate(`/provider/${provider.id}`)}
+            onClick={() => navigate(`/directory/provider/${provider.id}`)}
           />
           <div className="flex-1">
             <div className="flex justify-between items-start">
               <CardTitle 
                 className="text-lg font-bold cursor-pointer hover:text-primary"
-                onClick={() => navigate(`/provider/${provider.id}`)}
+                onClick={() => navigate(`/directory/provider/${provider.id}`)}
               >
                 {provider.name}
               </CardTitle>
@@ -89,7 +89,7 @@ const ProviderCard = ({
             </>
           )}
         </div>
-        <Button onClick={() => navigate(`/provider/${provider.id}`)}>
+        <Button onClick={() => navigate(`/directory/provider/${provider.id}`)}>
           View Profile
         </Button>
       </CardFooter>

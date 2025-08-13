@@ -31,7 +31,7 @@ function App() {
           <Route index element={<EnhancedDirectory />} />
           <Route path="directory-old" element={<Directory />} />
           <Route path="provider/:id/dashboard" element={<Provider />} />
-          <Route path="provider/:id" element={<PublicProviderProfilePage />} />
+          <Route path="directory/provider/:id" element={<PublicProviderProfilePage />} />
           <Route path="compare" element={<ComparePage />} />
           <Route path="update-profile" element={<UpdateProfile />} />
           <Route path="reports" element={<Reports />} />

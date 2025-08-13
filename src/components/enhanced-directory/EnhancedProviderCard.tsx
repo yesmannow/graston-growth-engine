@@ -34,7 +34,7 @@ const EnhancedProviderCard = ({
   const [imageLoaded, setImageLoaded] = useState(false);
 
   const handleClick = () => {
-    navigate(`/provider/${provider.id}`);
+    navigate(`/directory/provider/${provider.id}`);
   };
 
   const tierColors = {

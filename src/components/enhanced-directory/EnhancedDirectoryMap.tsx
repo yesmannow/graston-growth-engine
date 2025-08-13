@@ -277,7 +277,7 @@ const EnhancedDirectoryMap: React.FC<EnhancedDirectoryMapProps> = ({
               <div className="flex gap-2">
                 <Button
                   size="sm"
-                  onClick={() => navigate(`/provider/${selectedProvider.id}`)}
+                  onClick={() => navigate(`/directory/provider/${selectedProvider.id}`)}
                   className="flex-1"
                 >
                   View Profile

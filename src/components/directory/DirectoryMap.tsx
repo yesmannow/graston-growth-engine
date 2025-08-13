@@ -168,7 +168,7 @@ const DirectoryMap: React.FC<DirectoryMapProps> = ({
             
             <Button
               size="sm"
-              onClick={() => navigate(`/provider/${selectedProvider.id}`)}
+              onClick={() => navigate(`/directory/provider/${selectedProvider.id}`)}
               className="w-full"
             >
               View Profile

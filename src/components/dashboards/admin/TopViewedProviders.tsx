@@ -20,7 +20,7 @@ const TopViewedProviders = ({ providers }: TopViewedProvidersProps) => {
           <li 
             key={provider.id} 
             className="flex items-center justify-between p-2 rounded-md hover:bg-muted cursor-pointer"
-            onClick={() => navigate(`/provider/${provider.id}`)}
+            onClick={() => navigate(`/directory/provider/${provider.id}`)}
           >
             <div className="flex items-center gap-3">
               <Avatar className="h-9 w-9">
