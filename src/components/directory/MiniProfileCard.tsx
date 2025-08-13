@@ -24,7 +24,7 @@ const MiniProfileCard = ({ provider }: MiniProfileCardProps) => {
       </div>
       <Button 
         className="w-full mt-3 h-8 text-xs"
-        onClick={() => navigate(`/directory/provider/${provider.id}`)}
+        onClick={() => navigate(`/provider/${provider.id}`)}
       >
         View Profile
       </Button>

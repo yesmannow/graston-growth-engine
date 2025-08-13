@@ -12,7 +12,7 @@ import NotificationBell from "./NotificationBell";
 import CommandPaletteShortcut from "./CommandPaletteShortcut";
 
 const navItems = [
-  { href: "/directory", label: "Find a Provider" },
+  { href: "/", label: "Find a Provider" },
   { href: "/about", label: "About" },
   { href: "/faq", label: "FAQ" },
   { href: "/onboarding", label: "Onboarding" },
@@ -44,7 +44,7 @@ const Header = () => {
             </NavLink>
           ))}
           <Button asChild>
-            <Link to="/provider/1">Dashboard</Link>
+            <Link to="/provider/1/dashboard">Dashboard</Link>
           </Button>
           <NotificationBell />
         </nav>
@@ -75,7 +75,7 @@ const Header = () => {
                   </Link>
                 ))}
                  <Button asChild>
-                    <Link to="/provider/1">Dashboard</Link>
+                    <Link to="/provider/1/dashboard">Dashboard</Link>
                 </Button>
               </nav>
             </SheetContent>

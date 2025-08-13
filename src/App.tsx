@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import Layout from '@/components/layout/Layout';
 import AdminLayout from '@/components/layout/AdminLayout';
-import Index from '@/pages/Index';
 import EnhancedDirectory from '@/pages/EnhancedDirectory';
 import Directory from '@/pages/Directory';
 import Provider from '@/pages/Provider';
@@ -29,10 +28,9 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Index />} />
-          <Route path="directory" element={<EnhancedDirectory />} />
+          <Route index element={<EnhancedDirectory />} />
           <Route path="directory-old" element={<Directory />} />
-          <Route path="directory/provider/:id" element={<Provider />} />
+          <Route path="provider/:id/dashboard" element={<Provider />} />
           <Route path="provider/:id" element={<PublicProviderProfilePage />} />
           <Route path="compare" element={<ComparePage />} />
           <Route path="update-profile" element={<UpdateProfile />} />
