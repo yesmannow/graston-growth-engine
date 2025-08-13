@@ -13,6 +13,7 @@ import { FullProviderProfile } from "@/types";
 import { showSuccess, showError } from "@/utils/toast";
 import { User, Mail, Phone, MapPin, Globe, Plus, X } from "lucide-react";
 import { mockProviderData } from "@/lib/mockData";
+import { mapMockToFullProfile } from "@/lib/dataMapping";
 
 interface UpdateProfileFormProps {
   providerId: string;
@@ -28,7 +29,8 @@ export const UpdateProfileForm = ({ providerId, onUpdate }: UpdateProfileFormPro
 
   useEffect(() => {
     setIsLoading(true);
-    const providerData = mockProviderData.find((p: any) => p.id === providerId) || null;
+    const rawProviderData = mockProviderData.find((p: any) => p.id.toString() === providerId);
+    const providerData = rawProviderData ? mapMockToFullProfile(rawProviderData) : null;
     setFormData(providerData);
     setIsLoading(false);
   }, [providerId]);

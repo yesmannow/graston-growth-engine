@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { mockProviderData } from "@/lib/mockData";
 import { useEffect, useState } from "react";
+import { mapMockToFullProfile } from "@/lib/dataMapping";
 
 const UpdateProfilePage = () => {
   const { id } = useParams<{ id: string }>();
@@ -16,7 +17,8 @@ const UpdateProfilePage = () => {
   useEffect(() => {
     // Simulate API call
     setIsLoading(true);
-    const foundProvider = mockProviderData.find((p: any) => p.id === id) || null;
+    const rawProviderData = mockProviderData.find((p: any) => p.id.toString() === id);
+    const foundProvider = rawProviderData ? mapMockToFullProfile(rawProviderData) : null;
     setProvider(foundProvider);
     setIsLoading(false);
   }, [id]);

@@ -1,54 +1,74 @@
-import { Users, Star, Gem, DollarSign, Activity } from "lucide-react";
-import { DataTable } from "@/components/data-table/data-table";
-import { columns } from "@/components/data-table/columns";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import MetricCard from "@/components/dashboards/admin/MetricCard";
 import ProviderTierChart from "@/components/dashboards/admin/ProviderTierChart";
 import EngagementByTypeChart from "@/components/dashboards/admin/EngagementByTypeChart";
-import TopViewedProviders from "@/components/dashboards/admin/TopViewedProviders";
-import { mockProviders } from "@/lib/mockData";
-import AiAssistantAlerts from "@/components/dashboards/admin/AiAssistantAlerts";
+import GeographicHeatmap from "@/components/admin/analytics/GeographicHeatmap";
+import TierPerformanceFunnel from "@/components/admin/analytics/TierPerformanceFunnel";
 import TaskQueue from "@/components/dashboards/admin/TaskQueue";
+import InsightAlertCenter from "@/components/admin/insights/InsightAlertCenter";
+import TopViewedProviders from "@/components/dashboards/admin/TopViewedProviders";
+import { mockProviderData } from "@/lib/mockData";
+import AiAssistantAlerts from "@/components/dashboards/admin/AiAssistantAlerts";
+import { mapMockToFullProfile } from "@/lib/dataMapping";
 
-const AdminPage = () => {
-    const providers = mockProviders;
+const AdminDashboardPage = () => {
+  const providers = mockProviderData.map(mapMockToFullProfile);
 
+  const calculateMetrics = () => {
     const totalProviders = providers.length;
-    const premierProviders = providers.filter(p => p.tier === 'Premier').length;
-    const preferredProviders = providers.filter(p => p.tier === 'Preferred').length;
+    const premierProviders = providers.filter((p) => p.tier === 'Premier').length;
+    const preferredProviders = providers.filter((p) => p.tier === 'Preferred').length;
     const monthlyRevenue = 59 * premierProviders + 29 * preferredProviders; // Example calculation
 
-    return (
-        <div className="container mx-auto py-10 space-y-6">
-            <h1 className="text-3xl font-bold">Command Center</h1>
+    return {
+      totalProviders,
+      monthlyRevenue,
+      premierProviders,
+      preferredProviders,
+      engagementRate: 76.3, // Mock data
+      churnRate: 2.1, // Mock data
+    };
+  };
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <MetricCard title="Total Providers" value={totalProviders} icon={<Users className="h-4 w-4 text-muted-foreground" />} />
-                <MetricCard title="Premier Tier" value={premierProviders} icon={<Gem className="h-4 w-4 text-muted-foreground" />} />
-                <MetricCard title="Preferred Tier" value={preferredProviders} icon={<Star className="h-4 w-4 text-muted-foreground" />} />
-                <MetricCard title="Est. Monthly Revenue" value={`$${monthlyRevenue.toLocaleString()}`} icon={<DollarSign className="h-4 w-4 text-muted-foreground" />} />
-            </div>
+  const metrics = calculateMetrics();
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
-                <div className="lg:col-span-3 space-y-6">
-                    <AiAssistantAlerts />
-                    <TaskQueue />
-                </div>
-                <div className="lg:col-span-2">
-                    <ProviderTierChart providers={providers} />
-                </div>
-            </div>
-            
-            <Card>
-                <CardHeader>
-                    <CardTitle>Recent Provider Activity</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <DataTable columns={columns} data={providers.slice(0, 5)} />
-                </CardContent>
-            </Card>
+  return (
+    <div className="p-4 md:p-8 space-y-8 bg-gray-50/50">
+      <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
+      
+      {/* Key Metrics */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <MetricCard title="Total Providers" value={metrics.totalProviders.toString()} change="+5 this month" />
+        <MetricCard title="Estimated MRR" value={`$${metrics.monthlyRevenue.toLocaleString()}`} change="+3.2%" />
+        <MetricCard title="Engagement Rate" value={`${metrics.engagementRate}%`} change="-0.5%" isWarning />
+        <MetricCard title="Churn Rate" value={`${metrics.churnRate}%`} change="+0.2%" isDanger />
+      </div>
+
+      {/* AI Assistant Alerts */}
+      <AiAssistantAlerts />
+
+      {/* Main Dashboard Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left Column */}
+        <div className="lg:col-span-2 space-y-8">
+          <ProviderTierChart data={{
+            premier: metrics.premierProviders,
+            preferred: metrics.preferredProviders,
+            free: metrics.totalProviders - metrics.premierProviders - metrics.preferredProviders
+          }} />
+          <GeographicHeatmap />
+          <TopViewedProviders providers={providers} />
         </div>
-    );
-}
 
-export default AdminPage;
+        {/* Right Column */}
+        <div className="space-y-8">
+          <InsightAlertCenter />
+          <TierPerformanceFunnel />
+          <EngagementByTypeChart providers={providers} />
+          <TaskQueue />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AdminDashboardPage;

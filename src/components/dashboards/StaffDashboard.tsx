@@ -3,10 +3,11 @@ import { DataTable } from "@/components/data-table/data-table";
 import { columns } from "@/components/data-table/columns";
 import { Button } from "@/components/ui/button";
 import { mockProviderData } from "@/lib/mockData";
+import { mapMockToFullProfile } from "@/lib/dataMapping";
 
 const StaffDashboard = () => {
   // Use the properly typed mock providers instead of inline data
-  const providers = mockProviderData;
+  const providers = mockProviderData.map(mapMockToFullProfile);
 
   return (
     <div className="container mx-auto p-4 md:p-8 bg-background">

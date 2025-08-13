@@ -1,51 +1,46 @@
-"use client";
-
-import { useMemo } from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { FullProviderProfile } from '@/types';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { FullProviderProfile } from "@/types";
 
 interface EngagementByTypeChartProps {
   providers: FullProviderProfile[];
 }
 
 const EngagementByTypeChart = ({ providers }: EngagementByTypeChartProps) => {
-  const engagementData = useMemo(() => {
-    const engagementByTpe: Record<string, { totalViews: number, count: number }> = {};
-
-    providers.forEach(provider => {
-      const type = provider.clinicianType || 'Other';
-      if (!engagementByTpe[type]) {
-        engagementByTpe[type] = { totalViews: 0, count: 0 };
-      }
-      engagementByTpe[type].totalViews += provider.views || 0;
-      engagementByTpe[type].count += 1;
-    });
-
-    return Object.entries(engagementByTpe).map(([type, data]) => ({
-      name: type,
-      'Avg. Views': data.count > 0 ? Math.round(data.totalViews / data.count) : 0,
-    }));
-  }, [providers]);
+  const data = [
+    { name: 'Profile Updates', value: 400 },
+    { name: 'Logins', value: 300 },
+    { name: 'Content Added', value: 300 },
+    { name: 'Searches', value: 200 },
+  ];
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Engagement by Clinician Type</CardTitle>
-        <CardDescription>Average profile views per clinician type.</CardDescription>
+        <CardTitle>Engagement by Type</CardTitle>
+        <CardDescription>Breakdown of key provider activities on the platform.</CardDescription>
       </CardHeader>
       <CardContent>
-        <div style={{ width: '100%', height: 300 }}>
-          <ResponsiveContainer>
-            <BarChart data={engagementData}>
-              <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-              <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `${value}`} />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="Avg. Views" fill="#3B82F6" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+        <ResponsiveContainer width="100%" height={250}>
+          <PieChart>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              outerRadius={80}
+              fill="#8884d8"
+              dataKey="value"
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart>
+        </ResponsiveContainer>
       </CardContent>
     </Card>
   );

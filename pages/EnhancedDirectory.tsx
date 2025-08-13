@@ -20,16 +20,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Filter, List, Map as MapIcon, LocateFixed, X } from "lucide-react";
 import { useJsApiLoader } from "@react-google-maps/api";
-import {
-  usePlacesWidget,
+import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from "use-places-autocomplete";
 import { mockProviderData, specialties } from "@/lib/mockData";
 import Fuse from 'fuse.js';
 import smallProvidersRaw from '@/lib/smallProviderData.json';
+import { mapMockToFullProfile } from "@/lib/dataMapping";
 
-const smallProviders: FullProviderProfile[] = smallProvidersRaw as FullProviderProfile[];
+const smallProviders: FullProviderProfile[] = (smallProvidersRaw as any[]).map(mapMockToFullProfile);
 
 const ITEMS_PER_PAGE = 9;
 const LIBRARIES: ("places")[] = ["places"];
@@ -42,6 +42,7 @@ const EnhancedDirectory = () => {
   const [mapCenter, setMapCenter] = useState({ lat: 39.8283, lng: -98.5795 }); // Center of US
   const [mapZoom, setMapZoom] = useState(4);
   const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
+  const [comparingProviders, setComparingProviders] = useState<string[]>([]);
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
@@ -50,12 +51,13 @@ const EnhancedDirectory = () => {
   });
 
   const {
-    placesService,
-    placePredictions,
-    getPlacePredictions,
-    isPlacePredictionsLoading,
-  } = usePlacesWidget({
-    request: {
+    ready,
+    value,
+    suggestions: { status, data: placePredictions },
+    setValue,
+    clearSuggestions,
+  } = usePlacesAutocomplete({
+    requestOptions: {
       types: ["(cities)"],
       componentRestrictions: { country: "us" },
     },
@@ -80,7 +82,7 @@ const EnhancedDirectory = () => {
       if (filters.state && filters.state !== 'all' && !p.location.includes(filters.state)) return false;
       if (filters.tier && filters.tier !== 'All' && p.tier !== filters.tier) return false;
       if (filters.specialty && filters.specialty !== 'All' && p.specialty !== filters.specialty) return false;
-      if (filters.favoritesOnly && !p.isFavorited) return false;
+      if (filters.favoritesOnly && !p.isFavorite) return false;
       return true;
     });
 
@@ -110,13 +112,14 @@ const EnhancedDirectory = () => {
   };
 
   const handlePlaceSelect = async (place: google.maps.places.AutocompletePrediction) => {
+    setValue(place.description, false);
+    clearSuggestions();
     try {
       const results = await getGeocode({ address: place.description });
       const { lat, lng } = await getLatLng(results[0]);
       setMapCenter({ lat, lng });
       setMapZoom(11);
-      handleFilterChange('searchTerm', place.description.split(',')[0]);
-      getPlacePredictions({ input: '' }); // Clear predictions
+      handleFilterChange({...filters, searchTerm: place.description.split(',')[0]});
     } catch (error) {
       console.error("Error getting geocode: ", error);
     }
@@ -146,6 +149,14 @@ const EnhancedDirectory = () => {
     }
   };
 
+  const handleToggleCompare = (providerId: string) => {
+    setComparingProviders(prev => 
+      prev.includes(providerId) 
+        ? prev.filter(id => id !== providerId)
+        : [...prev, providerId]
+    );
+  };
+
   return (
     <div className="flex flex-col lg:flex-row h-[calc(100vh-65px)] bg-gray-50">
       {/* Desktop Filter Panel */}
@@ -159,26 +170,24 @@ const EnhancedDirectory = () => {
           <div className="flex-1 relative">
             <Input 
               placeholder="Search by city, zip, or provider name..."
-              value={filters.searchTerm || ''}
-              onChange={(e) => {
-                handleFilterChange({...filters, searchTerm: e.target.value});
-                if (isLoaded) getPlacePredictions({ input: e.target.value });
-              }}
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              disabled={!ready}
               className="max-w-md"
             />
-            {filters.searchTerm && (
+            {value && (
               <Button 
                 variant="ghost" 
                 size="icon" 
                 className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7"
-                onClick={() => handleFilterChange({...filters, searchTerm: ''})}
+                onClick={() => setValue("")}
               >
                 <X className="h-4 w-4" />
               </Button>
             )}
-            {placePredictions.length > 0 && (
+            {status === 'OK' && (
               <div className="absolute z-10 w-full max-w-md bg-white border rounded-md mt-1 shadow-lg">
-                {placePredictions.map(place => (
+                {placePredictions.map((place: google.maps.places.AutocompletePrediction) => (
                   <div 
                     key={place.place_id}
                     onClick={() => handlePlaceSelect(place)}
@@ -238,7 +247,12 @@ const EnhancedDirectory = () => {
                     onMouseEnter={() => setHoveredProviderId(provider.id)}
                     onMouseLeave={() => setHoveredProviderId(null)}
                   >
-                    <EnhancedProviderCard provider={provider} />
+                    <EnhancedProviderCard 
+                      provider={provider}
+                      onToggleCompare={handleToggleCompare}
+                      isComparing={comparingProviders.includes(provider.id)}
+                      onToggleFavorite={() => {}}
+                    />
                   </div>
                 ))}
               </div>

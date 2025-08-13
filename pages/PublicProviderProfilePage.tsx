@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
 import { Phone, Mail, MapPin, Star, Users, Award, Video, Image as ImageIcon } from 'lucide-react';
+import { mapMockToFullProfile } from '@/lib/dataMapping';
 
 const PublicProviderProfilePage = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,7 +18,8 @@ const PublicProviderProfilePage = () => {
     setIsLoading(true);
     // Simulate API fetch
     setTimeout(() => {
-      const foundProvider = mockProviderData.find((p: any) => p.id === id) || null;
+      const rawProviderData = mockProviderData.find((p: any) => p.id.toString() === id);
+      const foundProvider = rawProviderData ? mapMockToFullProfile(rawProviderData) : null;
       setProvider(foundProvider);
       setIsLoading(false);
     }, 500);
@@ -60,7 +62,7 @@ const PublicProviderProfilePage = () => {
                   <p className="text-md text-gray-600">{provider.specialty}</p>
                   <div className="mt-2 flex flex-wrap gap-2 justify-center sm:justify-start">
                     <Badge variant="outline" className={tierColorMap[provider.tier]}>{provider.tier} Member</Badge>
-                    <Badge variant="secondary">{provider.graston_level}</Badge>
+                    <Badge variant="secondary">{provider.grastonLevel}</Badge>
                   </div>
                 </div>
               </div>

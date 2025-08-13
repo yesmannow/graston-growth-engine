@@ -1,66 +1,38 @@
-"use client";
-
-import { useMemo } from 'react';
-import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { FullProviderProfile, Tier } from '@/types';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import chartColors from '@/theme/chartColors';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 interface ProviderTierChartProps {
-  providers: FullProviderProfile[];
+  data: {
+    premier: number;
+    preferred: number;
+    free: number;
+  };
 }
 
-const COLORS: Record<Tier, string> = {
-  Premier: chartColors.secondary,
-  Preferred: chartColors.primary,
-  Free: chartColors.gray,
-};
-
-const ProviderTierChart = ({ providers }: ProviderTierChartProps) => {
-  const tierData = useMemo(() => {
-    const counts = providers.reduce((acc, provider) => {
-      acc[provider.tier] = (acc[provider.tier] || 0) + 1;
-      return acc;
-    }, {} as Record<Tier, number>);
-
-    return (Object.keys(counts) as Tier[]).map(tier => ({
-      name: tier,
-      value: counts[tier],
-    }));
-  }, [providers]);
+const ProviderTierChart = ({ data }: ProviderTierChartProps) => {
+  const chartData = [
+    { name: 'Premier', count: data.premier, fill: '#8884d8' },
+    { name: 'Preferred', count: data.preferred, fill: '#82ca9d' },
+    { name: 'Free', count: data.free, fill: '#ffc658' },
+  ];
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Provider Tier Distribution</CardTitle>
+        <CardTitle>Provider Distribution by Tier</CardTitle>
+        <CardDescription>A breakdown of active providers across membership tiers.</CardDescription>
       </CardHeader>
       <CardContent>
-        <div style={{ width: '100%', height: 300 }}>
-          <ResponsiveContainer>
-            <PieChart>
-              <Pie
-                data={tierData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                outerRadius={80}
-                fill={chartColors.primary}
-                dataKey="value"
-                nameKey="name"
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-              >
-                {tierData.map((entry) => (
-                  <Cell key={`cell-${entry.name}`} fill={COLORS[entry.name as Tier]} />
-                ))}
-              </Pie>
-              <Tooltip
-                contentStyle={{ background: "#fff", borderRadius: 8, border: "1px solid #e5e7eb" }}
-                formatter={(value: any, name: any) => [`${value} providers`, name]}
-              />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={chartData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis allowDecimals={false} />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="count" name="Providers" />
+          </BarChart>
+        </ResponsiveContainer>
       </CardContent>
     </Card>
   );

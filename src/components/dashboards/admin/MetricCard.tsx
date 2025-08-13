@@ -1,35 +1,34 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ReactNode } from "react";
-import { ArrowUpRight, ArrowDownRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface MetricCardProps {
   title: string;
-  value: string | number;
-  icon: ReactNode;
-  description?: string;
-  trend?: "up" | "down";
-  trendValue?: number;
+  value: string;
+  change?: string;
+  isWarning?: boolean;
+  isDanger?: boolean;
 }
 
-const MetricCard = ({ title, value, icon, description, trend, trendValue }: MetricCardProps) => (
-  <Card>
-    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-      <CardTitle className="text-sm font-medium">{title}</CardTitle>
-      {icon}
-    </CardHeader>
-    <CardContent>
-      <div className="text-2xl font-bold flex items-center gap-2">
-        {typeof value === "number" ? value.toLocaleString() : value}
-        {trend && (
-          <span className={`ml-2 flex items-center text-xs font-semibold ${trend === "up" ? "text-green-600" : "text-red-600"}`}>
-            {trend === "up" ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
-            {trendValue !== undefined ? `${Math.abs(trendValue)}%` : ""}
-          </span>
+const MetricCard = ({ title, value, change, isWarning, isDanger }: MetricCardProps) => {
+  const changeColor = isWarning ? "text-yellow-600" : isDanger ? "text-red-600" : "text-green-600";
+
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium text-muted-foreground">
+          {title}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">{value}</div>
+        {change && (
+          <p className={cn("text-xs text-muted-foreground", changeColor)}>
+            {change}
+          </p>
         )}
-      </div>
-      {description && <p className="text-xs text-muted-foreground">{description}</p>}
-    </CardContent>
-  </Card>
-);
+      </CardContent>
+    </Card>
+  );
+};
 
 export default MetricCard;

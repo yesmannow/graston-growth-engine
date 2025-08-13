@@ -155,7 +155,7 @@ const FilterPanel = ({ filters, onFilterChange, specialties }: FilterPanelProps)
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">All States</SelectItem>
-                        {states.map((state: string) => (
+                        {states.map((state) => (
                           <SelectItem key={state} value={state}>{state}</SelectItem>
                         ))}
                       </SelectContent>
@@ -184,7 +184,7 @@ const FilterPanel = ({ filters, onFilterChange, specialties }: FilterPanelProps)
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">Any Distance</SelectItem>
-                        {radiusOptions.map((radius: RadiusOption) => (
+                        {radiusOptions.map((radius) => (
                           <SelectItem key={radius} value={radius.toString()}>{`${radius} miles`}</SelectItem>
                         ))}
                       </SelectContent>
@@ -213,7 +213,7 @@ const FilterPanel = ({ filters, onFilterChange, specialties }: FilterPanelProps)
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="All">All Types</SelectItem>
-                      {clinicianTypes.map((type: ClinicianType) => (
+                      {clinicianTypes.map((type) => (
                         <SelectItem key={type} value={type}>{type}</SelectItem>
                       ))}
                     </SelectContent>
@@ -281,12 +281,12 @@ const FilterPanel = ({ filters, onFilterChange, specialties }: FilterPanelProps)
             <AccordionTrigger className="text-sm font-medium">Conditions Treated</AccordionTrigger>
             <AccordionContent>
               <div className="grid grid-cols-2 gap-2 pt-2">
-                {conditions.map((condition: Condition) => (
+                {conditions.map((condition) => (
                   <div key={condition} className="flex items-center space-x-2">
                     <Checkbox 
                       id={`condition-${condition}`} 
-                      checked={selectedConditions.includes(condition)}
-                      onCheckedChange={() => handleMultiSelectToggle(selectedConditions, condition, setSelectedConditions, 'conditionsTreated')}
+                      checked={selectedConditions.includes(condition as Condition)}
+                      onCheckedChange={() => handleMultiSelectToggle(selectedConditions, condition as Condition, setSelectedConditions, 'conditionsTreated')}
                     />
                     <Label 
                       htmlFor={`condition-${condition}`}
@@ -307,12 +307,12 @@ const FilterPanel = ({ filters, onFilterChange, specialties }: FilterPanelProps)
             <AccordionTrigger className="text-sm font-medium">Patient Types</AccordionTrigger>
             <AccordionContent>
               <div className="grid grid-cols-2 gap-2 pt-2">
-                {patientDemographics.map((type: PatientDemographic) => (
+                {patientDemographics.map((type) => (
                   <div key={type} className="flex items-center space-x-2">
                     <Checkbox 
                       id={`patient-type-${type}`} 
-                      checked={selectedPatientTypes.includes(type)}
-                      onCheckedChange={() => handleMultiSelectToggle(selectedPatientTypes, type, setSelectedPatientTypes, 'patientTypes')}
+                      checked={selectedPatientTypes.includes(type as PatientDemographic)}
+                      onCheckedChange={() => handleMultiSelectToggle(selectedPatientTypes, type as PatientDemographic, setSelectedPatientTypes, 'patientTypes')}
                     />
                     <Label 
                       htmlFor={`patient-type-${type}`}
@@ -333,12 +333,12 @@ const FilterPanel = ({ filters, onFilterChange, specialties }: FilterPanelProps)
             <AccordionTrigger className="text-sm font-medium">Languages Spoken</AccordionTrigger>
             <AccordionContent>
               <div className="grid grid-cols-2 gap-2 pt-2">
-                {languages.map((language: Language) => (
+                {languages.map((language) => (
                   <div key={language} className="flex items-center space-x-2">
                     <Checkbox 
                       id={`language-${language}`} 
-                      checked={selectedLanguages.includes(language)}
-                      onCheckedChange={() => handleMultiSelectToggle(selectedLanguages, language, setSelectedLanguages, 'languages')}
+                      checked={selectedLanguages.includes(language as Language)}
+                      onCheckedChange={() => handleMultiSelectToggle(selectedLanguages, language as Language, setSelectedLanguages, 'languages')}
                     />
                     <Label 
                       htmlFor={`language-${language}`}
@@ -374,7 +374,7 @@ const FilterPanel = ({ filters, onFilterChange, specialties }: FilterPanelProps)
               <SelectValue placeholder="Select sort option" />
             </SelectTrigger>
             <SelectContent>
-              {sortOptions.map((option: { value: string; label: string }) => (
+              {sortOptions.map((option) => (
                 <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
               ))}
             </SelectContent>

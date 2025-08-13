@@ -30,8 +30,9 @@ import { mockProviderData, specialties } from "@/lib/mockData";
 import Fuse from 'fuse.js';
 import { Filter, List, Map as MapIcon } from "lucide-react";
 import smallProvidersRaw from '@/lib/smallProviderData.json';
+import { mapMockToFullProfile } from "@/lib/dataMapping";
 
-const smallProviders: FullProviderProfile[] = smallProvidersRaw as FullProviderProfile[];
+const smallProviders: FullProviderProfile[] = (smallProvidersRaw as any[]).map(mapMockToFullProfile);
 
 const ITEMS_PER_PAGE = 9;
 
@@ -58,7 +59,7 @@ const Directory = () => {
       if (filters.state && filters.state !== 'all' && !p.location.includes(filters.state)) return false;
       if (filters.tier && filters.tier !== 'All' && p.tier !== filters.tier) return false;
       if (filters.specialty && filters.specialty !== 'All' && p.specialty !== filters.specialty) return false;
-      if (filters.favoritesOnly && !p.isFavorited) return false;
+      if (filters.favoritesOnly && !p.isFavorite) return false;
       return true;
     });
 
