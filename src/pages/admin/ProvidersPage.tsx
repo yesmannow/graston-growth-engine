@@ -10,17 +10,18 @@ import { DataTable } from "@/components/data-table/data-table";
 import { columns } from "@/components/admin/providers/columns";
 import { mockProviderData } from "@/lib/mockData";
 import { Provider } from "@/types/index";
+import { mapMockToFullProfile } from "@/lib/dataMapping";
 
 const AdminProvidersPage = () => {
   // Convert FullProviderProfile to Provider for DataTable compatibility
-  const providers: Provider[] = mockProviderData.map((provider: any) => ({
-    id: provider.id,
-    name: provider.provider_name,
-    email: provider.contact.provider_email,
-    tier: provider.membership_tier,
-    status: "Active", // Mock status
-    lastLogin: new Date().toISOString(), // Mock date
-  }));
+  const providers: Provider[] = mockProviderData.map((provider: any) => {
+    const fullProfile = mapMockToFullProfile(provider);
+    return {
+      ...fullProfile,
+      status: "Active", // Mock status
+      lastLogin: new Date().toISOString(), // Mock date
+    };
+  });
 
   return (
     <div className="p-4 md:p-8">

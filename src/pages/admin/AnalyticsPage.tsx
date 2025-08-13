@@ -20,20 +20,18 @@ const AnalyticsPage = () => {
         <MetricCard 
           title="Total Profile Views (30d)" 
           value="125,830" 
-          icon={<Eye className="h-4 w-4 text-muted-foreground" />} 
-          description="+15.2% from last month"
+          change="+15.2% from last month"
         />
         <MetricCard 
           title="Avg. Conversion Rate" 
           value="4.7%" 
-          icon={<Target className="h-4 w-4 text-muted-foreground" />}
-          description="+0.5% from last month"
+          change="+0.5% from last month"
         />
         <MetricCard 
           title="New Premier Members (30d)" 
           value="23" 
-          icon={<Handshake className="h-4 w-4 text-muted-foreground" />}
-          description="-8% from last month"
+          change="-8% from last month"
+          isDanger
         />
       </div>
 

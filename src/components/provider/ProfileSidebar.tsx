@@ -1,5 +1,5 @@
 import React from 'react';
-import { FullProviderProfile, Tier } from '@/types';
+import { FullProviderProfile, Tier, AccreditationLogo } from '@/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -118,7 +118,7 @@ const ProfileSidebar = ({ provider, onToggleFavorite }: ProfileSidebarProps) => 
             <CardContent className="p-4">
               <h3 className="text-sm font-semibold text-center text-muted-foreground mb-3">Accreditations</h3>
               <div className="flex flex-wrap justify-center items-center gap-4">
-                {provider.accreditationLogos.map((acc, index) => (
+                {provider.accreditationLogos.map((acc: AccreditationLogo, index: number) => (
                   <Tooltip key={index}>
                     <TooltipTrigger asChild>
                       <a href={acc.url} target="_blank" rel="noopener noreferrer">

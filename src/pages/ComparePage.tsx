@@ -7,8 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, XCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { mapMockToFullProfile } from '@/lib/dataMapping';
 
-const smallProviders: FullProviderProfile[] = smallProvidersRaw as FullProviderProfile[];
+const smallProviders: FullProviderProfile[] = (smallProvidersRaw as any[]).map(mapMockToFullProfile);
 
 const ComparePage = () => {
   const [providersToCompare, setProvidersToCompare] = useState<FullProviderProfile[]>([]);
@@ -25,9 +26,9 @@ const ComparePage = () => {
 
   const features = [
     { key: 'tier', label: 'Membership Tier' },
-    { key: 'graston_level', label: 'Graston Level' },
+    { key: 'grastonLevel', label: 'Graston Level' },
     { key: 'rating', label: 'Rating' },
-    { key: 'reviews', label: 'Reviews' },
+    { key: 'reviewCount', label: 'Reviews' },
     { key: 'services', label: 'Services Offered' },
   ];
 

@@ -21,7 +21,7 @@ const center = {
 };
 
 const DirectoryMap = ({ providers, hoveredProviderId, onMarkerHover }: DirectoryMapProps) => {
-  const [selectedProvider, setSelectedProvider] = useState<FullProviderProfile | null>(null);
+  const [selectedProvider, setSelectedProvider] = useState<(FullProviderProfile & { position: { lat: number; lng: number } }) | null>(null);
 
   const providerLocations = useMemo(() => {
     // In a real app, you'd have lat/lng for each provider.

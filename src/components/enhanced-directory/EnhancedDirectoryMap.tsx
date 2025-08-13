@@ -38,7 +38,7 @@ const mapOptions = {
 };
 
 const EnhancedDirectoryMap = ({ providers, hoveredProviderId, onMarkerHover, center, zoom, userLocation }: EnhancedDirectoryMapProps) => {
-  const [selectedProvider, setSelectedProvider] = useState<FullProviderProfile | null>(null);
+  const [selectedProvider, setSelectedProvider] = useState<(FullProviderProfile & { position: { lat: number; lng: number } }) | null>(null);
 
   const providerLocations = useMemo(() => {
     return providers.map((p, i) => ({
@@ -111,7 +111,7 @@ const EnhancedDirectoryMap = ({ providers, hoveredProviderId, onMarkerHover, cen
             <div className="flex items-center gap-1 text-sm mb-2">
               <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
               <span className="font-semibold">{selectedProvider.rating}</span>
-              <span className="text-gray-500">({selectedProvider.reviews} reviews)</span>
+              <span className="text-gray-500">({selectedProvider.reviewCount} reviews)</span>
             </div>
             <Button size="sm" className="w-full">View Full Profile</Button>
           </div>

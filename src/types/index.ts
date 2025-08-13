@@ -8,6 +8,12 @@ export type TierFilter = Tier | "All";
 export type Condition = "Back Pain" | "Sports Injuries" | "Post-Surgical Rehab" | "Headaches & Migraines" | "Sciatica" | "Neck Pain" | "Athletic Injuries" | "Joint Pain" | "Mobility Issues" | "Knee Replacement Rehab" | "Shoulder Surgery Recovery" | "Aquatic Therapy";
 export type PatientDemographic = "Athletes" | "Seniors" | "Pediatric" | "General";
 
+export interface AccreditationLogo {
+  name: string;
+  logoUrl: string;
+  url: string;
+}
+
 export interface FullProviderProfile {
   id: string;
   name: string;
@@ -30,8 +36,14 @@ export interface FullProviderProfile {
   instagram: string;
   twitter: string;
   rating: number;
-  reviews: number;
+  reviewCount: number;
   isFavorite?: boolean;
+  verificationBadges?: string[];
+  accreditationLogos?: AccreditationLogo[];
+  can_compare?: boolean;
+  views?: number;
+  engagementScore?: number;
+  churnRisk?: boolean;
 }
 
 export interface Provider {
@@ -41,24 +53,9 @@ export interface Provider {
   tier: Tier;
   status: "Active" | "Inactive" | "Pending";
   lastLogin: string;
-  specialty: string;
   profileImage: string;
   location: string;
-  clinicAddress: string;
-  phone: string;
-  bio: string;
-  services: string[];
-  certifications: string[];
-  experience: string;
-  education: string;
-  website: string;
-  linkedin: string;
-  facebook: string;
-  instagram: string;
-  twitter: string;
-  rating: number;
-  reviews: number;
-  isFavorite?: boolean;
+  engagementScore?: number;
 }
 
 export interface DirectoryFilters {
@@ -76,4 +73,31 @@ export interface DirectoryFilters {
   languages?: Language[];
   favoritesOnly?: boolean;
   sortBy: SortOption;
+}
+
+export interface MarketingResource {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  tier: Tier;
+  image: string;
+  filePath: string;
+}
+
+export interface Faq {
+  question: string;
+  answer: string;
+}
+
+export interface MediaItem {
+  url: string;
+  type: 'image' | 'video';
+}
+
+export interface Testimonial {
+  author: string;
+  avatar: string;
+  rating: number;
+  text: string;
 }

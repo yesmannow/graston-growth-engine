@@ -8,6 +8,7 @@ import { Phone, Mail, MapPin } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { mockProviderData } from "@/lib/mockData";
 import { useEffect, useState } from "react";
+import { mapMockToFullProfile } from "@/lib/dataMapping";
 
 const ProviderPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,7 +18,8 @@ const ProviderPage = () => {
   useEffect(() => {
     // Simulate API call
     setIsLoading(true);
-    const foundProvider = mockProviderData.find((p: any) => p.id === id) || null;
+    const rawProviderData = mockProviderData.find((p: any) => p.id.toString() === id);
+    const foundProvider = rawProviderData ? mapMockToFullProfile(rawProviderData) : null;
     setProvider(foundProvider);
     setIsLoading(false);
   }, [id]);
@@ -51,7 +53,7 @@ const ProviderPage = () => {
                 <p className="text-lg text-gray-600">{provider.specialty}</p>
                 <div className="mt-2 flex items-center justify-center md:justify-start space-x-2">
                   <Badge className={tierColors[provider.tier]}>{provider.tier}</Badge>
-                  <Badge variant="outline">{provider.graston_level}</Badge>
+                  <Badge variant="outline">{provider.grastonLevel}</Badge>
                 </div>
               </div>
             </div>
