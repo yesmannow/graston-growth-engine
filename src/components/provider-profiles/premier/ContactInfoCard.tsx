@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { MapPin, Phone, Mail, Globe, ExternalLink } from 'lucide-react';
 import { ProviderProfile } from '@/types/provider-profile';

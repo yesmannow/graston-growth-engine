@@ -1,4 +1,3 @@
-import React from 'react';
 import Joyride, { Step, CallBackProps } from 'react-joyride';
 import { Tier } from '@/types';
 

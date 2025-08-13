@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { SupportTicket } from '@/types/support';
 import { useToast } from '@/hooks/use-toast';
+import { SupportTicket } from '@/types/support';
 
 export const useTicketActions = () => {
   const [replyText, setReplyText] = useState('');
@@ -10,39 +10,36 @@ export const useTicketActions = () => {
   const handleAcceptSuggestion = (ticket: SupportTicket) => {
     setReplyText(ticket.aiAnalysis.suggestedReply);
     toast({
-      title: "AI Suggestion Accepted",
-      description: "The suggested reply has been loaded into the editor",
+      title: "Suggestion Accepted",
+      description: "AI-suggested reply has been copied to the editor",
     });
   };
 
-  const handleRejectSuggestion = (ticket: SupportTicket) => {
+  const handleRejectSuggestion = () => {
     toast({
-      title: "AI Suggestion Rejected",
-      description: "You can write a custom reply",
+      title: "Suggestion Rejected",
+      description: "Thank you for your feedback. We'll use it to improve our AI.",
     });
   };
 
   const handleSendReply = async (
-    selectedTicket: SupportTicket | null,
-    onTicketUpdate: (ticketId: string, status: SupportTicket['status']) => void
+    ticket: SupportTicket | null,
+    updateTicketStatus: (ticketId: string, newStatus: SupportTicket['status']) => void
   ) => {
-    if (!selectedTicket || !replyText.trim()) return;
+    if (!ticket || !replyText.trim()) return;
 
     setLoading(true);
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
-    // Simulate sending reply
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // Update ticket status
-    onTicketUpdate(selectedTicket.id, 'In Progress');
-
-    toast({
-      title: "Reply Sent",
-      description: "Your response has been sent to the customer",
-    });
-
+    updateTicketStatus(ticket.id, 'Solved');
     setReplyText('');
     setLoading(false);
+    
+    toast({
+      title: "Reply Sent",
+      description: `Your reply to ticket ${ticket.id} has been sent successfully.`,
+    });
   };
 
   return {

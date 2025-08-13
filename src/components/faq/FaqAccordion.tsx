@@ -20,7 +20,6 @@ const FaqAccordion = ({
   onToggle, 
   onCopyLink, 
   searchTerm,
-  categoryColor = 'blue'
 }: FaqAccordionProps) => {
   const [feedback, setFeedback] = React.useState<'helpful' | 'not-helpful' | null>(null);
   const [linkCopied, setLinkCopied] = React.useState(false);
@@ -116,7 +115,7 @@ const FaqAccordion = ({
             <div 
               className="text-gray-700 leading-relaxed"
               dangerouslySetInnerHTML={{ 
-                __html: highlightText(item.answer, searchTerm || '') 
+                __html: highlightText(item.answer, searchTerm || '') as any
               }}
             />
           </div>

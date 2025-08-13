@@ -1,105 +1,111 @@
-import { BookOpen, Bot, Download, Edit, Mail, Share2, Star } from "lucide-react";
-
-export const brandAssets = {
-  logos: [
-    { id: 'logo-1', title: 'Primary Logo (Color)', type: 'PNG', url: '/assets/logo-color.png', image: '/assets/logo-color.png' },
-    { id: 'logo-2', title: 'Primary Logo (White)', type: 'PNG', url: '/assets/logo-white.png', image: '/assets/logo-white.png' },
-    { id: 'logo-3', title: 'Icon Only', type: 'SVG', url: '/assets/logo-icon.svg', image: '/assets/logo-icon.svg' },
-  ],
-  badges: [
-    { id: 'badge-1', title: 'Verified Provider Badge', type: 'PNG', url: '/assets/verified-badge.png', image: '/assets/verified-badge.png' },
-  ],
-  templates: [
-    { id: 'template-1', title: 'Clinic Brochure Template', type: 'PDF', url: '/assets/brochure.pdf', image: '/assets/brochure-thumb.png' },
-    { id: 'template-2', title: 'Patient Flyer Template', type: 'PDF', url: '/assets/flyer.pdf', image: '/assets/flyer-thumb.png' },
-  ],
-  stockPhotos: [
-    { id: 'photo-1', title: 'Clinic Interior', type: 'JPG', url: '/assets/stock-1.jpg', image: '/assets/stock-1.jpg' },
-    { id: 'photo-2', title: 'Practitioner with Patient', type: 'JPG', url: '/assets/stock-2.jpg', image: '/assets/stock-2.jpg' },
-    { id: 'photo-3', title: 'Physical Therapy Session', type: 'JPG', url: '/assets/stock-3.jpg', image: '/assets/stock-3.jpg' },
-  ],
-  emailSignatures: [
-    { id: 'sig-1', title: 'Standard Signature', type: 'HTML', content: '<div>Your Name | Your Clinic<br><a href="[Profile Link]">View My Profile</a></div>', image: '/assets/signature-thumb.png' },
-  ]
-};
-
-export const campaigns = [
-  {
-    id: 'campaign-1',
-    title: 'Back to School Sports Physicals',
-    description: 'Attract young athletes and their parents before the school sports season begins.',
-    image: '/assets/campaign-sports.jpg',
-    assets: [
-      { title: 'Facebook Post Graphic', type: 'PNG', url: '#' },
-      { title: 'Instagram Story Graphic', type: 'PNG', url: '#' },
-      { title: 'Email Header', type: 'PNG', url: '#' },
-      { title: 'Suggested Post Copy', type: 'DOCX', url: '#' },
-    ]
-  },
-  {
-    id: 'campaign-2',
-    title: 'National Physical Therapy Month',
-    description: 'Engage your community and raise awareness during this key industry event in October.',
-    image: '/assets/campaign-pt-month.jpg',
-    assets: [
-      { title: 'Social Media Graphics (Set of 3)', type: 'PNG', url: '#' },
-      { title: 'Email Newsletter Template', type: 'HTML', url: '#' },
-    ]
-  },
-];
-
-export const patientEducation = [
-  { id: 'edu-1', title: 'Understanding Plantar Fasciitis', url: '#', image: '/assets/edu-plantar.jpg' },
-  { id: 'edu-2', title: '5 Stretches for Lower Back Pain', url: '#', image: '/assets/edu-back-pain.jpg' },
-  { id: 'edu-3', title: 'Recovering from a Sprained Ankle', url: '#', image: '/assets/edu-ankle.jpg' },
-];
-
-export const contentGeneratorOptions = {
-  types: [
-    { value: 'social-post', label: 'Social Media Post', icon: Share2 },
-    { value: 'blog-idea', label: 'Blog/Newsletter Idea', icon: Edit },
-    { value: 'email-campaign', label: 'Email Campaign Copy', icon: Mail },
-  ],
-  themes: [
-    { value: 'patient-education', label: 'Patient Education' },
-    { value: 'service-promotion', label: 'Service Promotion' },
-    { value: 'community-engagement', label: 'Community Engagement' },
-    { value: 'thought-leadership', label: 'Thought Leadership' },
-  ],
-  tones: [
-    { value: 'professional', label: 'Professional' },
-    { value: 'friendly', label: 'Friendly & Approachable' },
-    { value: 'authoritative', label: 'Authoritative & Expert' },
-    { value: 'inspirational', label: 'Inspirational & Motivational' },
-  ]
-};
-
-export const reputationTools = {
-  reviewSites: [
-    { value: 'google', label: 'Google Reviews' },
-    { value: 'yelp', label: 'Yelp' },
-    { value: 'facebook', label: 'Facebook Recommendations' },
-  ],
-  communicationMethods: [
-    { value: 'email', label: 'Email Template' },
-    { value: 'sms', label: 'SMS Template' },
-  ]
-};
+import { BookOpen, Bot, Edit, Mail, Share2, Star } from "lucide-react";
 
 export const aiCoachTips = [
     {
-        id: 'tip-1',
-        icon: Bot,
-        text: "Your profile analytics show high engagement from Facebook. Try generating a few Facebook posts to capitalize on this trend."
+        icon: Edit,
+        text: "A complete profile is 7x more likely to be viewed. Have you updated your bio and services recently?"
     },
     {
-        id: 'tip-2',
         icon: Star,
-        text: "You've received 5 new positive reviews this month! Use the Reputation Manager to ask more happy patients for feedback."
+        text: "Providers with 5+ reviews get 50% more inquiries. Use the Reputation Manager to request feedback from recent patients."
     },
     {
-        id: 'tip-3',
+        icon: Share2,
+        text: "Share your latest blog post on social media. Use the Content AI to generate a compelling caption."
+    },
+    {
+        icon: Mail,
+        text: "Consider running a 'New Patient Special' campaign for the upcoming season. Find templates in the Campaign-in-a-Box."
+    },
+    {
         icon: BookOpen,
-        text: "It's National Physical Therapy month. Launch the pre-built campaign to engage your local community."
+        text: "Patient education builds trust. Share the 'Benefits of Graston Technique' PDF with your email list."
     }
 ];
+
+export const brandAssets = {
+    logos: [
+        { id: 'logo-1', title: 'Graston Technique Logo (Color)', type: 'PNG', url: '/assets/logo-color.png', image: '/assets/logo-color.png' },
+        { id: 'logo-2', title: 'Graston Technique Logo (White)', type: 'PNG', url: '/assets/logo-white.png', image: '/assets/logo-white.png' },
+    ],
+    badges: [
+        { id: 'badge-1', title: 'Premier Provider Badge', type: 'PNG', url: '/images/PremierBadge_01-04.png', image: '/images/PremierBadge_01-04.png' },
+        { id: 'badge-2', title: 'Preferred Provider Badge', type: 'PNG', url: '/images/PreferredBadge_01.webp', image: '/images/PreferredBadge_01.webp' },
+    ],
+    templates: [
+        { id: 'template-1', title: 'Patient Intake Form', type: 'PDF', url: '#', image: '/images/template-placeholder.png' },
+        { id: 'template-2', title: 'Clinic Brochure (Tri-fold)', type: 'AI', url: '#', image: '/images/template-placeholder.png' },
+    ],
+    stockPhotos: [
+        { id: 'photo-1', title: 'Clinic Interior', type: 'JPG', url: '/images/AdobeStock_1106097284-Medium.jpeg', image: '/images/AdobeStock_1106097284-Medium.jpeg' },
+        { id: 'photo-2', title: 'Practitioner with Patient', type: 'JPG', url: '/images/AdobeStock_622858237.jpeg', image: '/images/AdobeStock_622858237.jpeg' },
+    ],
+    emailSignatures: [
+        { id: 'sig-1', title: 'Standard Email Signature', type: 'HTML', url: '#', image: '/images/template-placeholder.png' },
+    ]
+};
+
+export const campaigns = [
+    {
+        id: 'campaign-1',
+        title: 'Back Pain Relief Campaign',
+        description: 'Target patients with chronic back pain using educational content and a special offer.',
+        image: '/images/back-pain-campaign.jpg',
+        assets: [
+            { title: 'Social Media Post Templates', type: 'DOCX', url: '#' },
+            { title: 'Email Newsletter Copy', type: 'DOCX', url: '#' },
+            { title: 'Printable In-Clinic Flyer', type: 'PDF', url: '#' },
+        ]
+    },
+    {
+        id: 'campaign-2',
+        title: 'Runner\'s Knee Recovery Campaign',
+        description: 'Attract local runners by showcasing your expertise in treating common running injuries.',
+        image: '/images/runners-knee-campaign.jpg',
+        assets: [
+            { title: 'Facebook Ad Creatives', type: 'ZIP', url: '#' },
+            { title: 'Educational Blog Post', type: 'DOCX', url: '#' },
+            { title: 'Video Script for Testimonials', type: 'DOCX', url: '#' },
+        ]
+    }
+];
+
+export const reputationTools = {
+    reviewSites: [
+        { value: 'google', label: 'Google' },
+        { value: 'facebook', label: 'Facebook' },
+        { value: 'yelp', label: 'Yelp' },
+        { value: 'healthgrades', label: 'Healthgrades' },
+    ],
+    communicationMethods: [
+        { value: 'email', label: 'Email' },
+        { value: 'sms', label: 'SMS Text Message' },
+    ]
+};
+
+export const patientEducation = [
+    { id: 'pe-1', title: 'Understanding Plantar Fasciitis', url: '#', image: '/images/patient-ed-1.jpg' },
+    { id: 'pe-2', title: '5 Stretches for Lower Back Pain', url: '#', image: '/images/patient-ed-2.jpg' },
+    { id: 'pe-3', title: 'What to Expect from Your GT Session', url: '#', image: '/images/patient-ed-3.jpg' },
+];
+
+export const contentGeneratorOptions = {
+    types: [
+        { value: 'social-media-post', label: 'Social Media Post' },
+        { value: 'blog-post-idea', label: 'Blog Post Idea' },
+        { value: 'email-newsletter-snippet', label: 'Email Newsletter Snippet' },
+        { value: 'video-script-outline', label: 'Video Script Outline' },
+    ],
+    themes: [
+        { value: 'patient-education', label: 'Patient Education' },
+        { value: 'success-story', label: 'Success Story' },
+        { value: 'service-highlight', label: 'Service Highlight' },
+        { value: 'myth-busting', label: 'Myth Busting' },
+    ],
+    tones: [
+        { value: 'professional', label: 'Professional' },
+        { value: 'friendly', label: 'Friendly & Approachable' },
+        { value: 'clinical', label: 'Clinical & Authoritative' },
+        { value: 'inspirational', label: 'Inspirational' },
+    ]
+};

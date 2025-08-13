@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import TicketQueue from './triage/TicketQueue';
 import TicketHeader from './triage/TicketHeader';
 import AiAnalysisCard from './triage/AiAnalysisCard';

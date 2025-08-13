@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import AutomationRulesList from './automation/AutomationRulesList';
 import RuleBuilder from './automation/RuleBuilder';
 import RuleDetail from './automation/RuleDetail';
 import EmptyRuleState from './automation/EmptyRuleState';
 import { useAutomationRules } from '@/hooks/useAutomationRules';
-import { useRuleBuilder, RuleForm } from '@/hooks/useRuleBuilder';
+import { useRuleBuilder } from '@/hooks/useRuleBuilder';
 import { AutomationRule } from '@/types/support';
 import { useToast } from '@/hooks/use-toast';
 
@@ -18,7 +18,6 @@ const AutomationBuilder = () => {
     createRule,
     updateRule,
     deleteRule,
-    refreshRules
   } = useAutomationRules();
 
   const {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -7,9 +7,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   MessageSquare, 
-  Users, 
-  Clock, 
-  Star,
   Send,
   Smile,
   Paperclip,
@@ -19,14 +16,14 @@ import {
   Archive,
   UserPlus
 } from 'lucide-react';
-import { ChatSession, Agent } from '@/types/support';
+import { ChatSession } from '@/types/support';
 
 const ChatDashboard = () => {
   const [activeSessions, setActiveSessions] = useState<ChatSession[]>([]);
   const [waitingSessions, setWaitingSessions] = useState<ChatSession[]>([]);
   const [selectedSession, setSelectedSession] = useState<ChatSession | null>(null);
   const [message, setMessage] = useState('');
-  const [agentStatus, setAgentStatus] = useState<'Online' | 'Away' | 'Busy'>('Online');
+  const [agentStatus] = useState<'Online' | 'Away' | 'Busy'>('Online');
 
   // Mock data
   useEffect(() => {

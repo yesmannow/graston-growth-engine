@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DataTable } from '@/components/data-table/data-table';
 import { 
@@ -145,7 +145,7 @@ const InsightAlertCenter = () => {
     try {
       switch (action.type) {
         case 'view_cohort':
-          await loadCohortData(alert);
+          await loadCohortData();
           setSelectedAlert(alert);
           break;
           
@@ -154,7 +154,7 @@ const InsightAlertCenter = () => {
           break;
           
         case 'build_automation':
-          await buildAutomation(alert);
+          await buildAutomation();
           break;
       }
     } catch (error) {
@@ -168,7 +168,7 @@ const InsightAlertCenter = () => {
     }
   };
 
-  const loadCohortData = async (alert: Alert) => {
+  const loadCohortData = async () => {
     // Simulate API call to load cohort data
     await new Promise(resolve => setTimeout(resolve, 1000));
     
@@ -210,7 +210,7 @@ const InsightAlertCenter = () => {
     });
   };
 
-  const buildAutomation = async (alert: Alert) => {
+  const buildAutomation = async () => {
     // Simulate automation creation
     await new Promise(resolve => setTimeout(resolve, 1000));
     

@@ -1,45 +1,40 @@
+"use client";
+
 import * as React from "react";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const EnhancedTooltipProvider = TooltipPrimitive.Provider;
-
 const EnhancedTooltip = TooltipPrimitive.Root;
-
 const EnhancedTooltipTrigger = TooltipPrimitive.Trigger;
 
 const EnhancedTooltipContent = React.forwardRef<
   React.ElementRef<typeof TooltipPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content> & {
-    showArrow?: boolean;
-  }
->(({ className, sideOffset = 4, showArrow = true, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
+>(({ className, sideOffset = 4, ...props }, ref) => (
   <TooltipPrimitive.Portal>
-    <TooltipPrimitive.Content
-      ref={ref}
-      sideOffset={sideOffset}
-      className={cn(
-        "z-50 overflow-hidden rounded-md border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md",
-        className,
-      )}
-      asChild
-      {...props}
-    >
+    <TooltipPrimitive.Content ref={ref} sideOffset={sideOffset} asChild>
       <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 2 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 2 }}
-        transition={{ duration: 0.15, ease: "easeOut" }}
-      >
-        {children}
-        {showArrow && (
-          <TooltipPrimitive.Arrow className="fill-popover" />
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        transition={{ duration: 0.1 }}
+        className={cn(
+          "z-50 overflow-hidden rounded-md border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+          className
         )}
+      >
+        {props.children}
       </motion.div>
     </TooltipPrimitive.Content>
   </TooltipPrimitive.Portal>
 ));
 EnhancedTooltipContent.displayName = TooltipPrimitive.Content.displayName;
 
-export { EnhancedTooltip, EnhancedTooltipTrigger, EnhancedTooltipContent, EnhancedTooltipProvider };
+export {
+  EnhancedTooltip,
+  EnhancedTooltipTrigger,
+  EnhancedTooltipContent,
+  EnhancedTooltipProvider,
+};

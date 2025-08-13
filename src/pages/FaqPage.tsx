@@ -1,15 +1,14 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Search, ThumbsUp, ThumbsDown, HelpCircle, MessageCircle, ChevronRight, Hash } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { Search, HelpCircle, MessageCircle, ChevronRight, Hash } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import FaqAccordion from '@/components/faq/FaqAccordion';
 import FaqCategory from '@/components/faq/FaqCategory';
 import TopQuestions from '@/components/faq/TopQuestions';
 import EscalationCta from '@/components/faq/EscalationCta';
-import { faqData, FaqItem, FaqCategoryData } from '@/data/faqData';
+import { faqData } from '@/data/faqData';
 
 const FaqPage = () => {
   const [searchTerm, setSearchTerm] = useState('');

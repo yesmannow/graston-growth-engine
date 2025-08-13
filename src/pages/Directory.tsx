@@ -1,19 +1,13 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import ProviderCard from "@/components/directory/ProviderCard";
 import { Input } from "@/components/ui/input";
 import {
   DirectoryFilters,
   FullProviderProfile,
-  SortOption,
   Tier,
-  TrainingLevel,
   Language,
-  Condition,
-  PatientDemographic,
-  RadiusOption,
   ClinicianType,
 } from "@/types";
 import { Search, Filter, RefreshCw, List, Map, Star, MapPin } from "lucide-react";
@@ -21,7 +15,6 @@ import DirectoryMap from "@/components/directory/DirectoryMap";
 import FilterPanel from "@/components/directory/FilterPanel";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { useMediaQuery } from "@/hooks/use-mobile";
 import { showSuccess, showError } from "@/utils/toast";
 import { Card, CardContent } from "@/components/ui/card";
 import { getGeocode, getLatLng } from "use-places-autocomplete";
@@ -54,9 +47,6 @@ type RawProvider = {
 };
 
 const Directory: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const isDesktop = useMediaQuery("(min-width: 1024px)");
   const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
   const [filters, setFilters] = useState<DirectoryFilters>({ sortBy: "premier-first" });

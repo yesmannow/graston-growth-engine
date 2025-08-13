@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { EnhancedButton } from "@/components/ui/enhanced-button";
 import { EnhancedTooltip, EnhancedTooltipContent, EnhancedTooltipTrigger } from "@/components/ui/enhanced-tooltip";
-import { MapPin, Star, Phone, Globe, Heart, Eye, Calendar } from "lucide-react";
+import { MapPin, Star, Phone, Globe, Heart, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -27,11 +27,10 @@ const EnhancedProviderCard = ({
   onMouseLeave, 
   onToggleFavorite, 
   onToggleCompare, 
-  isComparing,
-  viewMode = 'grid'
+  isComparing
 }: EnhancedProviderCardProps) => {
   const navigate = useNavigate();
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const [, setImageLoaded] = useState(false);
 
   const handleClick = () => {
     navigate(`/directory/provider/${provider.id}`);

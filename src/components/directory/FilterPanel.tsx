@@ -29,7 +29,6 @@ import {
   Language, 
   RadiusOption, 
   SortOption, 
-  Tier, 
   TierFilter,
   TrainingLevel,
   Condition,

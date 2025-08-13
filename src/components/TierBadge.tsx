@@ -1,33 +1,49 @@
 import React from 'react';
-import { Badge } from '@/components/ui/badge';
 import { Tier } from '@/types';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+
+// It's better to place these in the public directory
+const badgeImages: Record<Tier, string> = {
+  Premier: '/images/PremierBadge_01-04.png',
+  Preferred: '/images/PreferredBadge_01.webp',
+  Free: '', // No image for Free tier
+};
 
 interface TierBadgeProps {
   tier: Tier;
+  size?: 'sm' | 'md' | 'lg';
 }
 
-const TierBadge: React.FC<TierBadgeProps> = ({ tier }) => {
-  let variant: "default" | "secondary" | "outline" | "destructive" = "secondary";
-  let className = "";
+const sizeMap = {
+  sm: 'h-12 w-12',
+  md: 'h-20 w-20',
+  lg: 'h-28 w-28',
+};
 
-  switch (tier) {
-    case "Premier":
-      className = "bg-purple-500 text-white hover:bg-purple-600";
-      break;
-    case "Preferred":
-      className = "bg-blue-500 text-white hover:bg-blue-600";
-      break;
-    case "Free":
-      className = "bg-gray-300 text-gray-800 hover:bg-gray-400";
-      break;
-    default:
-      variant = "secondary";
+const TierBadge: React.FC<TierBadgeProps> = ({ tier, size = 'md' }) => {
+  if (tier === 'Free') {
+    return (
+      <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+        Basic Listing
+      </div>
+    );
   }
 
   return (
-    <Badge variant={variant} className={className}>
-      {tier}
-    </Badge>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger>
+          <img
+            src={badgeImages[tier]}
+            alt={`${tier} Provider Badge`}
+            className={`${sizeMap[size]} object-contain`}
+          />
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{tier} Certified Provider</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 

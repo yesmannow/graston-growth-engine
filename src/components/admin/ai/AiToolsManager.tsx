@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -17,9 +17,6 @@ import {
   MessageSquare, 
   FileText,
   Users,
-  CheckCircle,
-  XCircle,
-  Clock,
   Sparkles
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -50,11 +47,10 @@ interface AiSuggestion {
 const AiToolsManager = () => {
   const [tools, setTools] = useState<AiTool[]>([]);
   const [suggestions, setSuggestions] = useState<AiSuggestion[]>([]);
-  const [selectedTool, setSelectedTool] = useState<AiTool | null>(null);
   const { toast } = useToast();
 
   // Mock data
-  React.useEffect(() => {
+  useState(() => {
     const mockTools: AiTool[] = [
       {
         id: 'profile-optimizer',
@@ -127,7 +123,7 @@ const AiToolsManager = () => {
 
     setTools(mockTools);
     setSuggestions(mockSuggestions);
-  }, []);
+  });
 
   const handleToggleTool = (toolId: string) => {
     setTools(prev => prev.map(tool => 

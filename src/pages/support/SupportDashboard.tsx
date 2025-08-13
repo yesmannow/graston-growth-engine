@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { 
@@ -12,7 +11,6 @@ import {
   Zap,
   Bell,
   Search,
-  Filter,
   Bot
 } from 'lucide-react';
 import SmartInbox from '@/components/support/SmartInbox';

@@ -1,18 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
+import { useState, useEffect } from 'react';
+import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
 import { Badge } from '@/components/ui/badge';
 import { 
   Search, 
   Users, 
   BarChart3, 
   Bot, 
-  Settings, 
   FileText, 
   MessageSquare,
   Zap,
-  Calendar,
   Mail,
-  Shield,
   TrendingUp
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';

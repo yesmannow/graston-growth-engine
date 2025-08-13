@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   BookOpen, 
   Search, 
@@ -14,9 +13,6 @@ import {
   Eye, 
   ThumbsUp, 
   ThumbsDown,
-  Star,
-  TrendingUp,
-  Filter,
   Save,
   X
 } from 'lucide-react';
@@ -36,7 +32,7 @@ const KnowledgeBase = () => {
   });
 
   // Mock data
-  React.useEffect(() => {
+  useEffect(() => {
     const mockArticles: KnowledgeBaseArticle[] = [
       {
         id: 'kb-1',

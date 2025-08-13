@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -7,16 +7,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { 
-  Filter, 
   Search, 
   Clock, 
   AlertTriangle, 
   Eye, 
   MessageSquare,
-  Tag,
   User,
-  Calendar,
-  ChevronRight,
   RefreshCw
 } from 'lucide-react';
 import { Ticket, TicketStatus, TicketPriority, TicketChannel } from '@/types/support';
@@ -32,7 +28,6 @@ const SmartInbox = () => {
     assignee: 'all',
     search: ''
   });
-  const [sortBy, setSortBy] = useState('updated');
 
   // Mock data - in real app this would come from API
   useEffect(() => {

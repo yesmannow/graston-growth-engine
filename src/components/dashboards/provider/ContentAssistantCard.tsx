@@ -39,10 +39,10 @@ const ContentAssistantCard = () => {
 
   const mutation = useMutation<ContentResponse, Error, string>({
     mutationFn: generateContent,
-    onSuccess: (data) => {
+    onSuccess: () => {
       showSuccess("Content generated successfully!"); // Changed usage
     },
-    onError: (error) => {
+    onError: () => {
       // Do nothing, the UI will show the error message
     }
   });

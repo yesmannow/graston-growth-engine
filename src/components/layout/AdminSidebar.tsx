@@ -1,9 +1,11 @@
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { 
   LayoutDashboard, 
   Users, 
   Bot, 
+  Settings,
   BarChart3,
   MessageSquare
 } from 'lucide-react';

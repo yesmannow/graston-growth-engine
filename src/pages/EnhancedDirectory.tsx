@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import EnhancedProviderCard from "@/components/enhanced-directory/EnhancedProviderCard";
 import EnhancedDirectoryMap from "@/components/enhanced-directory/EnhancedDirectoryMap";
 import { EnhancedButton } from "@/components/ui/enhanced-button";
@@ -31,7 +31,6 @@ import {
   Grid3X3,
   LayoutList
 } from "lucide-react";
-import { useMediaQuery } from "@/hooks/use-mobile";
 import { showSuccess } from "@/utils/toast";
 import { getGeocode, getLatLng } from "use-places-autocomplete";
 import { specialties } from "@/lib/mockData";
@@ -41,8 +40,6 @@ import { useDebounce } from '@/hooks/useDebounce';
 
 const EnhancedDirectory: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const isDesktop = useMediaQuery("(min-width: 1024px)");
   const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
   // State management
@@ -52,7 +49,7 @@ const EnhancedDirectory: React.FC = () => {
   const [viewMode, setViewMode] = useState<'list' | 'map'>('map');
   const [listViewMode, setListViewMode] = useState<'grid' | 'list'>('grid');
   const [compareList, setCompareList] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [, setIsLoading] = useState(true);
   const [searchInput, setSearchInput] = useState('');
   const debouncedSearchInput = useDebounce(searchInput, 300);
 
@@ -375,7 +372,7 @@ const EnhancedDirectory: React.FC = () => {
                               </EnhancedButton>
                             </div>
                           ) : (
-                            filteredAndSortedProviders.map((provider, index) => (
+                            filteredAndSortedProviders.map((provider) => (
                               <div
                                 key={provider.id}
                                 className="p-3 border rounded-lg hover:bg-muted/50 cursor-pointer transition-all duration-200 hover:shadow-sm"
@@ -436,7 +433,7 @@ const EnhancedDirectory: React.FC = () => {
               ) : (
                 <>
                   <div className={`grid gap-6 ${listViewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'}`}>
-                    {displayedProviders.map((provider, index) => (
+                    {displayedProviders.map((provider) => (
                       <div key={provider.id}>
                         <EnhancedProviderCard
                           provider={provider}

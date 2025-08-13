@@ -1,4 +1,3 @@
-import React from 'react';
 import { ProviderProfile } from '@/types/provider-profile';
 import PremierHero from './premier/PremierHero';
 import PremierContentTabs from './premier/PremierContentTabs';
