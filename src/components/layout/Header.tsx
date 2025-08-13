@@ -106,6 +106,13 @@ const Header = () => {
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
+              <NavigationMenuLink asChild>
+                <Link to="/for-providers" className={navigationMenuTriggerStyle()}>
+                  For Providers
+                </Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
               <NavigationMenuTrigger>Resources</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
@@ -208,6 +215,9 @@ const Header = () => {
                   </Link>
                   <Link to="/" className="hover:text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
                     Find a Provider
+                  </Link>
+                  <Link to="/for-providers" className="hover:text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
+                    For Providers
                   </Link>
                   <Accordion type="single" collapsible className="w-full">
                     <AccordionItem value="resources">

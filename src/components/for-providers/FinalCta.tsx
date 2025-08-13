@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
-const CtaSection = () => {
+const FinalCta = () => {
   return (
     <section className="py-16 md:py-24 bg-white">
       <div className="container mx-auto text-center">
@@ -13,17 +13,14 @@ const CtaSection = () => {
           transition={{ duration: 0.8 }}
         >
           <h2 className="text-3xl md:text-4xl font-bold">
-            Ready to Get Started?
+            Ready to Grow Your Practice?
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-            Whether you're a patient seeking care or a provider looking to grow, your journey starts here.
+            Join an exclusive network of certified professionals and start connecting with new patients today.
           </p>
-          <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
+          <div className="mt-10">
             <Button size="lg" asChild>
-              <Link to="/directory">Find a Provider Near You</Link>
-            </Button>
-            <Button size="lg" variant="outline" asChild>
-              <Link to="/onboarding">Join the Directory</Link>
+              <Link to="/onboarding">Start Your Membership Trial</Link>
             </Button>
           </div>
         </motion.div>
@@ -32,4 +29,4 @@ const CtaSection = () => {
   );
 };
 
-export default CtaSection;
+export default FinalCta;
