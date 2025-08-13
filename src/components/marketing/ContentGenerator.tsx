@@ -5,36 +5,39 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Wand2, Copy, RefreshCw } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Wand2, Copy, RefreshCw, CheckCircle } from "lucide-react";
 import { showSuccess } from "@/utils/toast";
+import { contentGeneratorOptions } from "@/data/marketingData";
 
 const ContentGenerator = () => {
   const [contentType, setContentType] = useState("");
-  const [topic, setTopic] = useState("");
+  const [theme, setTheme] = useState("");
   const [tone, setTone] = useState("");
+  const [customTopic, setCustomTopic] = useState("");
   const [generatedContent, setGeneratedContent] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
 
   const handleGenerate = async () => {
-    if (!contentType || !topic || !tone) return;
+    if (!contentType || !theme || !tone) return;
     
     setIsGenerating(true);
+    setGeneratedContent("");
     await new Promise(resolve => setTimeout(resolve, 2000));
     
-    const mockContent = {
-      "social-post": `🌟 Transform your health journey with expert ${topic} care! Our certified practitioners use evidence-based techniques to help you achieve lasting results. #HealthcareExcellence #${topic.replace(/\s+/g, '')}`,
-      "email-campaign": `Subject: Discover the Power of ${topic}\n\nDear [Patient Name],\n\nAre you ready to take control of your health and wellness? Our specialized ${topic} treatments have helped thousands achieve remarkable results.\n\nBest regards,\n[Your Name]`,
-      "blog-post": `# The Complete Guide to ${topic}\n\n${topic} has revolutionized healthcare and wellness. This guide explores everything you need to know about this innovative treatment approach.`
-    };
+    const topic = customTopic || theme.replace(/-/g, ' ');
+    const mockContent = `Here is your AI-generated ${contentType} about "${topic}" with a ${tone} tone. This content is optimized for engagement and tailored to your practice's needs. Remember to add your clinic's specific details before posting!`;
 
-    setGeneratedContent(mockContent[contentType as keyof typeof mockContent] || "Generated content would appear here...");
+    setGeneratedContent(mockContent);
     setIsGenerating(false);
   };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(generatedContent);
     showSuccess("Content copied to clipboard!");
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000);
   };
 
   return (
@@ -47,85 +50,67 @@ const ContentGenerator = () => {
         <CardDescription>Generate compelling marketing content powered by AI</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="content-type">Content Type</Label>
+            <Label>Content Type</Label>
             <Select value={contentType} onValueChange={setContentType}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select type" />
-              </SelectTrigger>
+              <SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="social-post">Social Media Post</SelectItem>
-                <SelectItem value="email-campaign">Email Campaign</SelectItem>
-                <SelectItem value="blog-post">Blog Post</SelectItem>
+                {contentGeneratorOptions.types.map(t => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>
-          
           <div className="space-y-2">
-            <Label htmlFor="topic">Topic/Service</Label>
-            <Input
-              id="topic"
-              value={topic}
-              onChange={(e) => setTopic(e.target.value)}
-              placeholder="e.g., Physical Therapy"
-            />
+            <Label>Theme</Label>
+            <Select value={theme} onValueChange={setTheme}>
+              <SelectTrigger><SelectValue placeholder="Select theme" /></SelectTrigger>
+              <SelectContent>
+                {contentGeneratorOptions.themes.map(t => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}
+              </SelectContent>
+            </Select>
           </div>
-          
           <div className="space-y-2">
-            <Label htmlFor="tone">Tone</Label>
+            <Label>Tone of Voice</Label>
             <Select value={tone} onValueChange={setTone}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select tone" />
-              </SelectTrigger>
+              <SelectTrigger><SelectValue placeholder="Select tone" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="professional">Professional</SelectItem>
-                <SelectItem value="friendly">Friendly</SelectItem>
-                <SelectItem value="authoritative">Authoritative</SelectItem>
-                <SelectItem value="conversational">Conversational</SelectItem>
+                {contentGeneratorOptions.tones.map(t => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}
               </SelectContent>
             </Select>
+          </div>
+          <div className="space-y-2">
+            <Label>Custom Topic (Optional)</Label>
+            <Input value={customTopic} onChange={e => setCustomTopic(e.target.value)} placeholder="e.g., Sports Injuries" />
           </div>
         </div>
 
-        <Button 
-          onClick={handleGenerate} 
-          disabled={!contentType || !topic || !tone || isGenerating}
-          className="w-full"
-        >
+        <Button onClick={handleGenerate} disabled={!contentType || !theme || !tone || isGenerating} className="w-full">
           {isGenerating ? (
-            <>
-              <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-              Generating...
-            </>
+            <><RefreshCw className="mr-2 h-4 w-4 animate-spin" /> Generating...</>
           ) : (
-            <>
-              <Wand2 className="mr-2 h-4 w-4" />
-              Generate Content
-            </>
+            <><Wand2 className="mr-2 h-4 w-4" /> Generate Content</>
           )}
         </Button>
 
-        {generatedContent && (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Badge variant="secondary">Generated Content</Badge>
-                <Badge variant="outline">{contentType}</Badge>
+        <AnimatePresence>
+          {generatedContent && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="space-y-2 pt-4 border-t"
+            >
+              <div className="flex justify-between items-center">
+                <Label>Generated Content:</Label>
+                <Button variant="ghost" size="sm" onClick={copyToClipboard}>
+                  {isCopied ? <CheckCircle className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+                  <span className="ml-2">{isCopied ? 'Copied!' : 'Copy'}</span>
+                </Button>
               </div>
-              <Button variant="outline" size="sm" onClick={copyToClipboard}>
-                <Copy className="mr-2 h-4 w-4" />
-                Copy
-              </Button>
-            </div>
-            <Textarea
-              value={generatedContent}
-              onChange={(e) => setGeneratedContent(e.target.value)}
-              rows={8}
-              className="font-mono text-sm"
-            />
-          </div>
-        )}
+              <Textarea value={generatedContent} readOnly rows={8} className="font-mono text-sm" />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </CardContent>
     </Card>
   );

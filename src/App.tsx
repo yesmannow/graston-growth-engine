@@ -31,11 +31,11 @@ function App() {
           <Route index element={<EnhancedDirectory />} />
           <Route path="directory-old" element={<Directory />} />
           <Route path="provider/:id/dashboard" element={<Provider />} />
+          <Route path="provider/:id/toolkit" element={<MarketingToolkit />} />
           <Route path="directory/provider/:id" element={<PublicProviderProfilePage />} />
           <Route path="compare" element={<ComparePage />} />
           <Route path="update-profile" element={<UpdateProfile />} />
           <Route path="reports" element={<Reports />} />
-          <Route path="marketing-toolkit" element={<MarketingToolkit />} />
           <Route path="support" element={<Support />} />
           <Route path="support-dashboard" element={<SupportDashboard />} />
           <Route path="faq" element={<FaqPage />} />
