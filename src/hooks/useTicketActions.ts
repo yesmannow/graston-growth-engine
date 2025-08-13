@@ -32,7 +32,7 @@ export const useTicketActions = () => {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    updateTicketStatus(ticket.id, 'Solved');
+    updateTicketStatus(ticket.id, 'Resolved');
     setReplyText('');
     setLoading(false);
     
