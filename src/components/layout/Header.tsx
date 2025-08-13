@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { Gem, Menu, LayoutDashboard, Rocket, Edit, Eye, Users, Bot, BarChart3 } from "lucide-react";
+import { Gem, Menu, LayoutDashboard, Rocket, Edit, Eye, Users, Bot, BarChart3, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -109,7 +109,7 @@ const Header = () => {
               <NavigationMenuTrigger>Resources</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                  <li className="row-span-3">
+                  <li className="row-span-4">
                     <NavigationMenuLink asChild>
                       <Link
                         className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
@@ -125,6 +125,9 @@ const Header = () => {
                       </Link>
                     </NavigationMenuLink>
                   </li>
+                  <ListItem href="/what-is-graston-technique" title="What is Graston Technique®?">
+                    A comprehensive guide for patients new to GT.
+                  </ListItem>
                   <ListItem href="/faq" title="FAQ">
                     Find answers to common questions from patients and providers.
                   </ListItem>
@@ -212,6 +215,7 @@ const Header = () => {
                       <AccordionContent className="pl-4">
                         <div className="grid gap-4 text-base">
                           <Link to="/about" className="text-muted-foreground hover:text-foreground" onClick={() => setIsMobileMenuOpen(false)}>About</Link>
+                          <Link to="/what-is-graston-technique" className="text-muted-foreground hover:text-foreground" onClick={() => setIsMobileMenuOpen(false)}>What is GT®?</Link>
                           <Link to="/faq" className="text-muted-foreground hover:text-foreground" onClick={() => setIsMobileMenuOpen(false)}>FAQ</Link>
                           <Link to="/onboarding" className="text-muted-foreground hover:text-foreground" onClick={() => setIsMobileMenuOpen(false)}>Onboarding</Link>
                           <Link to="/support" className="text-muted-foreground hover:text-foreground" onClick={() => setIsMobileMenuOpen(false)}>Support</Link>

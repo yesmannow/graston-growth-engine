@@ -21,6 +21,7 @@ import BadgeShowcase from '@/pages/BadgeShowcase';
 import FaqPage from '@/pages/FaqPage';
 import ProviderProfileShowcase from '@/pages/ProviderProfileShowcase';
 import AboutPage from '@/pages/AboutPage';
+import WhatIsGrastonPage from '@/pages/WhatIsGrastonPage';
 import NotFound from '@/pages/NotFound';
 import './App.css';
 
@@ -44,6 +45,7 @@ function App() {
           <Route path="onboarding" element={<Onboarding />} />
           <Route path="badges" element={<BadgeShowcase />} />
           <Route path="about" element={<AboutPage />} />
+          <Route path="what-is-graston-technique" element={<WhatIsGrastonPage />} />
           <Route path="*" element={<NotFound />} />
         </Route>
         
