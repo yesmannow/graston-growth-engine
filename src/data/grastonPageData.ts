@@ -1,4 +1,4 @@
-import { Stethoscope, Zap, ShieldCheck, Clock, Pill, Users } from 'lucide-react';
+import { Stethoscope, Zap, ShieldCheck, Clock, Pill, Users, Heart, Bone } from 'lucide-react';
 
 export const benefits = [
   {
@@ -67,4 +67,58 @@ export const testimonials = [
         condition: "Chronic Back Pain",
         text: "Nothing else worked for my lower back pain. The relief I felt after the first few Graston sessions was unbelievable. It gave me my life back.",
     },
+];
+
+export const symptomCheckerQuestions = [
+  {
+    question: "How long have you been experiencing this issue?",
+    options: ["Less than 2 weeks", "2-6 weeks", "More than 6 weeks (Chronic)"],
+  },
+  {
+    question: "What best describes your pain?",
+    options: ["Dull and achy", "Sharp and stabbing", "Stiffness and tightness", "Numbness or tingling"],
+  },
+  {
+    question: "What treatments have you tried so far?",
+    options: ["Rest and ice", "Stretching and exercise", "Medication", "Other therapies (e.g., massage, chiropractic)"],
+  },
+];
+
+export const caseStudies = [
+  {
+    id: 'case-1',
+    title: "Runner's Knee Recovery",
+    patient: "Avid Marathon Runner, 34",
+    problem: "Persistent pain around the kneecap (Patellofemoral Pain Syndrome) preventing long-distance running.",
+    approach: "6 sessions of Graston Technique® focused on the quadriceps, IT band, and surrounding fascia, combined with a targeted strengthening program.",
+    outcome: "Patient reported a 90% reduction in pain and successfully completed a half-marathon pain-free within 8 weeks.",
+    before: {
+      label: "Before",
+      description: "Limited knee flexion, pain with squatting.",
+      icon: Bone,
+    },
+    after: {
+      label: "After",
+      description: "Full range of motion, pain-free squatting.",
+      icon: Heart,
+    }
+  },
+  {
+    id: 'case-2',
+    title: "Restoring Shoulder Mobility",
+    patient: "Office Worker, 45",
+    problem: "Chronic shoulder stiffness and pain (Adhesive Capsulitis) from a previous injury, limiting daily activities.",
+    approach: "A series of GT sessions to break down scar tissue in the shoulder capsule, paired with gentle range-of-motion exercises.",
+    outcome: "Achieved nearly full range of motion, allowing the patient to return to recreational tennis and daily activities without pain.",
+     before: {
+      label: "Before",
+      description: "Significant restriction in shoulder abduction.",
+      icon: Bone,
+    },
+    after: {
+      label: "After",
+      description: "Restored mobility and function.",
+      icon: Heart,
+    }
+  }
 ];

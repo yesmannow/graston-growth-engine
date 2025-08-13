@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { Gem, Menu, LayoutDashboard, Rocket, Edit, Eye, Users, Bot, BarChart3, HelpCircle } from "lucide-react";
+import { Gem, Menu, LayoutDashboard, Rocket, Edit, Eye, Users, Bot, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,

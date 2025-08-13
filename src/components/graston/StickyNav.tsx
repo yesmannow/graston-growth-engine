@@ -3,8 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 const navLinks = [
+  { id: 'symptom-checker', label: 'Is It For You?' },
   { id: 'benefits', label: 'Benefits' },
   { id: 'conditions', label: 'Conditions' },
+  { id: 'case-studies', label: 'Case Studies' },
   { id: 'session', label: 'Your Visit' },
   { id: 'testimonials', label: 'Testimonials' },
 ];
@@ -52,13 +54,13 @@ const StickyNav = () => {
           className="sticky top-16 z-40 w-full bg-background/80 backdrop-blur-sm border-b"
         >
           <div className="container mx-auto flex justify-center items-center h-14">
-            <div className="flex space-x-6">
+            <div className="flex space-x-6 overflow-x-auto">
               {navLinks.map(link => (
                 <button
                   key={link.id}
                   onClick={() => scrollToSection(link.id)}
                   className={cn(
-                    'text-sm font-medium transition-colors relative',
+                    'text-sm font-medium transition-colors relative shrink-0',
                     activeSection === link.id
                       ? 'text-primary'
                       : 'text-muted-foreground hover:text-primary'
