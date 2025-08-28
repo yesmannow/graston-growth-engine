@@ -108,6 +108,7 @@ const EnhancedDirectory: React.FC = () => {
     if (debouncedSearchInput !== filters.searchTerm) {
       handleSearch(debouncedSearchInput);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchInput]);
 
   // Filter and sort providers

@@ -1,10 +1,12 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
 import { DataTable } from "@/components/data-table/data-table";
-import { columns } from "@/components/data-table/columns";
+import { getColumns } from "@/components/data-table/columns";
 import { Button } from "@/components/ui/button";
 import { mockProviders } from "@/lib/mockData";
 
 const StaffDashboard = () => {
+  const navigate = useNavigate();
   // Use the properly typed mock providers instead of inline data
   const providers = mockProviders;
 
@@ -18,7 +20,7 @@ const StaffDashboard = () => {
             <CardDescription>View and manage all providers.</CardDescription>
           </CardHeader>
           <CardContent>
-            <DataTable columns={columns} data={providers} />
+            <DataTable columns={getColumns(navigate)} data={providers} />
           </CardContent>
         </Card>
         <Card>

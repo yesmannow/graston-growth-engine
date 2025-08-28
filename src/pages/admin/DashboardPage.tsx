@@ -1,6 +1,7 @@
 import { Users, Star, Gem, DollarSign } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { DataTable } from "@/components/data-table/data-table";
-import { columns } from "@/components/data-table/columns";
+import { getColumns } from "@/components/data-table/columns";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import MetricCard from "@/components/dashboards/admin/MetricCard";
 import ProviderTierChart from "@/components/dashboards/admin/ProviderTierChart";
@@ -9,6 +10,7 @@ import AiAssistantAlerts from "@/components/dashboards/admin/AiAssistantAlerts";
 import TaskQueue from "@/components/dashboards/admin/TaskQueue";
 
 const AdminPage = () => {
+    const navigate = useNavigate();
     const providers = mockProviders;
 
     const totalProviders = providers.length;
@@ -42,7 +44,7 @@ const AdminPage = () => {
                     <CardTitle>Recent Provider Activity</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <DataTable columns={columns} data={providers.slice(0, 5)} />
+                    <DataTable columns={getColumns(navigate)} data={providers.slice(0, 5)} />
                 </CardContent>
             </Card>
         </div>

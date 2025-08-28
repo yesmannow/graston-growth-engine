@@ -1,4 +1,4 @@
-// @ts-ignore: Deno-specific import, will work in Supabase Edge Functions
+// @ts-expect-error: Deno-specific import, will work in Supabase Edge Functions
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts"
 
 const corsHeaders = {

@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -17,7 +17,7 @@ import {
 import { FullProviderProfile } from "@/types";
 import { Badge } from "@/components/ui/badge";
 
-export const columns: ColumnDef<FullProviderProfile>[] = [
+export const getColumns = (navigate: NavigateFunction): ColumnDef<FullProviderProfile>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -115,7 +115,6 @@ export const columns: ColumnDef<FullProviderProfile>[] = [
     id: "actions",
     cell: ({ row }) => {
       const provider = row.original;
-      const navigate = useNavigate();
 
       return (
         <DropdownMenu>
@@ -144,3 +143,6 @@ export const columns: ColumnDef<FullProviderProfile>[] = [
     },
   },
 ];
+
+// Default export for backward compatibility - creates columns without navigation
+export const columns: ColumnDef<FullProviderProfile>[] = getColumns(() => {});
