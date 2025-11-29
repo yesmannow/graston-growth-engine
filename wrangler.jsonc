@@ -1,5 +1,5 @@
 {
-  "name": "graston-growth-engine",
+  "name": "dashboardappforgraston",
   "compatibility_date": "2025-11-29",
   "assets": {
     "directory": "./dist"
